@@ -32,7 +32,7 @@ export default function LoginPage() {
       return;
     }
 
-    router.push("/dashboard");
+    window.location.href = "/dashboard";
   }
 
   return (

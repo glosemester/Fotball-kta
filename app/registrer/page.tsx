@@ -43,7 +43,7 @@ export default function RegistrerPage() {
       return;
     }
 
-    router.push("/dashboard");
+    window.location.href = "/dashboard";
   }
 
   return (
