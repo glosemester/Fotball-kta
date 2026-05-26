@@ -44,6 +44,7 @@ export default function OpprettLagForm() {
 
     setName("");
     setClubName("");
+    setLoading(false);
     setOpen(false);
     router.refresh();
   }

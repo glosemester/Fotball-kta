@@ -49,6 +49,7 @@ export default function LeggTilSpillerForm({ teamId }: { teamId: string }) {
 
     setFirstName("");
     setLastName("");
+    setLoading(false);
     setOpen(false);
     router.refresh();
   }
