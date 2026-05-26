@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import Anthropic from "@anthropic-ai/sdk";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { getSession } from "@/lib/auth";
 import { getAgeGroupRules, isHeadingForbidden } from "@/lib/rules-engine";
 import type { AgeGroupKey, SessionTheme } from "@/types";
@@ -18,7 +18,7 @@ const THEME_LABELS: Record<SessionTheme, string> = {
 
 const SYSTEM_PROMPT = `Du er en ekspert på barne- og ungdomsfotball i Norden med dyp kunnskap om NFF, SvFF og DBU sine retningslinjer.
 
-Du genererer konkrete, pedagogisk gjennomtenkte treningsøvelser. Returner ALLTID gyldig JSON i dette formatet:
+Du genererer konkrete, pedagogisk gjennomtenkte treningsøvelser. Returner ALLTID gyldig JSON i dette formatet — ingen tekst rundt, bare ren JSON:
 
 {
   "exercises": [
@@ -36,15 +36,14 @@ Du genererer konkrete, pedagogisk gjennomtenkte treningsøvelser. Returner ALLTI
 }
 
 Pedagogisk filosofi: «Flest mulig · Lengst mulig · Best mulig» — Trygghet → Mestring → Trivsel.
-Alltid: høy ball-rolling-tid (>70%), minimale instruksjonspauser, alderstilpasset kompleksitet, lekbasert tilnærming for yngre.
-Returner BARE JSON — ingen tekst rundt.`;
+Alltid: høy ball-rolling-tid (>70%), minimale instruksjonspauser, alderstilpasset kompleksitet, lekbasert tilnærming for yngre.`;
 
 export async function POST(req: NextRequest) {
   const session = await getSession();
   if (!session) return NextResponse.json({ error: "Ikke innlogget" }, { status: 401 });
 
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return NextResponse.json({ error: "AI ikke konfigurert — legg til ANTHROPIC_API_KEY i .env" }, { status: 503 });
+  if (!process.env.GEMINI_API_KEY) {
+    return NextResponse.json({ error: "AI ikke konfigurert — legg til GEMINI_API_KEY i .env" }, { status: 503 });
   }
 
   const {
@@ -89,28 +88,22 @@ ${phaseList}
 Tilpass alle øvelser til nøyaktig ${player_count} spillere og en bane på ${field_length}m × ${field_width}m.
 ${headingForbidden ? "VIKTIG: Absolutt headingsforbud — ingen del av noen øvelse skal inneholde heading." : ""}`;
 
-  const client = new Anthropic();
-
-  const message = await client.messages.create({
-    model: "claude-sonnet-4-6",
-    max_tokens: 2048,
-    system: [
-      {
-        type: "text",
-        text: SYSTEM_PROMPT,
-        cache_control: { type: "ephemeral" },
-      },
-    ],
-    messages: [{ role: "user", content: userPrompt }],
+  const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+  const model = genAI.getGenerativeModel({
+    model: "gemini-2.0-flash",
+    systemInstruction: SYSTEM_PROMPT,
+    generationConfig: {
+      responseMimeType: "application/json",
+    },
   });
 
-  const raw = message.content[0].type === "text" ? message.content[0].text : "";
+  const result = await model.generateContent(userPrompt);
+  const raw = result.response.text();
 
   try {
     const parsed = JSON.parse(raw);
     return NextResponse.json(parsed);
   } catch {
-    // Claude sometimes wraps JSON in ```json ... ``` — strip it
     const match = raw.match(/```(?:json)?\s*([\s\S]*?)```/);
     if (match) {
       try {
