@@ -207,3 +207,4 @@ Prisma-klienten genereres til `lib/generated/prisma/` (gitignorert).
 | 2026-05-26 | Lyst pastel design-rewrite: hvit/lavendel tema, fast bunnmeny for app-følelse |
 | 2026-05-26 | Treningsøkter-modul: listeside, API og lagring fra wizard |
 | 2026-05-26 | Velvære-modul: uke-oversikt, registrering per spiller (Grønn/Gul/Rød), varselpanel |
+| 2026-05-26 | Ukesplan-modul: daglig fokusvelger, NFF-regel for antall økter, uke-navigering |
