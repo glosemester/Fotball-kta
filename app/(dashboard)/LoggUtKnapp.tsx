@@ -14,10 +14,10 @@ export default function LoggUtKnapp() {
   return (
     <button
       onClick={handleLogout}
-      className="flex items-center gap-1.5 text-green-200 hover:text-white text-sm transition-colors px-2 py-1 rounded hover:bg-white/10"
+      className="flex items-center gap-1.5 text-[#4E5A72] hover:text-white text-sm transition-colors px-2 py-1.5 rounded-lg hover:bg-white/[0.05]"
     >
       <LogOut className="h-4 w-4" />
-      <span className="hidden sm:inline">Logg ut</span>
+      <span className="hidden sm:inline text-xs">Logg ut</span>
     </button>
   );
 }

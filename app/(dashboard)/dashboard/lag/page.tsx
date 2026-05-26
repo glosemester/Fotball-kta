@@ -2,17 +2,12 @@ import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { Card, CardContent } from "@/components/ui/card";
-import { Users, ChevronRight } from "lucide-react";
+import { ChevronRight, Users } from "lucide-react";
 import OpprettLagForm from "./OpprettLagForm";
 
 const AGE_LABELS: Record<string, string> = {
-  AGE_6_7: "6–7 år",
-  AGE_8_9: "8–9 år",
-  AGE_10_12: "10–12 år",
-  AGE_13_14: "13–14 år",
-  AGE_15_16: "15–16 år",
-  AGE_17_18: "17–18 år",
+  AGE_6_7: "6–7 år", AGE_8_9: "8–9 år", AGE_10_12: "10–12 år",
+  AGE_13_14: "13–14 år", AGE_15_16: "15–16 år", AGE_17_18: "17–18 år",
 };
 
 export default async function LagPage() {
@@ -28,37 +23,38 @@ export default async function LagPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Lag & Spillere</h1>
-        <p className="text-gray-500 mt-1">Administrer dine lag og spillere.</p>
+        <h1 className="text-2xl font-bold text-white">Lag & Spillere</h1>
+        <p className="text-[#94A3B8] mt-1 text-sm">Administrer dine lag og spillere.</p>
       </div>
 
       <OpprettLagForm />
 
-      <div className="space-y-3">
+      <div className="space-y-2">
         {teams.length === 0 ? (
-          <div className="text-center py-12 text-gray-400">
-            <Users className="h-10 w-10 mx-auto mb-3 opacity-40" />
-            <p className="text-sm">Ingen lag ennå — opprett ditt første lag!</p>
+          <div className="text-center py-16">
+            <div className="w-16 h-16 rounded-2xl bg-[#141929] border border-white/[0.07] flex items-center justify-center mx-auto mb-4">
+              <Users className="h-7 w-7 text-[#4E5A72]" />
+            </div>
+            <p className="text-[#94A3B8] text-sm">Ingen lag ennå</p>
+            <p className="text-[#4E5A72] text-xs mt-1">Opprett ditt første lag ovenfor</p>
           </div>
         ) : (
           teams.map((team) => (
-            <Link key={team.id} href={`/dashboard/lag/${team.id}`}>
-              <Card className="hover:shadow-md transition-shadow cursor-pointer">
-                <CardContent className="p-4 flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="bg-green-100 p-2 rounded-lg">
-                      <Users className="h-5 w-5 text-green-700" />
-                    </div>
-                    <div>
-                      <p className="font-semibold text-gray-900">{team.name}</p>
-                      <p className="text-sm text-gray-500">
-                        {team.club_name} · {AGE_LABELS[team.age_group]} · {team._count.players} spillere
-                      </p>
-                    </div>
+            <Link key={team.id} href={`/dashboard/lag/${team.id}`} className="group block">
+              <div className="bg-[#141929] border border-white/[0.07] rounded-2xl p-4 flex items-center justify-between hover:border-[#4F7EFF]/30 hover:bg-[#1C2338] transition-all">
+                <div className="flex items-center gap-4">
+                  <div className="w-11 h-11 rounded-xl bg-[#4F7EFF]/12 flex items-center justify-center shrink-0">
+                    <Users className="h-5 w-5 text-[#4F7EFF]" />
                   </div>
-                  <ChevronRight className="h-4 w-4 text-gray-400" />
-                </CardContent>
-              </Card>
+                  <div>
+                    <p className="font-semibold text-white text-sm">{team.name}</p>
+                    <p className="text-xs text-[#4E5A72] mt-0.5">
+                      {team.club_name} · {AGE_LABELS[team.age_group]} · {team._count.players} spillere
+                    </p>
+                  </div>
+                </div>
+                <ChevronRight className="h-4 w-4 text-[#4E5A72] group-hover:text-[#4F7EFF] transition-colors" />
+              </div>
             </Link>
           ))
         )}

@@ -1,26 +1,72 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-base: #0B0F1A;
+  --bg-surface: #141929;
+  --bg-elevated: #1C2338;
+  --border: rgba(255, 255, 255, 0.07);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --text-primary: #FFFFFF;
+  --text-secondary: #94A3B8;
+  --text-muted: #4E5A72;
+  --blue: #4F7EFF;
+  --blue-hover: #3B6BF5;
+  --blue-subtle: rgba(79, 126, 255, 0.12);
+  --blue-border: rgba(79, 126, 255, 0.3);
+  --green: #22C55E;
+  --green-subtle: rgba(34, 197, 94, 0.12);
+  --red: #EF4444;
+  --red-subtle: rgba(239, 68, 68, 0.12);
+  --yellow: #F59E0B;
+  --yellow-subtle: rgba(245, 158, 11, 0.12);
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-background: var(--bg-base);
+  --color-foreground: var(--text-primary);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-base);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
+
+/* Mørk input-stil brukt overalt */
+.input-dark {
+  width: 100%;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 10px;
+  padding: 10px 14px;
+  font-size: 14px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  outline: none;
+}
+
+.input-dark::placeholder {
+  color: var(--text-muted);
+}
+
+.input-dark:focus {
+  border-color: var(--blue);
+  box-shadow: 0 0 0 3px var(--blue-subtle);
+}
+
+.input-dark option {
+  background: var(--bg-elevated);
+  color: var(--text-primary);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }

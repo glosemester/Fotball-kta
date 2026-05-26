@@ -1,13 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 
 export default function LoginPage() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -36,17 +33,20 @@ export default function LoginPage() {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-green-900 via-green-800 to-green-700 flex items-center justify-center px-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="text-5xl mb-2">⚽</div>
-          <CardTitle className="text-2xl">Logg inn</CardTitle>
-          <CardDescription>Fotball-KTA — Treningsplanlegging</CardDescription>
-        </CardHeader>
-        <CardContent>
+    <main className="min-h-screen bg-[#0B0F1A] flex items-center justify-center px-4 relative overflow-hidden">
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#4F7EFF]/8 rounded-full blur-[100px] pointer-events-none" />
+
+      <div className="relative w-full max-w-sm space-y-6">
+        <div className="text-center space-y-2">
+          <div className="text-5xl mb-4">⚽</div>
+          <h1 className="text-2xl font-bold text-white">Velkommen tilbake</h1>
+          <p className="text-[#94A3B8] text-sm">Logg inn på FotballKTA</p>
+        </div>
+
+        <div className="bg-[#141929] border border-white/[0.07] rounded-2xl p-6 space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">E-post</label>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-[#94A3B8]">E-post</label>
               <input
                 type="email"
                 value={email}
@@ -54,33 +54,40 @@ export default function LoginPage() {
                 required
                 autoComplete="email"
                 placeholder="trener@klubb.no"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="input-dark"
               />
             </div>
-            <div className="space-y-1">
-              <label className="text-sm font-medium text-gray-700">Passord</label>
+            <div className="space-y-1.5">
+              <label className="text-sm font-medium text-[#94A3B8]">Passord</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 autoComplete="current-password"
-                className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-600"
+                className="input-dark"
               />
             </div>
-            {error && <p className="text-sm text-red-600 bg-red-50 px-3 py-2 rounded-lg">{error}</p>}
-            <Button type="submit" disabled={loading} className="w-full bg-green-700 hover:bg-green-800">
+
+            {error && (
+              <div className="bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-xl px-4 py-3">
+                <p className="text-sm text-[#EF4444]">{error}</p>
+              </div>
+            )}
+
+            <Button type="submit" disabled={loading} className="w-full" size="lg">
               {loading ? "Logger inn..." : "Logg inn"}
             </Button>
           </form>
-          <p className="mt-4 text-center text-sm text-gray-600">
-            Ingen konto?{" "}
-            <Link href="/registrer" className="text-green-700 font-medium hover:underline">
-              Registrer deg
-            </Link>
-          </p>
-        </CardContent>
-      </Card>
+        </div>
+
+        <p className="text-center text-sm text-[#4E5A72]">
+          Ingen konto?{" "}
+          <Link href="/registrer" className="text-[#4F7EFF] font-medium hover:text-[#3B6BF5]">
+            Registrer deg
+          </Link>
+        </p>
+      </div>
     </main>
   );
 }
