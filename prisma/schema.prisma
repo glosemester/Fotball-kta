@@ -20,6 +20,8 @@ model Coach {
   created_at DateTime  @default(now())
   updated_at DateTime  @updatedAt
 
+  features String[] @default([])
+
   teams    Team[]
   sessions TrainingSession[]
 
