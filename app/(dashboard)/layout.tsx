@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { CalendarDays, Users, Dumbbell, LayoutDashboard, Activity } from "lucide-react";
+import { getSession } from "@/lib/auth";
+import LoggUtKnapp from "./LoggUtKnapp";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Oversikt", icon: LayoutDashboard },
@@ -9,7 +11,9 @@ const NAV_ITEMS = [
   { href: "/dashboard/velvare", label: "Velvære", icon: Activity },
 ];
 
-export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
+  const session = await getSession();
+
   return (
     <div className="min-h-screen flex flex-col">
       {/* Toppbar */}
@@ -18,7 +22,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
           <span className="text-2xl">⚽</span>
           <span>Fotball-KTA</span>
         </Link>
-        <div className="text-xs text-green-200">Flest mulig · Lengst mulig · Best mulig</div>
+        <div className="flex items-center gap-3">
+          {session && (
+            <span className="text-xs text-green-200 hidden sm:block">{session.fullName}</span>
+          )}
+          <LoggUtKnapp />
+        </div>
       </header>
 
       <div className="flex flex-1">
