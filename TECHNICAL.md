@@ -204,3 +204,4 @@ Prisma-klienten genereres til `lib/generated/prisma/` (gitignorert).
 | 2026-05-26 | Innlogging, registrering, JWT-auth og rutebeskyttelse implementert |
 | 2026-05-26 | Lag og spillere: CRUD-operasjoner med API-ruter og sider |
 | 2026-05-26 | Komplett mørkt design-rewrite (navy/blå tema) |
+| 2026-05-26 | Lyst pastel design-rewrite: hvit/lavendel tema, fast bunnmeny for app-følelse |

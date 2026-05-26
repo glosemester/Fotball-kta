@@ -14,7 +14,7 @@ export default function LoggUtKnapp() {
   return (
     <button
       onClick={handleLogout}
-      className="flex items-center gap-1.5 text-[#4E5A72] hover:text-white text-sm transition-colors px-2 py-1.5 rounded-lg hover:bg-white/[0.05]"
+      className="flex items-center gap-1.5 text-[#94A3B8] hover:text-[#1A1A2E] text-sm transition-colors px-2 py-1.5 rounded-lg hover:bg-[#F0EEFF]"
     >
       <LogOut className="h-4 w-4" />
       <span className="hidden sm:inline text-xs">Logg ut</span>

@@ -23,8 +23,8 @@ export default async function LagPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-white">Lag & Spillere</h1>
-        <p className="text-[#94A3B8] mt-1 text-sm">Administrer dine lag og spillere.</p>
+        <h1 className="text-2xl font-bold text-[#1A1A2E]">Lag & Spillere</h1>
+        <p className="text-[#64748B] mt-1 text-sm">Administrer dine lag og spillere.</p>
       </div>
 
       <OpprettLagForm />
@@ -32,28 +32,28 @@ export default async function LagPage() {
       <div className="space-y-2">
         {teams.length === 0 ? (
           <div className="text-center py-16">
-            <div className="w-16 h-16 rounded-2xl bg-[#141929] border border-white/[0.07] flex items-center justify-center mx-auto mb-4">
-              <Users className="h-7 w-7 text-[#4E5A72]" />
+            <div className="w-16 h-16 rounded-2xl bg-white border border-[#E4E2F5] flex items-center justify-center mx-auto mb-4">
+              <Users className="h-7 w-7 text-[#94A3B8]" />
             </div>
-            <p className="text-[#94A3B8] text-sm">Ingen lag ennå</p>
-            <p className="text-[#4E5A72] text-xs mt-1">Opprett ditt første lag ovenfor</p>
+            <p className="text-[#64748B] text-sm">Ingen lag ennå</p>
+            <p className="text-[#94A3B8] text-xs mt-1">Opprett ditt første lag ovenfor</p>
           </div>
         ) : (
           teams.map((team) => (
             <Link key={team.id} href={`/dashboard/lag/${team.id}`} className="group block">
-              <div className="bg-[#141929] border border-white/[0.07] rounded-2xl p-4 flex items-center justify-between hover:border-[#4F7EFF]/30 hover:bg-[#1C2338] transition-all">
+              <div className="bg-white border border-[#E4E2F5] rounded-2xl p-4 flex items-center justify-between hover:border-[#6D28D9]/30 hover:shadow-sm transition-all active:scale-[0.99]">
                 <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 rounded-xl bg-[#4F7EFF]/12 flex items-center justify-center shrink-0">
-                    <Users className="h-5 w-5 text-[#4F7EFF]" />
+                  <div className="w-11 h-11 rounded-xl bg-[#F5F3FF] flex items-center justify-center shrink-0">
+                    <Users className="h-5 w-5 text-[#6D28D9]" />
                   </div>
                   <div>
-                    <p className="font-semibold text-white text-sm">{team.name}</p>
-                    <p className="text-xs text-[#4E5A72] mt-0.5">
+                    <p className="font-semibold text-[#1A1A2E] text-sm">{team.name}</p>
+                    <p className="text-xs text-[#94A3B8] mt-0.5">
                       {team.club_name} · {AGE_LABELS[team.age_group]} · {team._count.players} spillere
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="h-4 w-4 text-[#4E5A72] group-hover:text-[#4F7EFF] transition-colors" />
+                <ChevronRight className="h-4 w-4 text-[#94A3B8] group-hover:text-[#6D28D9] transition-colors" />
               </div>
             </Link>
           ))

@@ -69,10 +69,10 @@ export default function NyTreningsøktPage() {
   const headingForbidden = ageGroup ? isHeadingForbidden(ageGroup) : false;
 
   return (
-    <div className="max-w-2xl space-y-6">
+    <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Ny treningsøkt</h1>
-        <p className="text-gray-500 mt-1">Fyll inn informasjon — appen tilpasser øvelsene automatisk.</p>
+        <h1 className="text-2xl font-bold text-[#1A1A2E]">Ny treningsøkt</h1>
+        <p className="text-[#64748B] mt-1 text-sm">Fyll inn informasjon — appen tilpasser øvelsene automatisk.</p>
       </div>
 
       {/* Steg-indikator */}
@@ -81,26 +81,26 @@ export default function NyTreningsøktPage() {
           <div key={s} className="flex items-center gap-2">
             <div
               className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
-                step >= s ? "bg-green-700 text-white" : "bg-gray-200 text-gray-500"
+                step >= s ? "bg-[#6D28D9] text-white" : "bg-[#E4E2F5] text-[#94A3B8]"
               }`}
             >
               {step > s ? <CheckCircle2 className="h-4 w-4" /> : s}
             </div>
-            {s < 3 && <div className={`h-0.5 w-8 ${step > s ? "bg-green-700" : "bg-gray-200"}`} />}
+            {s < 3 && <div className={`h-0.5 w-8 ${step > s ? "bg-[#6D28D9]" : "bg-[#E4E2F5]"}`} />}
           </div>
         ))}
-        <span className="text-sm text-gray-500 ml-2">
+        <span className="text-sm text-[#64748B] ml-2">
           {step === 1 ? "Aldersgruppe & Tema" : step === 2 ? "Praktiske rammer" : "Forhåndsvisning"}
         </span>
       </div>
 
-      {/* STEG 1: Aldersgruppe og tema */}
+      {/* STEG 1 */}
       {step === 1 && (
         <div className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <Users className="h-4 w-4 text-green-700" />
+                <Users className="h-4 w-4 text-[#6D28D9]" />
                 Hvilken aldersgruppe?
               </CardTitle>
             </CardHeader>
@@ -112,8 +112,8 @@ export default function NyTreningsøktPage() {
                     onClick={() => setAgeGroup(key)}
                     className={`rounded-xl border-2 p-3 text-sm font-semibold text-left transition-all ${
                       ageGroup === key
-                        ? "border-green-600 bg-green-50 text-green-800"
-                        : "border-gray-200 hover:border-gray-400 text-gray-700"
+                        ? "border-[#6D28D9] bg-[#F5F3FF] text-[#6D28D9]"
+                        : "border-[#E4E2F5] hover:border-[#6D28D9]/40 text-[#1A1A2E]"
                     }`}
                   >
                     {label}
@@ -124,19 +124,19 @@ export default function NyTreningsøktPage() {
           </Card>
 
           {rules && (
-            <Card className="border-green-100 bg-green-50">
+            <Card className="border-[#6D28D9]/20 bg-[#F5F3FF]">
               <CardContent className="p-4 space-y-2">
-                <p className="text-xs font-semibold text-green-800 uppercase tracking-wider">NFF-retningslinjer for {rules.label}</p>
-                <div className="grid grid-cols-2 gap-2 text-sm text-green-900">
+                <p className="text-xs font-semibold text-[#6D28D9] uppercase tracking-wider">NFF-retningslinjer for {rules.label}</p>
+                <div className="grid grid-cols-2 gap-2 text-sm text-[#1A1A2E]">
                   <div><span className="font-medium">Spillform:</span> {rules.recommended_game_form}</div>
                   <div><span className="font-medium">Ballstørrelse:</span> {rules.ball_size}</div>
                   <div><span className="font-medium">Varighet:</span> maks {rules.max_session_duration_minutes} min</div>
                   <div><span className="font-medium">Heading:</span> {rules.heading_label}</div>
                 </div>
                 {headingForbidden && (
-                  <div className="flex items-center gap-2 mt-2 p-2 bg-red-100 rounded-lg">
-                    <AlertTriangle className="h-4 w-4 text-red-600 shrink-0" />
-                    <span className="text-xs text-red-700 font-medium">Heading er absolutt forbudt for denne aldersgruppen.</span>
+                  <div className="flex items-center gap-2 mt-2 p-2 bg-[#FEF2F2] rounded-lg border border-[#DC2626]/20">
+                    <AlertTriangle className="h-4 w-4 text-[#DC2626] shrink-0" />
+                    <span className="text-xs text-[#DC2626] font-medium">Heading er absolutt forbudt for denne aldersgruppen.</span>
                   </div>
                 )}
               </CardContent>
@@ -146,7 +146,7 @@ export default function NyTreningsøktPage() {
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <Target className="h-4 w-4 text-green-700" />
+                <Target className="h-4 w-4 text-[#6D28D9]" />
                 Kveldens tema?
               </CardTitle>
               <CardDescription>Velg ett fokusområde for treningsøkten</CardDescription>
@@ -159,8 +159,8 @@ export default function NyTreningsøktPage() {
                     onClick={() => setTheme(value)}
                     className={`rounded-xl border-2 p-3 text-sm text-left transition-all ${
                       theme === value
-                        ? "border-green-600 bg-green-50 text-green-800 font-semibold"
-                        : "border-gray-200 hover:border-gray-400 text-gray-700"
+                        ? "border-[#6D28D9] bg-[#F5F3FF] text-[#6D28D9] font-semibold"
+                        : "border-[#E4E2F5] hover:border-[#6D28D9]/40 text-[#1A1A2E]"
                     }`}
                   >
                     <span className="text-lg mr-2">{emoji}</span>
@@ -171,60 +171,37 @@ export default function NyTreningsøktPage() {
             </CardContent>
           </Card>
 
-          <Button
-            onClick={() => setStep(2)}
-            disabled={!ageGroup || !theme}
-            size="lg"
-            className="w-full"
-          >
+          <Button onClick={() => setStep(2)} disabled={!ageGroup || !theme} size="lg" className="w-full">
             Neste: Praktiske rammer →
           </Button>
         </div>
       )}
 
-      {/* STEG 2: Praktiske rammer */}
+      {/* STEG 2 */}
       {step === 2 && (
         <div className="space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <Users className="h-4 w-4 text-green-700" />
+                <Users className="h-4 w-4 text-[#6D28D9]" />
                 Spillere
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Planlagt antall
-                  </label>
-                  <input
-                    type="number"
-                    min={2}
-                    max={30}
-                    value={plannedCount}
-                    onChange={(e) => setPlannedCount(Number(e.target.value))}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  <label className="block text-sm font-medium text-[#64748B] mb-1">Planlagt antall</label>
+                  <input type="number" min={2} max={30} value={plannedCount} onChange={(e) => setPlannedCount(Number(e.target.value))} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Faktisk oppmøte
-                  </label>
-                  <input
-                    type="number"
-                    min={2}
-                    max={30}
-                    value={playerCount}
-                    onChange={(e) => setPlayerCount(Number(e.target.value))}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  <label className="block text-sm font-medium text-[#64748B] mb-1">Faktisk oppmøte</label>
+                  <input type="number" min={2} max={30} value={playerCount} onChange={(e) => setPlayerCount(Number(e.target.value))} className="input-field" />
                 </div>
               </div>
               {playerCount !== plannedCount && (
-                <div className="flex items-start gap-2 p-3 bg-amber-50 rounded-lg border border-amber-200">
-                  <AlertTriangle className="h-4 w-4 text-amber-600 shrink-0 mt-0.5" />
-                  <div className="text-xs text-amber-800">
+                <div className="flex items-start gap-2 p-3 bg-[#FFFBEB] rounded-xl border border-[#D97706]/20">
+                  <AlertTriangle className="h-4 w-4 text-[#D97706] shrink-0 mt-0.5" />
+                  <div className="text-xs text-[#92400E]">
                     <span className="font-semibold">{Math.abs(plannedCount - playerCount)} {playerCount < plannedCount ? "færre" : "flere"} enn planlagt.</span>
                     {" "}Øvelsene tilpasses automatisk.
                     {oddSolution && <p className="mt-1">{oddSolution}</p>}
@@ -232,7 +209,7 @@ export default function NyTreningsøktPage() {
                 </div>
               )}
               {gameForm && (
-                <div className="p-3 bg-green-50 rounded-lg text-sm text-green-800">
+                <div className="p-3 bg-[#F0FDF4] rounded-xl border border-[#16A34A]/20 text-sm text-[#166534]">
                   <span className="font-semibold">Anbefalt spillform:</span> {gameForm.description}
                 </div>
               )}
@@ -246,30 +223,16 @@ export default function NyTreningsøktPage() {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Lengde (meter)</label>
-                  <input
-                    type="number"
-                    min={10}
-                    max={110}
-                    value={fieldLength}
-                    onChange={(e) => setFieldLength(Number(e.target.value))}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  <label className="block text-sm font-medium text-[#64748B] mb-1">Lengde (meter)</label>
+                  <input type="number" min={10} max={110} value={fieldLength} onChange={(e) => setFieldLength(Number(e.target.value))} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Bredde (meter)</label>
-                  <input
-                    type="number"
-                    min={10}
-                    max={70}
-                    value={fieldWidth}
-                    onChange={(e) => setFieldWidth(Number(e.target.value))}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  <label className="block text-sm font-medium text-[#64748B] mb-1">Bredde (meter)</label>
+                  <input type="number" min={10} max={70} value={fieldWidth} onChange={(e) => setFieldWidth(Number(e.target.value))} className="input-field" />
                 </div>
               </div>
               {rules && (
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[#94A3B8]">
                   Anbefalt for {rules.label}: {rules.field_dimensions.length_min}–{rules.field_dimensions.length_max}m
                   x {rules.field_dimensions.width_min}–{rules.field_dimensions.width_max}m
                 </p>
@@ -283,14 +246,16 @@ export default function NyTreningsøktPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Mål</label>
+                <label className="block text-sm font-medium text-[#64748B] mb-2">Mål</label>
                 <div className="grid grid-cols-2 gap-2">
                   {GOAL_TYPES.map(({ value, label }) => (
                     <button
                       key={value}
                       onClick={() => setGoalType(value)}
-                      className={`rounded-lg border-2 p-2 text-sm transition-all ${
-                        goalType === value ? "border-green-600 bg-green-50 font-semibold" : "border-gray-200 hover:border-gray-400"
+                      className={`rounded-xl border-2 p-2.5 text-sm transition-all ${
+                        goalType === value
+                          ? "border-[#6D28D9] bg-[#F5F3FF] text-[#6D28D9] font-semibold"
+                          : "border-[#E4E2F5] hover:border-[#6D28D9]/40 text-[#1A1A2E]"
                       }`}
                     >
                       {label}
@@ -300,41 +265,26 @@ export default function NyTreningsøktPage() {
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Antall baller</label>
-                  <input
-                    type="number"
-                    min={1}
-                    max={30}
-                    value={balls}
-                    onChange={(e) => setBalls(Number(e.target.value))}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  <label className="block text-sm font-medium text-[#64748B] mb-1">Antall baller</label>
+                  <input type="number" min={1} max={30} value={balls} onChange={(e) => setBalls(Number(e.target.value))} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Antall kjegler</label>
-                  <input
-                    type="number"
-                    min={0}
-                    max={100}
-                    value={cones}
-                    onChange={(e) => setCones(Number(e.target.value))}
-                    className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500"
-                  />
+                  <label className="block text-sm font-medium text-[#64748B] mb-1">Antall kjegler</label>
+                  <input type="number" min={0} max={100} value={cones} onChange={(e) => setCones(Number(e.target.value))} className="input-field" />
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Tilpasninger som vil bli gjort */}
           {constraints && constraints.adjustments_made.length > 0 && (
-            <Card className="border-blue-100 bg-blue-50">
+            <Card className="border-[#2563EB]/20 bg-[#EFF6FF]">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-blue-800">Automatiske tilpasninger</CardTitle>
+                <CardTitle className="text-sm text-[#1D4ED8]">Automatiske tilpasninger</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 {constraints.adjustments_made.map((adj, i) => (
-                  <div key={i} className="flex items-start gap-2 text-xs text-blue-700">
-                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 mt-0.5 text-blue-500" />
+                  <div key={i} className="flex items-start gap-2 text-xs text-[#1D4ED8]">
+                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 mt-0.5 text-[#2563EB]" />
                     <span>{adj.description}</span>
                   </div>
                 ))}
@@ -343,29 +293,25 @@ export default function NyTreningsøktPage() {
           )}
 
           <div className="flex gap-3">
-            <Button variant="outline" onClick={() => setStep(1)} className="flex-1">
-              ← Tilbake
-            </Button>
-            <Button onClick={() => setStep(3)} size="lg" className="flex-1">
-              Forhåndsvis økt →
-            </Button>
+            <Button variant="outline" onClick={() => setStep(1)} className="flex-1">← Tilbake</Button>
+            <Button onClick={() => setStep(3)} size="lg" className="flex-1">Forhåndsvis økt →</Button>
           </div>
         </div>
       )}
 
-      {/* STEG 3: Forhåndsvisning */}
+      {/* STEG 3 */}
       {step === 3 && ageGroup && theme && rules && (
         <div className="space-y-6">
-          <Card className="border-green-200 bg-green-50">
+          <Card className="border-[#6D28D9]/20 bg-[#F5F3FF]">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-green-900">
+                <CardTitle className="text-[#1A1A2E]">
                   {THEMES.find((t) => t.value === theme)?.emoji}{" "}
                   {THEMES.find((t) => t.value === theme)?.label}
                 </CardTitle>
-                <Badge variant="green">{rules.label}</Badge>
+                <Badge variant="default">{rules.label}</Badge>
               </div>
-              <CardDescription className="text-green-700">
+              <CardDescription className="text-[#64748B]">
                 {playerCount} spillere · {fieldLength}m x {fieldWidth}m · Maks {rules.max_session_duration_minutes} min
               </CardDescription>
             </CardHeader>
@@ -379,12 +325,8 @@ export default function NyTreningsøktPage() {
           />
 
           <div className="flex gap-3">
-            <Button variant="outline" onClick={() => setStep(2)} className="flex-1">
-              ← Tilbake
-            </Button>
-            <Button size="lg" className="flex-1">
-              Lagre og start økt ✓
-            </Button>
+            <Button variant="outline" onClick={() => setStep(2)} className="flex-1">← Tilbake</Button>
+            <Button size="lg" className="flex-1">Lagre og start økt ✓</Button>
           </div>
         </div>
       )}
@@ -415,37 +357,37 @@ function SessionPreview({
 
   return (
     <div className="space-y-3">
-      <h3 className="font-semibold text-gray-900 flex items-center gap-2">
-        <Clock className="h-4 w-4 text-green-700" />
+      <h3 className="font-semibold text-[#1A1A2E] flex items-center gap-2">
+        <Clock className="h-4 w-4 text-[#6D28D9]" />
         Øktstruktur
       </h3>
       {phases.map((phase, i) => (
         <div key={i} className="flex gap-4 items-start">
           <div className="text-right shrink-0 w-12">
-            <span className="text-xs font-semibold text-green-700">{phase.duration_minutes} min</span>
+            <span className="text-xs font-semibold text-[#6D28D9]">{phase.duration_minutes} min</span>
           </div>
-          <div className="flex-1 border-l-2 border-green-200 pl-4 pb-4">
-            <p className="font-semibold text-sm text-gray-900">{phase.phase}</p>
-            <p className="text-xs text-gray-500 mt-0.5">{phase.description}</p>
+          <div className="flex-1 border-l-2 border-[#E4E2F5] pl-4 pb-4">
+            <p className="font-semibold text-sm text-[#1A1A2E]">{phase.phase}</p>
+            <p className="text-xs text-[#64748B] mt-0.5">{phase.description}</p>
           </div>
         </div>
       ))}
 
       {headingForbidden && (
-        <div className="flex items-center gap-2 p-3 bg-red-50 rounded-xl border border-red-200">
-          <AlertTriangle className="h-4 w-4 text-red-600 shrink-0" />
-          <p className="text-xs text-red-700 font-medium">
+        <div className="flex items-center gap-2 p-3 bg-[#FEF2F2] rounded-xl border border-[#DC2626]/20">
+          <AlertTriangle className="h-4 w-4 text-[#DC2626] shrink-0" />
+          <p className="text-xs text-[#DC2626] font-medium">
             Husk: Absolutt headingsforbud for denne aldersgruppen. Ingen øvelse skal inneholde heading.
           </p>
         </div>
       )}
 
-      <div className="p-3 bg-gray-50 rounded-xl border border-gray-200">
-        <p className="text-xs font-semibold text-gray-700 mb-1">Pedagogiske mål for {rules.label}:</p>
-        <ul className="text-xs text-gray-600 space-y-1">
+      <div className="p-3 bg-white rounded-xl border border-[#E4E2F5]">
+        <p className="text-xs font-semibold text-[#1A1A2E] mb-1">Pedagogiske mål for {rules.label}:</p>
+        <ul className="text-xs text-[#64748B] space-y-1">
           {(rules.technical_focus as string[]).slice(0, 3).map((focus, i) => (
             <li key={i} className="flex items-start gap-1.5">
-              <span className="text-green-600 shrink-0">•</span>
+              <span className="text-[#6D28D9] shrink-0">•</span>
               {focus}
             </li>
           ))}

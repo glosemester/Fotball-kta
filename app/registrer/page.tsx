@@ -17,70 +17,62 @@ export default function RegistrerPage() {
     e.preventDefault();
     if (password !== password2) { setError("Passordene er ikke like"); return; }
     if (password.length < 8) { setError("Passordet må være minst 8 tegn"); return; }
-    setLoading(true);
-    setError("");
-
+    setLoading(true); setError("");
     const res = await fetch("/api/auth/registrer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ full_name: fullName, club_name: clubName, email, password }),
     });
-
     const data = await res.json();
     if (!res.ok) { setError(data.error || "Noe gikk galt"); setLoading(false); return; }
-
     window.location.href = "/dashboard";
   }
 
   return (
-    <main className="min-h-screen bg-[#0B0F1A] flex items-center justify-center px-4 relative overflow-hidden">
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#4F7EFF]/8 rounded-full blur-[100px] pointer-events-none" />
-
-      <div className="relative w-full max-w-sm space-y-6">
+    <main className="min-h-screen bg-gradient-to-br from-[#EDE9FF] via-[#F0EEFF] to-[#E0EAFF] flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-sm space-y-6">
         <div className="text-center space-y-2">
           <div className="text-5xl mb-4">⚽</div>
-          <h1 className="text-2xl font-bold text-white">Opprett konto</h1>
-          <p className="text-[#94A3B8] text-sm">Kom i gang med FotballKTA</p>
+          <h1 className="text-2xl font-bold text-[#1A1A2E]">Opprett konto</h1>
+          <p className="text-[#64748B] text-sm">Kom i gang med FotballKTA</p>
         </div>
 
-        <div className="bg-[#141929] border border-white/[0.07] rounded-2xl p-6 space-y-4">
+        <div className="bg-white rounded-2xl shadow-sm border border-[#E4E2F5] p-6 space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#94A3B8]">Fullt navn</label>
-              <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required placeholder="Ola Nordmann" className="input-dark" />
+              <label className="text-sm font-medium text-[#1A1A2E]">Fullt navn</label>
+              <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required placeholder="Ola Nordmann" className="input-field" />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#94A3B8]">Klubbnavn <span className="text-[#4E5A72]">(valgfritt)</span></label>
-              <input type="text" value={clubName} onChange={(e) => setClubName(e.target.value)} placeholder="Rosenborg BK" className="input-dark" />
+              <label className="text-sm font-medium text-[#1A1A2E]">Klubbnavn <span className="text-[#94A3B8] font-normal">(valgfritt)</span></label>
+              <input type="text" value={clubName} onChange={(e) => setClubName(e.target.value)} placeholder="Rosenborg BK" className="input-field" />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#94A3B8]">E-post</label>
-              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" placeholder="trener@klubb.no" className="input-dark" />
+              <label className="text-sm font-medium text-[#1A1A2E]">E-post</label>
+              <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" placeholder="trener@klubb.no" className="input-field" />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#94A3B8]">Passord</label>
-              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="new-password" placeholder="Minst 8 tegn" className="input-dark" />
+              <label className="text-sm font-medium text-[#1A1A2E]">Passord</label>
+              <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="new-password" placeholder="Minst 8 tegn" className="input-field" />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#94A3B8]">Gjenta passord</label>
-              <input type="password" value={password2} onChange={(e) => setPassword2(e.target.value)} required autoComplete="new-password" className="input-dark" />
+              <label className="text-sm font-medium text-[#1A1A2E]">Gjenta passord</label>
+              <input type="password" value={password2} onChange={(e) => setPassword2(e.target.value)} required autoComplete="new-password" className="input-field" />
             </div>
-
             {error && (
-              <div className="bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-xl px-4 py-3">
-                <p className="text-sm text-[#EF4444]">{error}</p>
+              <div className="bg-[#DC2626]/8 border border-[#DC2626]/15 rounded-xl px-4 py-3">
+                <p className="text-sm text-[#DC2626]">{error}</p>
               </div>
             )}
-
             <Button type="submit" disabled={loading} className="w-full" size="lg">
               {loading ? "Oppretter konto..." : "Registrer deg"}
             </Button>
           </form>
         </div>
 
-        <p className="text-center text-sm text-[#4E5A72]">
+        <p className="text-center text-sm text-[#94A3B8]">
           Har du allerede konto?{" "}
-          <Link href="/login" className="text-[#4F7EFF] font-medium hover:text-[#3B6BF5]">Logg inn</Link>
+          <Link href="/login" className="text-[#6D28D9] font-medium hover:text-[#5B21B6]">Logg inn</Link>
         </p>
       </div>
     </main>

@@ -15,7 +15,7 @@ export default function SlettSpillerKnapp({ playerId, teamId }: { playerId: stri
   return (
     <button
       onClick={handleDelete}
-      className="p-2 text-[#4E5A72] hover:text-[#EF4444] hover:bg-[#EF4444]/10 rounded-lg transition-all"
+      className="p-2 text-[#94A3B8] hover:text-[#DC2626] hover:bg-[#FEF2F2] rounded-lg transition-all"
     >
       <Trash2 className="h-4 w-4" />
     </button>
