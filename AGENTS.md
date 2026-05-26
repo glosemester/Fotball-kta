@@ -3,3 +3,12 @@
 
 This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` before writing any code. Heed deprecation notices.
 <!-- END:nextjs-agent-rules -->
+
+# Dokumentasjonsplikt
+
+Oppdater alltid `TECHNICAL.md` når du:
+- Implementerer ny funksjonalitet
+- Fikser en feil som påvirker arkitekturen
+- Endrer teknisk oppsett (database, auth, deploy)
+
+Legg til en ny rad i tabellen under **Endringslogg** med dato og kort beskrivelse.
