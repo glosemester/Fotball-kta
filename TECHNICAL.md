@@ -205,3 +205,5 @@ Prisma-klienten genereres til `lib/generated/prisma/` (gitignorert).
 | 2026-05-26 | Lag og spillere: CRUD-operasjoner med API-ruter og sider |
 | 2026-05-26 | Komplett mørkt design-rewrite (navy/blå tema) |
 | 2026-05-26 | Lyst pastel design-rewrite: hvit/lavendel tema, fast bunnmeny for app-følelse |
+| 2026-05-26 | Treningsøkter-modul: listeside, API og lagring fra wizard |
+| 2026-05-26 | Velvære-modul: uke-oversikt, registrering per spiller (Grønn/Gul/Rød), varselpanel |
