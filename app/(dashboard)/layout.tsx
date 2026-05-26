@@ -31,7 +31,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       </header>
 
       {/* Hovedinnhold */}
-      <main className="flex-1 p-4 md:p-6 max-w-2xl w-full mx-auto pb-28">
+      <main className="flex-1 p-4 md:p-6 max-w-2xl w-full mx-auto pb-36">
         {children}
       </main>
 
