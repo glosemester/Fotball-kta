@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { getAllAgeGroups, getAgeGroupRules, isHeadingForbidden } from "@/lib/rules-engine";
 import { applyConstraints, getRecommendedGameForm, getOddPlayerSolution } from "@/lib/constraints-engine";
 import type { AgeGroupKey, SessionTheme, FieldSize, Equipment } from "@/types";
-import { AlertTriangle, CheckCircle2, Users, Clock, Target, Dumbbell } from "lucide-react";
+import { AlertTriangle, CheckCircle2, Users, Clock, Target, Dumbbell, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
 
 const THEMES: { value: SessionTheme; label: string; emoji: string }[] = [
   { value: "pasning_mottak",     label: "Pasning & Mottak",       emoji: "🎯" },
@@ -28,6 +28,17 @@ const GOAL_TYPES: { value: "full" | "small" | "cone_goals" | "none"; label: stri
   { value: "cone_goals", label: "Kjegleporter" },
   { value: "none",       label: "Ingen mål" },
 ];
+
+interface AiExercise {
+  phase: string;
+  name: string;
+  duration_minutes: number;
+  description: string;
+  setup: string;
+  instructions: string[];
+  coaching_points: string[];
+  variations: string[];
+}
 
 interface TeamOption {
   id: string;
@@ -64,6 +75,9 @@ export default function NyTreningsøktPage() {
   const [cones, setCones] = useState(20);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
+  const [aiExercises, setAiExercises] = useState<AiExercise[] | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
+  const [aiError, setAiError] = useState("");
 
   useEffect(() => {
     fetch("/api/lag")
@@ -114,6 +128,42 @@ export default function NyTreningsøktPage() {
   const gameForm = ageGroup ? getRecommendedGameForm(ageGroup, playerCount) : null;
   const oddSolution = ageGroup ? getOddPlayerSolution(ageGroup, playerCount) : "";
   const headingForbidden = ageGroup ? isHeadingForbidden(ageGroup) : false;
+
+  async function generateAI() {
+    if (!ageGroup || !theme || !rules) return;
+    setAiLoading(true);
+    setAiError("");
+    setAiExercises(null);
+
+    const sessionStructure = (rules as { session_structure?: { session_breakdown?: { phase: string; duration_minutes: number; description: string }[]; ramp_breakdown?: { phase: string; duration_minutes: number; description: string }[]; main_parts?: { phase: string; duration_minutes: number; description: string }[] } })?.session_structure;
+    const phases = sessionStructure?.session_breakdown ??
+      (sessionStructure?.ramp_breakdown ?? []).concat(sessionStructure?.main_parts ?? []) ?? [
+        { phase: "Oppvarming", duration_minutes: 15, description: "" },
+        { phase: "Hoveddel", duration_minutes: 45, description: "" },
+        { phase: "Fritt spill", duration_minutes: 15, description: "" },
+      ];
+
+    const res = await fetch("/api/treninger/generer", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        age_group: ageGroup,
+        theme,
+        player_count: playerCount,
+        field_length: fieldLength,
+        field_width: fieldWidth,
+        phases,
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      setAiError(data.error || "Noe gikk galt med AI-genereringen");
+    } else {
+      setAiExercises(data.exercises ?? []);
+    }
+    setAiLoading(false);
+  }
 
   async function handleSave() {
     if (!ageGroup || !theme) return;
@@ -439,6 +489,36 @@ export default function NyTreningsøktPage() {
 
           <SessionPreview ageGroup={ageGroup} theme={theme} headingForbidden={headingForbidden} rules={rules} />
 
+          {/* AI-øvelser */}
+          <div className="space-y-3">
+            <Button
+              type="button"
+              variant="secondary"
+              size="lg"
+              className="w-full"
+              onClick={generateAI}
+              disabled={aiLoading}
+            >
+              <Sparkles className="h-4 w-4" />
+              {aiLoading ? "Genererer øvelser..." : aiExercises ? "Generer på nytt ✨" : "Generer øvelser med AI ✨"}
+            </Button>
+
+            {aiLoading && (
+              <div className="text-center py-8 space-y-2">
+                <div className="w-8 h-8 border-2 border-[#6D28D9] border-t-transparent rounded-full animate-spin mx-auto" />
+                <p className="text-xs text-[#94A3B8]">Claude tilpasser øvelsene til {playerCount} spillere...</p>
+              </div>
+            )}
+
+            {aiError && (
+              <div className="bg-[#FEF2F2] border border-[#DC2626]/20 rounded-xl px-4 py-3">
+                <p className="text-sm text-[#DC2626]">{aiError}</p>
+              </div>
+            )}
+
+            {aiExercises && <AiExerciseList exercises={aiExercises} />}
+          </div>
+
           {saveError && (
             <div className="bg-[#FEF2F2] border border-[#DC2626]/20 rounded-xl px-4 py-3">
               <p className="text-sm text-[#DC2626]">{saveError}</p>
@@ -453,6 +533,94 @@ export default function NyTreningsøktPage() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function AiExerciseList({ exercises }: { exercises: AiExercise[] }) {
+  const [expanded, setExpanded] = useState<number | null>(0);
+
+  return (
+    <div className="space-y-2">
+      <p className="text-xs font-semibold text-[#94A3B8] uppercase tracking-widest px-1">
+        AI-genererte øvelser
+      </p>
+      {exercises.map((ex, i) => (
+        <div key={i} className="bg-white border border-[#E4E2F5] rounded-xl overflow-hidden">
+          <button
+            onClick={() => setExpanded(expanded === i ? null : i)}
+            className="w-full flex items-center justify-between p-4 text-left hover:bg-[#F8F7FF] transition-colors"
+          >
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="shrink-0">
+                <span className="text-[10px] font-semibold text-[#6D28D9] bg-[#F5F3FF] px-2 py-0.5 rounded-full">
+                  {ex.phase}
+                </span>
+              </div>
+              <div className="min-w-0">
+                <p className="font-semibold text-[#1A1A2E] text-sm truncate">{ex.name}</p>
+                <p className="text-xs text-[#94A3B8]">{ex.duration_minutes} min</p>
+              </div>
+            </div>
+            {expanded === i
+              ? <ChevronUp className="h-4 w-4 text-[#94A3B8] shrink-0" />
+              : <ChevronDown className="h-4 w-4 text-[#94A3B8] shrink-0" />}
+          </button>
+
+          {expanded === i && (
+            <div className="px-4 pb-4 space-y-3 border-t border-[#E4E2F5] pt-3">
+              <p className="text-sm text-[#64748B]">{ex.description}</p>
+
+              {ex.setup && (
+                <div>
+                  <p className="text-xs font-semibold text-[#1A1A2E] mb-1">Oppsett</p>
+                  <p className="text-xs text-[#64748B]">{ex.setup}</p>
+                </div>
+              )}
+
+              {ex.instructions?.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-[#1A1A2E] mb-1">Gjennomføring</p>
+                  <ol className="space-y-1">
+                    {ex.instructions.map((step, j) => (
+                      <li key={j} className="text-xs text-[#64748B] flex gap-2">
+                        <span className="text-[#6D28D9] font-bold shrink-0">{j + 1}.</span>
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                </div>
+              )}
+
+              {ex.coaching_points?.length > 0 && (
+                <div className="bg-[#F5F3FF] rounded-lg p-3">
+                  <p className="text-xs font-semibold text-[#6D28D9] mb-1.5">Trenerblikk</p>
+                  <ul className="space-y-1">
+                    {ex.coaching_points.map((pt, j) => (
+                      <li key={j} className="text-xs text-[#5B21B6] flex gap-1.5">
+                        <span className="shrink-0">•</span>{pt}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {ex.variations?.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-[#1A1A2E] mb-1">Varianter</p>
+                  <ul className="space-y-1">
+                    {ex.variations.map((v, j) => (
+                      <li key={j} className="text-xs text-[#64748B] flex gap-1.5">
+                        <span className="text-[#16A34A] shrink-0">→</span>{v}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      ))}
     </div>
   );
 }

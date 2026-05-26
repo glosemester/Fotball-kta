@@ -209,3 +209,4 @@ Prisma-klienten genereres til `lib/generated/prisma/` (gitignorert).
 | 2026-05-26 | Velvære-modul: uke-oversikt, registrering per spiller (Grønn/Gul/Rød), varselpanel |
 | 2026-05-26 | Ukesplan-modul: daglig fokusvelger, NFF-regel for antall økter, uke-navigering |
 | 2026-05-26 | Valgfrie moduler: features-felt på Coach, innstillinger-side, Velvære skjult til det slås på |
+| 2026-05-26 | AI-øvelser: Claude genererer tilpassede øvelser per fase i treningsøkt-wizarden |
