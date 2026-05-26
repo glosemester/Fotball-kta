@@ -1,0 +1,505 @@
+{
+  "age_groups_rules": {
+    "6-7": {
+      "label": "6–7 år",
+      "recommended_game_form": "3v3",
+      "has_goalkeeper": false,
+      "ball_size": 3,
+      "ball_weight_grams": 290,
+      "field_dimensions": {
+        "length_min": 15,
+        "length_max": 20,
+        "width_min": 10,
+        "width_max": 12
+      },
+      "goal_dimensions": {
+        "width": 1.5,
+        "height": 1.0
+      },
+      "max_session_duration_minutes": 60,
+      "min_session_duration_minutes": 45,
+      "sessions_per_week": {
+        "min": 1,
+        "max": 1
+      },
+      "target_ball_rolling_time_percentage": 85,
+      "heading_rule": "forbidden",
+      "heading_label": "Forbudt",
+      "forbidden_rules": ["throw_in", "offside"],
+      "allowed_restarts": ["kick_in", "dribble_in"],
+      "methodology": "part_to_whole",
+      "session_structure": {
+        "warm_up_minutes": 15,
+        "main_part_minutes": 35,
+        "closing_minutes": 10,
+        "ramp_warmup": false,
+        "fifa_11plus": false
+      },
+      "coaching_style": "guided_discovery",
+      "max_queue_players": 3,
+      "technical_focus": [
+        "Ballen og meg — forholdet mellom foten og ballen",
+        "Føre ball med begge føtter",
+        "Innside og utside av foten",
+        "Enkle retningsforandringer",
+        "Stoppe ball med sålen"
+      ],
+      "tactical_focus": [
+        "Retningsorientering — hvilken vei skal vi score?"
+      ],
+      "physical_development": "Tidlig grovmotorisk fase. Smalt synsfelt (tunnelsyn). Lav konsentrasjonsevne (3–5 min per oppgave). Geosentrisk verdensforståelse.",
+      "example_warm_up_activities": [
+        "Stiv heks med ball",
+        "Ball-gjemsel (drible unna)",
+        "Hai i havet med ball"
+      ],
+      "example_main_activities": [
+        "3v3 fritt spill på liten bane",
+        "Hinderløype med ball gjennom kjegler",
+        "Banelek: 'Pirater og skatter' (drible og beskytte ball)"
+      ],
+      "age_appropriate_notes": "100% lek- og spillbasert. Ingen taktiske instruksjoner. Gjør det morsomt og trygt.",
+      "wellbeing_check_mandatory": false,
+      "injury_risk_level": "low"
+    },
+
+    "8-9": {
+      "label": "8–9 år",
+      "recommended_game_form": "5v5",
+      "has_goalkeeper": true,
+      "ball_size": 3,
+      "ball_weight_grams": 305,
+      "field_dimensions": {
+        "length_min": 30,
+        "length_max": 30,
+        "width_min": 20,
+        "width_max": 20
+      },
+      "goal_dimensions": {
+        "width": 3.0,
+        "height": 2.0
+      },
+      "match_format": "3x15min eller 2x20min",
+      "max_session_duration_minutes": 60,
+      "min_session_duration_minutes": 60,
+      "sessions_per_week": {
+        "min": 1,
+        "max": 2
+      },
+      "target_ball_rolling_time_percentage": 80,
+      "heading_rule": "discouraged",
+      "heading_label": "Frarådes aktivt",
+      "forbidden_rules": ["offside"],
+      "methodology": "part_to_whole",
+      "session_structure": {
+        "warm_up_minutes": 15,
+        "main_part_1_minutes": 20,
+        "main_part_2_minutes": 20,
+        "closing_minutes": 5,
+        "ramp_warmup": false,
+        "fifa_11plus": false,
+        "session_breakdown": [
+          { "phase": "Teknisk oppvarming", "duration_minutes": 15, "description": "Ball per spiller, enkle teknikker" },
+          { "phase": "Overtalssituasjoner", "duration_minutes": 20, "description": "2v1 og 3v2 øvelser for romforståelse" },
+          { "phase": "Fritt spill 5v5", "duration_minutes": 20, "description": "Kveldens tema testes i kamp" },
+          { "phase": "Avslutning", "duration_minutes": 5, "description": "Samling, én positiv observasjon per spiller" }
+        ]
+      },
+      "coaching_style": "guided_discovery",
+      "max_queue_players": 3,
+      "technical_focus": [
+        "Kontrollert mottak med innsiden (ballen i ro)",
+        "Innsidepasning over korte avstander (2–7 meter)",
+        "Enkel skuddfinte",
+        "Enkelt oversteg"
+      ],
+      "tactical_focus": [
+        "Gjøre banen stor (bredde i angrep)",
+        "Nærmeste spiller går i press (første forsvarer)"
+      ],
+      "physical_development": "Forbedret perifert syn, men svak evne til å beregne ballens bane i luften. Stabil vekstperiode med god motorisk læringsevne.",
+      "example_warm_up_activities": [
+        "Pasningssirkler 2-3-2 med bevegelse",
+        "Ball-jonglering-konkurranse (maks berøringer)",
+        "Drible-stafett med retningsforandring"
+      ],
+      "example_main_activities": [
+        "2v1 mot keeper (lære å spille siste mann)",
+        "3v2 overtalsspill — se ledige medspillere",
+        "Posisjonsspill: gjøre banen bred (Y-formasjon)"
+      ],
+      "wellbeing_check_mandatory": false,
+      "injury_risk_level": "low"
+    },
+
+    "10-12": {
+      "label": "10–12 år",
+      "recommended_game_form": "7v7 (10 år) / 9v9 (11–12 år)",
+      "has_goalkeeper": true,
+      "ball_size": 4,
+      "ball_weight_grams": 370,
+      "field_dimensions": {
+        "length_min": 60,
+        "length_max": 68,
+        "width_min": 40,
+        "width_max": 50
+      },
+      "goal_dimensions": {
+        "width": 5.0,
+        "height": 2.0
+      },
+      "max_session_duration_minutes": 90,
+      "min_session_duration_minutes": 75,
+      "sessions_per_week": {
+        "min": 2,
+        "max": 3
+      },
+      "target_ball_rolling_time_percentage": 75,
+      "heading_rule": "controlled",
+      "heading_label": "Kun kontrollert med spesialball — maks 5 pr. spiller per uke",
+      "heading_max_per_player_per_week": 5,
+      "methodology": "part_to_whole",
+      "session_structure": {
+        "ramp_warmup": true,
+        "ramp_breakdown": [
+          { "phase": "R – Raise", "duration_minutes": 5, "description": "Pasningsspill i rolig bevegelse for å heve puls" },
+          { "phase": "A – Activate", "duration_minutes": 4, "description": "Gående utfall, seteløft — aktiver kjerne og hamstrings" },
+          { "phase": "M – Mobilize", "duration_minutes": 4, "description": "Dynamisk stretching (World's Greatest Stretch), INGEN statisk tøying" },
+          { "phase": "P – Potentiate", "duration_minutes": 3, "description": "Eksplosive retningsforandringer, korte akselerasjoner på signal" }
+        ],
+        "main_parts": [
+          { "phase": "Posisjonsspill/Rondo", "duration_minutes": 20, "description": "Rondos 4v1 eller 5v2 for pasningspresisjon og posisjonering" },
+          { "phase": "Temaspill", "duration_minutes": 25, "description": "Kveldens tekniske/taktiske tema, progressiv kompleksitet" },
+          { "phase": "Fritt spill", "duration_minutes": 20, "description": "Spillerne tester kveldens tema i reelt spill uten instruksjon" }
+        ],
+        "fifa_11plus": false
+      },
+      "coaching_style": "guided_discovery",
+      "tactical_methodology": "juego_de_posicion_intro",
+      "max_queue_players": 4,
+      "technical_focus": [
+        "Retningsbestemt førsteberøring (ta med ballen fremover)",
+        "Vristspark for langpasning",
+        "Cruyff-vending og sålevending",
+        "Scanning — se over skulderen FØR mottak"
+      ],
+      "tactical_focus": [
+        "Frispilling bakfra via keeper",
+        "Trekantspill og diamantformasjon",
+        "Kollektivt forsvar: press og sikring",
+        "Introduksjon posisjonsspill (4v4 + 3 nøytrale)"
+      ],
+      "signature_exercise": {
+        "name": "Den gylne Y-pasningen",
+        "description": "Y-formasjon. Spiller A slår hard pasning til Spiller B i midten. FØR B tar imot: scan over skulder, retningsbestemt mottak rundt kjegle med borteste fot, pasning videre til C1 eller C2. Rotasjon: følg din egen pasning.",
+        "players_needed": 5,
+        "cones_needed": 2,
+        "duration_minutes": 15
+      },
+      "physical_development": "Den gylne alder for motorisk læring. Nervesystem nesten ferdig utviklet. Utmerket balanse og romforståelse. Kan planlegge én handling frem i tid.",
+      "wellbeing_check_mandatory": true,
+      "injury_risk_level": "low_to_medium"
+    },
+
+    "13-14": {
+      "label": "13–14 år",
+      "recommended_game_form": "11v11",
+      "alternate_game_form": "9v9",
+      "has_goalkeeper": true,
+      "ball_size": 5,
+      "ball_weight_grams": 430,
+      "field_dimensions": {
+        "length_min": 90,
+        "length_max": 105,
+        "width_min": 60,
+        "width_max": 68
+      },
+      "goal_dimensions": {
+        "width": 7.32,
+        "height": 2.44
+      },
+      "max_session_duration_minutes": 90,
+      "min_session_duration_minutes": 90,
+      "sessions_per_week": {
+        "min": 3,
+        "max": 3
+      },
+      "matches_per_week": 1,
+      "target_ball_rolling_time_percentage": 70,
+      "heading_rule": "functional_only",
+      "heading_label": "Kun funksjonelt — ingen isolerte svingøvelser",
+      "injury_prevention_mandatory": true,
+      "injury_prevention_framework": "FIFA 11+",
+      "injury_prevention_frequency": "Minimum 2 ganger per uke",
+      "methodology": "whole_part_whole",
+      "session_structure": {
+        "ramp_warmup": true,
+        "fifa_11plus": true,
+        "ramp_breakdown": [
+          { "phase": "R – Raise", "duration_minutes": 5, "description": "Pasningsspill i bevegelse" },
+          { "phase": "A – Activate", "duration_minutes": 4, "description": "Gående utfall og seteløft" },
+          { "phase": "M – Mobilize", "duration_minutes": 4, "description": "Dynamisk stretching, ingen statisk" },
+          { "phase": "P – Potentiate", "duration_minutes": 3, "description": "Eksplosive akselerasjoner på signal" }
+        ],
+        "main_parts": [
+          { "phase": "Hel (Kampspill)", "duration_minutes": 15, "description": "Start med fullt spill for å avdekke problemet som skal trenes" },
+          { "phase": "Del (Deløvelse)", "duration_minutes": 30, "description": "Isoler problemet — f.eks. kollektivt press, leddforståelse" },
+          { "phase": "Hel (Kampspill igjen)", "duration_minutes": 20, "description": "Tilbake til kampspill — mål effekten av deløvelsen" }
+        ]
+      },
+      "coaching_style": "guided_discovery",
+      "phv_alert": true,
+      "phv_description": "Peak Height Velocity (maksimal vekstspurt). Observer 'Adolescent Awkwardness' — plutselig koordinasjonstap, langbeinte og usynkrone bevegelser. Øk ikke plyometrisk volum i disse periodene.",
+      "schlatter_severs_protocol": true,
+      "technical_focus": [
+        "Funksjonell teknikk under høyt kamptempo og fysisk press",
+        "Kroppsstilling for spill fremover på én berøring",
+        "Avslutninger: volleyskudd og direkte vristtreff på innlegg"
+      ],
+      "tactical_focus": [
+        "Faste spillsystemer: 4-3-3 eller 4-4-2",
+        "De fire spillfasene: angrep, overgang angrep→forsvar, forsvar, overgang forsvar→angrep",
+        "Soneforsvar med sideveis forskyvning",
+        "Kollektivt gjenvinningspress (Gegenpressing, 5–7 sekunder etter balltap)"
+      ],
+      "physical_development": "PHV — perioden for maksimal lengdevekst. Asynkron vekst gir midlertidig koordinasjonstap. Sterk økning i risiko for belastningsskader i senefester (Schlatter, Severs). Kognitivt: utvikler abstrakt tenkning og kollektive systemer.",
+      "wellbeing_check_mandatory": true,
+      "injury_risk_level": "high",
+      "load_management": {
+        "yellow_flag_recommendations": [
+          "Plasser spilleren som nøytral/frimann i posisjonsspill",
+          "Unngå maksimale sprinter og hopp",
+          "Bytt ut løpende FIFA 11+ øvelser med stasjonære kjerneøvelser"
+        ],
+        "red_flag_recommendations": [
+          "Spilleren deltar kun i tekniske stasjoner uten løp",
+          "Konsulter foreldre og vurder hvile",
+          "Kontakt idrettsmedisin ved vedvarende smerte"
+        ]
+      }
+    },
+
+    "15-16": {
+      "label": "15–16 år",
+      "recommended_game_form": "11v11",
+      "has_goalkeeper": true,
+      "ball_size": 5,
+      "ball_weight_grams": 430,
+      "field_dimensions": {
+        "length_min": 90,
+        "length_max": 105,
+        "width_min": 60,
+        "width_max": 68
+      },
+      "goal_dimensions": {
+        "width": 7.32,
+        "height": 2.44
+      },
+      "max_session_duration_minutes": 90,
+      "min_session_duration_minutes": 90,
+      "sessions_per_week": {
+        "min": 3,
+        "max": 4
+      },
+      "matches_per_week": { "min": 1, "max": 2 },
+      "target_ball_rolling_time_percentage": 70,
+      "heading_rule": "fully_integrated",
+      "heading_label": "Fullt integrert",
+      "injury_prevention_mandatory": true,
+      "injury_prevention_framework": "FIFA 11+",
+      "methodology": "whole_part_whole",
+      "session_structure": {
+        "ramp_warmup": true,
+        "fifa_11plus": true,
+        "main_parts": [
+          { "phase": "Hel (Kampspill)", "duration_minutes": 15, "description": "Fullt kampspill som utgangspunkt" },
+          { "phase": "Del: Posisjonsspill", "duration_minutes": 20, "description": "Formasjonsspill med tydelig tema (f.eks. høyt press vs. lav blokk)" },
+          { "phase": "Del: Fysisk kapasitet i spill", "duration_minutes": 15, "description": "Høyintensitetsspill med spesifikke anaerobe krav" },
+          { "phase": "Hel (Kampscenario)", "duration_minutes": 20, "description": "Store kampscenarier med kveldens tema integrert" }
+        ]
+      },
+      "coaching_style": "guided_discovery_with_tactical_instruction",
+      "technical_focus": [
+        "Posisjonsspesifikk perfeksjonering (innlegg i full fart for kanter, 360-orientering for sentrale midtbane)",
+        "Automatisering av funksjonelle pasninger og mottaksteknikker",
+        "Avslutninger under maksimalt press fra forsvarere"
+      ],
+      "tactical_focus": [
+        "Kollektive mønstre: høyt press kontra lav blokk",
+        "Relasjonell samhandling i leddene",
+        "Strategisk utnyttelse av overtall (overbelastning av soner)",
+        "Transisjonsspill: rask rekonstruksjon etter balltap"
+      ],
+      "physical_development": "Vekstspurt flater ut. Muskelmasse øker naturlig. Tåler høyere treningsvolum og større anaerob belastning. Dypere taktisk modenhet og evne til selvevaluering. Kritisk fase for frafall grunnet eksternt sosialt press.",
+      "dropout_risk": "high",
+      "dropout_prevention_notes": "Prioriter mestringsklima framfor resultatpress. Gi spillere medbestemmelse i treningsopplegget.",
+      "wellbeing_check_mandatory": true,
+      "injury_risk_level": "medium",
+      "load_management": {
+        "yellow_flag_recommendations": [
+          "Reduser sprint-volum med 30%",
+          "Erstatt høyintensive intervaller med teknisk posisjonsspill",
+          "Sjekk total treningsbelastning på tvers av lag"
+        ],
+        "red_flag_recommendations": [
+          "Hvile fra kontaktøvelser",
+          "Kun teknisk og taktisk deltagelse",
+          "Medisinsk vurdering anbefales"
+        ]
+      }
+    },
+
+    "17-18": {
+      "label": "17–18 år",
+      "recommended_game_form": "11v11",
+      "has_goalkeeper": true,
+      "ball_size": 5,
+      "ball_weight_grams": 430,
+      "field_dimensions": {
+        "length_min": 90,
+        "length_max": 105,
+        "width_min": 60,
+        "width_max": 68
+      },
+      "goal_dimensions": {
+        "width": 7.32,
+        "height": 2.44
+      },
+      "max_session_duration_minutes": 90,
+      "min_session_duration_minutes": 90,
+      "sessions_per_week": {
+        "min": 4,
+        "max": 4
+      },
+      "matches_per_week": { "min": 1, "max": 2 },
+      "target_ball_rolling_time_percentage": 70,
+      "heading_rule": "unrestricted",
+      "heading_label": "Ubegrenset",
+      "injury_prevention_mandatory": true,
+      "injury_prevention_framework": "FIFA 11+",
+      "methodology": "whole_part_whole",
+      "session_structure": {
+        "ramp_warmup": true,
+        "fifa_11plus": true,
+        "main_parts": [
+          { "phase": "RAMP / Prehab", "duration_minutes": 16, "description": "Komplett RAMP + FIFA 11+ forebygging" },
+          { "phase": "Høyintenst posisjonsspill", "duration_minutes": 25, "description": "Kompakt spill med høye krav til intensitet og beslutningshastighet" },
+          { "phase": "Store kampscenarier", "duration_minutes": 35, "description": "11v11 med spesifikke kampanalyse-instruksjoner og taktiske systemer" },
+          { "phase": "Avslutning", "duration_minutes": 14, "description": "Individuell teknisk finpuss og nedtoning" }
+        ]
+      },
+      "coaching_style": "tactical_instruction_with_autonomy",
+      "technical_focus": [
+        "Automatisering av basisteknikker under maksimal fysisk utmattelse",
+        "Kynisme og smartness i dueller (skjerme ball, bruke kroppen lovlig)",
+        "Keeperteknikk: W-grep, boksing i trafikk, hurtige slyngekast i transisjon"
+      ],
+      "tactical_focus": [
+        "Kampbildehåndtering og spesifikke kampanalyser",
+        "Soneforsvar med perfekt linjeavstand (kompakt lag under 30 meter total lengde)",
+        "Høyt press vs. lav blokk basert på motstanders styrker",
+        "Relasjonell samhandling og individuell taktisk frihet innen lagets rammer"
+      ],
+      "physical_development": "Fysisk fullt utviklet — tåler voksen belastning. Systematisk trening av maksimal styrke, kraft og utholdenhet. Kognitivt i stand til å håndtere høyt psykologisk press og komplekse taktiske systemer.",
+      "wellbeing_check_mandatory": true,
+      "injury_risk_level": "medium",
+      "load_management": {
+        "yellow_flag_recommendations": [
+          "Reduser belastning dagen etter kamp",
+          "Prioriter restitusjon fremfor høy treningsintensitet",
+          "Sjekk søvn og ernæring (spørrende, ikke målende)"
+        ],
+        "red_flag_recommendations": [
+          "Hvile og medisinsk vurdering",
+          "Kontakt spillerens fastlege ved behov",
+          "Dokumenter i appen for trenerkommunikasjon"
+        ]
+      }
+    }
+  },
+
+  "weekly_periodization": {
+    "description": "Mikrosyklus — ukesstruktur rundt kampdagen",
+    "match_day_minus_3": {
+      "focus": "Høyvolum — store relasjoner",
+      "intensity": "Høy (70–80% av maks)",
+      "description": "Posisjonsspill med mange spillere, store baner, komplekse taktiske strukturer"
+    },
+    "match_day_minus_1": {
+      "focus": "Skarphet og aktivering",
+      "intensity": "Lav-medium (50–60% av maks)",
+      "description": "Kort økt (45–60 min). Små flater, dødballer, raske en-trekningsspill. Ikke utmatte spillerne."
+    },
+    "match_day": {
+      "focus": "Kamp",
+      "intensity": "Maksimal",
+      "description": "Kamp. Fokus på gjennomføring av kveldens taktiske plan."
+    },
+    "match_day_plus_1": {
+      "focus": "Restitusjon",
+      "intensity": "Svært lav",
+      "description": "Aktiv restitusjon eller fri. Lett bevegelse. Ingen intensitet."
+    }
+  },
+
+  "methodology_frameworks": {
+    "ajax_rotation": {
+      "name": "Ajax-metoden",
+      "description": "4-stasjonsrotasjon for å eliminere køer. Alle spillere er aktive hele tiden.",
+      "max_players_per_station": 4
+    },
+    "la_masia_rondo": {
+      "name": "La Masia-metoden",
+      "description": "Rondoer brukt som dyp taktisk læringsarena for posisjonering og kroppsstilling, ikke bare oppvarming."
+    },
+    "tips_principle": {
+      "name": "TIPS-prinsippet (KNVB)",
+      "components": ["Teknikk", "Innsikt", "Personlighet", "Hurtighet"],
+      "description": "Helhetlig evaluering av spillerens potensial i tette 1v1- og 2v2-miljøer."
+    },
+    "four_corners": {
+      "name": "Four Corners Model (The FA)",
+      "components": ["Teknisk/Taktisk", "Fysisk", "Psykologisk", "Sosialt"],
+      "description": "Se hele spilleren gjennom fire interaktive vinduer."
+    },
+    "juego_de_posicion": {
+      "name": "Posisjonsspill (RFEF)",
+      "description": "Automatiser handlingskjeden: Oppfatte → Forstå → Utføre. Bruk strukturerte overtalssone-leker."
+    }
+  },
+
+  "wellbeing_rules": {
+    "forbidden_measurements": ["height", "weight", "body_fat_percentage", "bmi", "circumference"],
+    "forbidden_measurements_label": "ALDRI mål kropper. Ingen vekt, fettprosent, høyde eller BMI.",
+    "statuses": {
+      "green": {
+        "label": "Grønn — Overskudd",
+        "emoji": "🟢",
+        "description": "Klar for full belastning. God søvn, energi og motivasjon.",
+        "training_modification": "Ingen tilpasning nødvendig.",
+        "coach_action": "Normal treningsplan"
+      },
+      "yellow": {
+        "label": "Gul — Sliten / Vokseverk",
+        "emoji": "🟡",
+        "description": "Sliten, stiv, vokseverk eller generell tretthet. Kan trene, men redusert intensitet.",
+        "training_modification": "Reduser plyometrisk volum (hopp og sprint). Bruk spilleren som nøytral i posisjonsspill. Unngå maksimale akselerasjoner.",
+        "coach_action": "Gult flagg vises på oppmøtelisten med anbefaling"
+      },
+      "red": {
+        "label": "Rød — Smerte",
+        "emoji": "🔴",
+        "description": "Smerter (Schlatter foran på kneet, Severs bak på hælen, muskelskade o.l.). Skal ikke presse seg.",
+        "training_modification": "Kun tekniske stasjoner uten løp. Vurder full hvile. Kontakt foreldre.",
+        "coach_action": "Rødt flagg med konkret pedagogisk anbefaling. Bekreftelse fra trener kreves."
+      }
+    },
+    "symptom_examples": {
+      "schlatter": "Murring/smerte foran på kneet (Osgood-Schlatters sykdom — vekstspurt)",
+      "severs": "Smerte bak på hælen (Severs syndrom — vekstspurt)",
+      "general_fatigue": "Generell tretthet og mangel på energi",
+      "muscle_soreness": "Stivhet og ømhet i muskler",
+      "growing_pains": "Vokseverk i bein og ledd"
+    }
+  }
+}

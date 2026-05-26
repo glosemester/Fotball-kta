@@ -1,0 +1,197 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============================================================
+// BRUKERE (TRENERE)
+// ============================================================
+model Coach {
+  id         String    @id @default(cuid())
+  email      String    @unique
+  password   String
+  full_name  String
+  club_name  String?
+  role       CoachRole @default(COACH)
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+
+  teams    Team[]
+  sessions TrainingSession[]
+
+  @@map("coaches")
+}
+
+enum CoachRole {
+  COACH
+  ASSISTANT_COACH
+  ADMIN
+}
+
+// ============================================================
+// LAG
+// ============================================================
+model Team {
+  id         String   @id @default(cuid())
+  name       String
+  club_name  String
+  age_group  AgeGroup
+  season     String   @default("2025")
+  coach_id   String
+  is_active  Boolean  @default(true)
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  coach        Coach             @relation(fields: [coach_id], references: [id])
+  players      Player[]
+  sessions     TrainingSession[]
+  weekly_plans WeeklyPlan[]
+
+  @@map("teams")
+}
+
+// ============================================================
+// SPILLERE
+// ============================================================
+model Player {
+  id         String         @id @default(cuid())
+  first_name String
+  last_name  String
+  birth_year Int
+  team_id    String
+  position   PlayerPosition @default(UNASSIGNED)
+  is_active  Boolean        @default(true)
+  created_at DateTime       @default(now())
+  updated_at DateTime       @updatedAt
+
+  team              Team              @relation(fields: [team_id], references: [id])
+  wellbeing_reports WellbeingReport[]
+
+  @@map("players")
+}
+
+enum PlayerPosition {
+  GOALKEEPER
+  DEFENDER
+  MIDFIELDER
+  FORWARD
+  UNASSIGNED
+}
+
+// ============================================================
+// VELVÆRE-RAPPORTER
+// ABSOLUTT FORBUD: Ingen felt for vekt, fettprosent, høyde eller BMI.
+// All registrering er symptombasert og subjektiv.
+// ============================================================
+model WellbeingReport {
+  id          String          @id @default(cuid())
+  player_id   String
+  reported_by ReporterType    @default(PARENT)
+  status      WellbeingStatus
+  symptoms    String[]
+  note        String?
+  week_number Int
+  year        Int
+  created_at  DateTime        @default(now())
+
+  player Player @relation(fields: [player_id], references: [id])
+
+  @@unique([player_id, week_number, year])
+  @@map("wellbeing_reports")
+}
+
+enum WellbeingStatus {
+  GREEN
+  YELLOW
+  RED
+}
+
+enum ReporterType {
+  PLAYER
+  PARENT
+  COACH
+}
+
+// ============================================================
+// TRENINGSØKTER
+// ============================================================
+model TrainingSession {
+  id                   String        @id @default(cuid())
+  team_id              String
+  coach_id             String
+  title                String
+  date                 DateTime
+  age_group            AgeGroup
+  theme                SessionTheme
+  duration_minutes     Int
+  actual_player_count  Int
+  planned_player_count Int
+  field_length_meters  Float
+  field_width_meters   Float
+  has_full_goals       Boolean       @default(false)
+  balls_available      Int           @default(1)
+  cones_available      Int           @default(10)
+  status               SessionStatus @default(DRAFT)
+  constraints_applied  String[]
+  phases               Json
+  notes                String?
+  created_at           DateTime      @default(now())
+  updated_at           DateTime      @updatedAt
+
+  team  Team  @relation(fields: [team_id], references: [id])
+  coach Coach @relation(fields: [coach_id], references: [id])
+
+  @@map("training_sessions")
+}
+
+enum SessionStatus {
+  DRAFT
+  ACTIVE
+  COMPLETED
+}
+
+enum SessionTheme {
+  PASNING_MOTTAK
+  DRIBLING_VENDINGER
+  AVSLUTNINGER
+  FORSVAR
+  POSISJONSSPILL
+  PRESSING
+  OVERGANGER
+  KEEPERTEKNIKK
+  FRITT_SPILL
+}
+
+// ============================================================
+// UKESPLAN (PERIODISERING)
+// ============================================================
+model WeeklyPlan {
+  id          String   @id @default(cuid())
+  team_id     String
+  week_number Int
+  year        Int
+  match_day   String?
+  plan_data   Json
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  team Team @relation(fields: [team_id], references: [id])
+
+  @@unique([team_id, week_number, year])
+  @@map("weekly_plans")
+}
+
+// ============================================================
+// ALDERSGRUPPER (ENUM)
+// ============================================================
+enum AgeGroup {
+  AGE_6_7
+  AGE_8_9
+  AGE_10_12
+  AGE_13_14
+  AGE_15_16
+  AGE_17_18
+}
