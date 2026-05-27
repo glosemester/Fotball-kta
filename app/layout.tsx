@@ -8,7 +8,7 @@ const geistSans = Geist({
 });
 
 export const metadata: Metadata = {
-  title: "Fotball-KTA — AI-drevet Treningsplanlegging",
+  title: "PitchPlan — AI-drevet Treningsplanlegging",
   description:
     "Intelligent treningsplanlegging for barne- og ungdomsfotball (6–18 år). Basert på NFF, SvFF og DBU-retningslinjer.",
 };

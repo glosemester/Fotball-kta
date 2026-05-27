@@ -40,7 +40,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
       <header className="bg-white border-b border-[#E4E2F5] px-4 py-3 flex items-center justify-between sticky top-0 z-20">
         <Link href="/dashboard" className="flex items-center gap-2 font-bold text-lg text-[#1A1A2E]">
           <span className="text-2xl">⚽</span>
-          <span>Fotball<span className="text-[#6D28D9]">KTA</span></span>
+          <span>Pitch<span className="text-[#6D28D9]">Plan</span></span>
         </Link>
         <div className="flex items-center gap-1">
           {session && (
