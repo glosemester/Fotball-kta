@@ -210,3 +210,5 @@ Prisma-klienten genereres til `lib/generated/prisma/` (gitignorert).
 | 2026-05-26 | Ukesplan-modul: daglig fokusvelger, NFF-regel for antall økter, uke-navigering |
 | 2026-05-26 | Valgfrie moduler: features-felt på Coach, innstillinger-side, Velvære skjult til det slås på |
 | 2026-05-26 | AI-øvelser: Claude genererer tilpassede øvelser per fase i treningsøkt-wizarden |
+| 2026-05-27 | App omdøpt til PitchPlan; GitHub Actions auto-deploy til Hetzner via SSH |
+| 2026-05-27 | Flerspråklig støtte (nb/sv/da/en): cookie-basert i18n, JSON-ordbøker, LangSwitcher |
