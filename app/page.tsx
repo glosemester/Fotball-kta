@@ -7,7 +7,7 @@ export default function Home() {
         <div className="space-y-4">
           <div className="text-7xl">⚽</div>
           <h1 className="text-5xl font-bold text-[#1A1A2E] tracking-tight">
-            Fotball<span className="text-[#6D28D9]">KTA</span>
+            Pitch<span className="text-[#6D28D9]">Plan</span>
           </h1>
           <p className="text-[#64748B] text-lg">
             AI-drevet treningsplanlegging for barne- og ungdomsfotball
