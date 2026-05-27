@@ -21,7 +21,7 @@ jobs:
             cd /var/www/fotball-kta
             git pull origin main
             npm ci
-            npx prisma migrate deploy
+            npx prisma db push --accept-data-loss
             npm run build
             pm2 restart fotball-kta
             pm2 save
