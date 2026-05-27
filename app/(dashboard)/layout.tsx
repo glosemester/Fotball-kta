@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CalendarDays, Calendar, Users, Dumbbell, LayoutDashboard, Activity, Settings } from "lucide-react";
+import PitchPlanLogo from "@/components/PitchPlanLogo";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getLang, getDictionary } from "@/lib/dict";
@@ -35,7 +36,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <div className="min-h-screen bg-[#F0EEFF] flex flex-col">
       <header className="bg-white border-b border-[#E4E2F5] px-4 py-3 flex items-center justify-between sticky top-0 z-20">
         <Link href="/dashboard" className="flex items-center gap-2 font-bold text-lg text-[#1A1A2E]">
-          <span className="text-2xl">⚽</span>
+          <PitchPlanLogo size={28} />
           <span>Pitch<span className="text-[#6D28D9]">Plan</span></span>
         </Link>
         <div className="flex items-center gap-1">
