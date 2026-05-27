@@ -306,6 +306,6 @@
     "optional_modules": "Valgfrie moduler",
     "language_title": "Sprog",
     "wellbeing_label": "Velvære",
-    "wellbeing_desc": "Lad spillere og forældre registrere ugentlig velvære (Grøn/Gul/Rød). Vises i menuen og giver dig advarsler før træning."
+    "wellbeing_desc": "Registrer ugentlig velvære for dine spillere (Grøn/Gul/Rød). Symptombaseret — ingen kropstal. Giver dig overblik og advarsler før træning."
   }
 }

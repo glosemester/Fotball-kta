@@ -306,6 +306,6 @@
     "optional_modules": "Valfria moduler",
     "language_title": "Språk",
     "wellbeing_label": "Välmående",
-    "wellbeing_desc": "Låt spelare och föräldrar registrera veckovis välmående (Grön/Gul/Röd). Visas i menyn och ger dig varningar före träning."
+    "wellbeing_desc": "Registrera veckovis välmående för dina spelare (Grön/Gul/Röd). Symtombaserat — inga kroppsmått. Ger dig överblick och varningar före träning."
   }
 }
