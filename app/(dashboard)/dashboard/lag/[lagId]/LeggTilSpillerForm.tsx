@@ -5,15 +5,15 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
 
-const POSITIONS = [
-  { value: "UNASSIGNED", label: "Ikke satt" },
-  { value: "GOALKEEPER", label: "Keeper" },
-  { value: "DEFENDER", label: "Forsvarer" },
-  { value: "MIDFIELDER", label: "Midtbane" },
-  { value: "FORWARD", label: "Angriper" },
-];
+const POSITION_KEYS = ["UNASSIGNED","GOALKEEPER","DEFENDER","MIDFIELDER","FORWARD"];
 
-export default function LeggTilSpillerForm({ teamId }: { teamId: string }) {
+interface Dict {
+  add_player: string; player_form_title: string; first_name: string; last_name: string;
+  birth_year: string; position: string; adding: string; add_player_submit: string;
+  cancel: string; error_generic: string; positions: Record<string, string>;
+}
+
+export default function LeggTilSpillerForm({ teamId, dict }: { teamId: string; dict: Dict }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
@@ -25,22 +25,17 @@ export default function LeggTilSpillerForm({ teamId }: { teamId: string }) {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-
+    setLoading(true); setError("");
     const res = await fetch(`/api/lag/${teamId}/spillere`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ first_name: firstName, last_name: lastName, birth_year: Number(birthYear), position }),
     });
-
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error || "Noe gikk galt");
-      setLoading(false);
-      return;
+      setError(data.error || dict.error_generic);
+      setLoading(false); return;
     }
-
     setFirstName(""); setLastName(""); setLoading(false); setOpen(false);
     router.refresh();
   }
@@ -49,7 +44,7 @@ export default function LeggTilSpillerForm({ teamId }: { teamId: string }) {
     return (
       <Button onClick={() => setOpen(true)}>
         <Plus className="h-4 w-4" />
-        Legg til spiller
+        {dict.add_player}
       </Button>
     );
   }
@@ -57,7 +52,7 @@ export default function LeggTilSpillerForm({ teamId }: { teamId: string }) {
   return (
     <div className="bg-white border border-[#E4E2F5] rounded-2xl p-5 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-[#1A1A2E]">Ny spiller</h3>
+        <h3 className="font-semibold text-[#1A1A2E]">{dict.player_form_title}</h3>
         <button onClick={() => setOpen(false)} className="text-[#94A3B8] hover:text-[#1A1A2E] transition-colors">
           <X className="h-4 w-4" />
         </button>
@@ -65,23 +60,25 @@ export default function LeggTilSpillerForm({ teamId }: { teamId: string }) {
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-[#64748B]">Fornavn</label>
+            <label className="text-xs font-medium text-[#64748B]">{dict.first_name}</label>
             <input value={firstName} onChange={(e) => setFirstName(e.target.value)} required className="input-field" />
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-[#64748B]">Etternavn</label>
+            <label className="text-xs font-medium text-[#64748B]">{dict.last_name}</label>
             <input value={lastName} onChange={(e) => setLastName(e.target.value)} required className="input-field" />
           </div>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-[#64748B]">Fødselsår</label>
+            <label className="text-xs font-medium text-[#64748B]">{dict.birth_year}</label>
             <input type="number" value={birthYear} onChange={(e) => setBirthYear(Number(e.target.value))} min={2000} max={new Date().getFullYear()} required className="input-field" />
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-[#64748B]">Posisjon</label>
+            <label className="text-xs font-medium text-[#64748B]">{dict.position}</label>
             <select value={position} onChange={(e) => setPosition(e.target.value)} className="input-field">
-              {POSITIONS.map((p) => <option key={p.value} value={p.value}>{p.label}</option>)}
+              {POSITION_KEYS.map((key) => (
+                <option key={key} value={key}>{dict.positions[key] ?? key}</option>
+              ))}
             </select>
           </div>
         </div>
@@ -92,9 +89,9 @@ export default function LeggTilSpillerForm({ teamId }: { teamId: string }) {
         )}
         <div className="flex gap-2 pt-1">
           <Button type="submit" disabled={loading} className="flex-1">
-            {loading ? "Legger til..." : "Legg til"}
+            {loading ? dict.adding : dict.add_player_submit}
           </Button>
-          <Button type="button" variant="outline" onClick={() => setOpen(false)}>Avbryt</Button>
+          <Button type="button" variant="outline" onClick={() => setOpen(false)}>{dict.cancel}</Button>
         </div>
       </form>
     </div>

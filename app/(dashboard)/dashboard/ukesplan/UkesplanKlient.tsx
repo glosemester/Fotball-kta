@@ -6,45 +6,32 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ChevronLeft, ChevronRight, Save, Trophy } from "lucide-react";
 
-const DAYS = [
-  { key: "monday",    short: "Man", label: "Mandag" },
-  { key: "tuesday",  short: "Tir", label: "Tirsdag" },
-  { key: "wednesday",short: "Ons", label: "Onsdag" },
-  { key: "thursday", short: "Tor", label: "Torsdag" },
-  { key: "friday",   short: "Fre", label: "Fredag" },
-  { key: "saturday", short: "Lør", label: "Lørdag" },
-  { key: "sunday",   short: "Søn", label: "Søndag" },
-];
+const DAY_KEYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
-const FOCUS_OPTIONS: { value: string; label: string; emoji: string; desc: string; bg: string; border: string; text: string }[] = [
-  { value: "high_volume",  label: "Høy volum",    emoji: "💪", desc: "Lang økt, mye ballkontakt",     bg: "#EFF6FF", border: "#2563EB", text: "#1D4ED8" },
-  { value: "sharpness",    label: "Skarphet",      emoji: "⚡", desc: "Kort og intens, kampforberedelse", bg: "#F5F3FF", border: "#6D28D9", text: "#5B21B6" },
-  { value: "technical",    label: "Teknisk",       emoji: "🎯", desc: "Individuelle ferdigheter",       bg: "#F0FDF4", border: "#16A34A", text: "#15803D" },
-  { value: "recovery",     label: "Restitusjon",   emoji: "🧘", desc: "Lett økt, fritt spill",         bg: "#FFFBEB", border: "#D97706", text: "#92400E" },
-  { value: "match",        label: "Kamp",          emoji: "🏆", desc: "Kampdagen",                     bg: "#FEF2F2", border: "#DC2626", text: "#991B1B" },
-  { value: "rest",         label: "Hvildag",       emoji: "😴", desc: "Ingen aktivitet",               bg: "#F8FAFC", border: "#E4E2F5", text: "#64748B" },
-];
+const FOCUS_STYLE: Record<string, { emoji: string; bg: string; border: string; text: string }> = {
+  high_volume: { emoji: "💪", bg: "#EFF6FF", border: "#2563EB", text: "#1D4ED8" },
+  sharpness:   { emoji: "⚡", bg: "#F5F3FF", border: "#6D28D9", text: "#5B21B6" },
+  technical:   { emoji: "🎯", bg: "#F0FDF4", border: "#16A34A", text: "#15803D" },
+  recovery:    { emoji: "🧘", bg: "#FFFBEB", border: "#D97706", text: "#92400E" },
+  match:       { emoji: "🏆", bg: "#FEF2F2", border: "#DC2626", text: "#991B1B" },
+  rest:        { emoji: "😴", bg: "#F8FAFC", border: "#E4E2F5", text: "#64748B" },
+};
 
-const FOCUS_MAP = Object.fromEntries(FOCUS_OPTIONS.map((f) => [f.value, f]));
+const FOCUS_KEYS = ["high_volume", "sharpness", "technical", "recovery", "match", "rest"];
 
-interface DayPlan {
-  focus: string;
-  notes: string;
-}
-
-interface Team {
-  id: string;
-  name: string;
-  club_name: string;
-  age_group: string;
-}
-
+interface DayPlan { focus: string; notes: string; }
+interface Team { id: string; name: string; club_name: string; age_group: string; }
 interface ExistingPlan {
-  team_id: string;
-  week_number: number;
-  year: number;
-  match_day: string | null;
-  plan_data: Record<string, DayPlan>;
+  team_id: string; week_number: number; year: number;
+  match_day: string | null; plan_data: Record<string, DayPlan>;
+}
+
+interface WeekplanDict {
+  no_teams: string; save_button: string; saved: string;
+  note_placeholder: string; sessions_rule: string; of: string;
+  days: Record<string, string>;
+  focus: Record<string, string>;
+  focus_desc: Record<string, string>;
 }
 
 interface Props {
@@ -52,6 +39,8 @@ interface Props {
   week: number;
   year: number;
   existingPlans: ExistingPlan[];
+  dict: WeekplanDict;
+  weekLabel: string;
 }
 
 const AGE_SESSIONS: Record<string, { min: number; max: number; maxMin: number }> = {
@@ -64,10 +53,10 @@ const AGE_SESSIONS: Record<string, { min: number; max: number; maxMin: number }>
 };
 
 function emptyWeek(): Record<string, DayPlan> {
-  return Object.fromEntries(DAYS.map((d) => [d.key, { focus: "rest", notes: "" }]));
+  return Object.fromEntries(DAY_KEYS.map((k) => [k, { focus: "rest", notes: "" }]));
 }
 
-export default function UkesplanKlient({ teams, week, year, existingPlans }: Props) {
+export default function UkesplanKlient({ teams, week, year, existingPlans, dict, weekLabel }: Props) {
   const router = useRouter();
   const [selectedTeam, setSelectedTeam] = useState<Team | null>(teams[0] ?? null);
   const [currentWeek, setCurrentWeek] = useState(week);
@@ -79,9 +68,7 @@ export default function UkesplanKlient({ teams, week, year, existingPlans }: Pro
     (p) => p.team_id === selectedTeam?.id && p.week_number === currentWeek && p.year === currentYear
   );
 
-  const [days, setDays] = useState<Record<string, DayPlan>>(
-    existingPlan?.plan_data ?? emptyWeek()
-  );
+  const [days, setDays] = useState<Record<string, DayPlan>>(existingPlan?.plan_data ?? emptyWeek());
   const [matchDay, setMatchDay] = useState(existingPlan?.match_day ?? "");
 
   function handleTeamChange(teamId: string) {
@@ -98,9 +85,7 @@ export default function UkesplanKlient({ teams, week, year, existingPlans }: Pro
   function updateDay(dayKey: string, field: keyof DayPlan, value: string) {
     setDays((prev) => ({ ...prev, [dayKey]: { ...prev[dayKey], [field]: value } }));
     setSaved(false);
-    if (field === "focus" && value === "match") {
-      setMatchDay(dayKey);
-    }
+    if (field === "focus" && value === "match") setMatchDay(dayKey);
   }
 
   function prevWeek() {
@@ -134,22 +119,20 @@ export default function UkesplanKlient({ teams, week, year, existingPlans }: Pro
         plan_data: days,
       }),
     });
-    setSaving(false);
-    setSaved(true);
+    setSaving(false); setSaved(true);
     router.refresh();
   }
 
   if (teams.length === 0) {
     return (
       <div className="text-center py-16">
-        <p className="text-[#64748B] text-sm">Ingen lag ennå. Opprett et lag under Lag & Spillere.</p>
+        <p className="text-[#64748B] text-sm">{dict.no_teams}</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-5">
-      {/* Lag-velger */}
       {teams.length > 1 && (
         <div className="flex gap-2 flex-wrap">
           {teams.map((t) => (
@@ -168,13 +151,12 @@ export default function UkesplanKlient({ teams, week, year, existingPlans }: Pro
         </div>
       )}
 
-      {/* Uke-navigering */}
       <div className="flex items-center justify-between bg-white border border-[#E4E2F5] rounded-2xl px-4 py-3">
         <button onClick={prevWeek} className="p-1.5 rounded-lg hover:bg-[#F0EEFF] text-[#64748B] hover:text-[#6D28D9] transition-colors">
           <ChevronLeft className="h-5 w-5" />
         </button>
         <div className="text-center">
-          <p className="font-bold text-[#1A1A2E]">Uke {currentWeek}</p>
+          <p className="font-bold text-[#1A1A2E]">{weekLabel} {currentWeek}</p>
           <p className="text-xs text-[#94A3B8]">{currentYear}</p>
         </div>
         <button onClick={nextWeek} className="p-1.5 rounded-lg hover:bg-[#F0EEFF] text-[#64748B] hover:text-[#6D28D9] transition-colors">
@@ -182,7 +164,6 @@ export default function UkesplanKlient({ teams, week, year, existingPlans }: Pro
         </button>
       </div>
 
-      {/* NFF-regel for lag */}
       {sessionRule && (
         <div className={`rounded-xl border px-4 py-3 flex items-center justify-between ${
           tooMany ? "bg-[#FEF2F2] border-[#DC2626]/30" :
@@ -190,19 +171,19 @@ export default function UkesplanKlient({ teams, week, year, existingPlans }: Pro
                     "bg-[#F0FDF4] border-[#16A34A]/30"
         }`}>
           <p className={`text-xs font-medium ${tooMany ? "text-[#991B1B]" : tooFew ? "text-[#92400E]" : "text-[#15803D]"}`}>
-            {selectedTeam?.name}: {sessionRule.min}–{sessionRule.max} økter/uke · maks {sessionRule.maxMin} min
+            {selectedTeam?.name}: {sessionRule.min}–{sessionRule.max} {dict.sessions_rule} {sessionRule.maxMin} min
           </p>
           <Badge variant={tooMany ? "red" : tooFew ? "yellow" : "green"}>
-            {trainingDays} av {sessionRule.max}
+            {trainingDays} {dict.of} {sessionRule.max}
           </Badge>
         </div>
       )}
 
-      {/* Dag-kort */}
       <div className="space-y-2">
-        {DAYS.map(({ key, label }) => {
+        {DAY_KEYS.map((key) => {
+          const dayLabel = dict.days[key] ?? key;
           const day = days[key] ?? { focus: "rest", notes: "" };
-          const focusCfg = FOCUS_MAP[day.focus] ?? FOCUS_MAP.rest;
+          const focusCfg = FOCUS_STYLE[day.focus] ?? FOCUS_STYLE.rest;
           const isMatch = day.focus === "match";
 
           return (
@@ -211,39 +192,39 @@ export default function UkesplanKlient({ teams, week, year, existingPlans }: Pro
               className="bg-white border rounded-2xl overflow-hidden transition-all"
               style={{ borderColor: day.focus !== "rest" ? focusCfg.border : "#E4E2F5" }}
             >
-              {/* Dag-header */}
               <div className="flex items-center gap-3 px-4 py-3">
                 <div className="w-10 shrink-0">
-                  <p className="font-semibold text-sm text-[#1A1A2E]">{label}</p>
+                  <p className="font-semibold text-sm text-[#1A1A2E]">{dayLabel}</p>
                 </div>
                 {isMatch && <Trophy className="h-3.5 w-3.5 text-[#DC2626] shrink-0" />}
-                {/* Fokusvalg-rad */}
                 <div className="flex gap-1.5 flex-wrap flex-1">
-                  {FOCUS_OPTIONS.map(({ value, emoji, label: flabel }) => (
-                    <button
-                      key={value}
-                      onClick={() => updateDay(key, "focus", value)}
-                      title={flabel}
-                      className={`h-8 px-2.5 rounded-lg text-sm font-medium transition-all border ${
-                        day.focus === value
-                          ? "text-white border-transparent"
-                          : "bg-white border-[#E4E2F5] text-[#64748B] hover:border-[#6D28D9]/40"
-                      }`}
-                      style={day.focus === value ? { background: focusCfg.border } : {}}
-                    >
-                      {emoji}
-                    </button>
-                  ))}
+                  {FOCUS_KEYS.map((fKey) => {
+                    const fStyle = FOCUS_STYLE[fKey];
+                    return (
+                      <button
+                        key={fKey}
+                        onClick={() => updateDay(key, "focus", fKey)}
+                        title={dict.focus[fKey] ?? fKey}
+                        className={`h-8 px-2.5 rounded-lg text-sm font-medium transition-all border ${
+                          day.focus === fKey
+                            ? "text-white border-transparent"
+                            : "bg-white border-[#E4E2F5] text-[#64748B] hover:border-[#6D28D9]/40"
+                        }`}
+                        style={day.focus === fKey ? { background: focusCfg.border } : {}}
+                      >
+                        {fStyle.emoji}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
-              {/* Notat-felt — kun vis hvis ikke hvildag */}
               {day.focus !== "rest" && (
                 <div className="px-4 pb-3">
                   <input
                     value={day.notes}
                     onChange={(e) => updateDay(key, "notes", e.target.value)}
-                    placeholder={`Notat til ${label.toLowerCase()}...`}
+                    placeholder={`${dict.note_placeholder} ${dayLabel.toLowerCase()}...`}
                     className="input-field text-xs py-2"
                   />
                 </div>
@@ -253,7 +234,6 @@ export default function UkesplanKlient({ teams, week, year, existingPlans }: Pro
         })}
       </div>
 
-      {/* Lagre */}
       <Button
         onClick={handleSave}
         disabled={saving || !selectedTeam}
@@ -261,8 +241,8 @@ export default function UkesplanKlient({ teams, week, year, existingPlans }: Pro
         className="w-full"
         variant={saved ? "secondary" : "default"}
       >
-        {saving ? "Lagrer..." : saved ? "✓ Lagret" : (
-          <><Save className="h-4 w-4" /> Lagre ukesplan</>
+        {saving ? "..." : saved ? dict.saved : (
+          <><Save className="h-4 w-4" /> {dict.save_button}</>
         )}
       </Button>
     </div>

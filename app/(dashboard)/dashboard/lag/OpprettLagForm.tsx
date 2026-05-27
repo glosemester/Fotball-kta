@@ -5,16 +5,16 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Plus, X } from "lucide-react";
 
-const AGE_GROUPS = [
-  { value: "AGE_6_7", label: "6–7 år" },
-  { value: "AGE_8_9", label: "8–9 år" },
-  { value: "AGE_10_12", label: "10–12 år" },
-  { value: "AGE_13_14", label: "13–14 år" },
-  { value: "AGE_15_16", label: "15–16 år" },
-  { value: "AGE_17_18", label: "17–18 år" },
-];
+interface Dict {
+  create_button: string; form_title: string; team_name: string;
+  team_name_placeholder: string; club_name: string; club_name_placeholder: string;
+  age_group: string; creating: string; create_team: string; cancel: string;
+  error_generic: string; age_labels: Record<string, string>;
+}
 
-export default function OpprettLagForm() {
+const AGE_GROUP_KEYS = ["AGE_6_7","AGE_8_9","AGE_10_12","AGE_13_14","AGE_15_16","AGE_17_18"];
+
+export default function OpprettLagForm({ dict }: { dict: Dict }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [name, setName] = useState("");
@@ -25,22 +25,17 @@ export default function OpprettLagForm() {
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    setLoading(true);
-    setError("");
-
+    setLoading(true); setError("");
     const res = await fetch("/api/lag", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ name, club_name: clubName, age_group: ageGroup }),
     });
-
     if (!res.ok) {
       const data = await res.json();
-      setError(data.error || "Noe gikk galt");
-      setLoading(false);
-      return;
+      setError(data.error || dict.error_generic);
+      setLoading(false); return;
     }
-
     setName(""); setClubName(""); setLoading(false); setOpen(false);
     router.refresh();
   }
@@ -49,7 +44,7 @@ export default function OpprettLagForm() {
     return (
       <Button onClick={() => setOpen(true)}>
         <Plus className="h-4 w-4" />
-        Opprett nytt lag
+        {dict.create_button}
       </Button>
     );
   }
@@ -57,24 +52,26 @@ export default function OpprettLagForm() {
   return (
     <div className="bg-white border border-[#E4E2F5] rounded-2xl p-5 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-[#1A1A2E]">Nytt lag</h3>
+        <h3 className="font-semibold text-[#1A1A2E]">{dict.form_title}</h3>
         <button onClick={() => setOpen(false)} className="text-[#94A3B8] hover:text-[#1A1A2E] transition-colors">
           <X className="h-4 w-4" />
         </button>
       </div>
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-[#64748B]">Lagnavn</label>
-          <input value={name} onChange={(e) => setName(e.target.value)} required placeholder="f.eks. Gutter 2017" className="input-field" />
+          <label className="text-xs font-medium text-[#64748B]">{dict.team_name}</label>
+          <input value={name} onChange={(e) => setName(e.target.value)} required placeholder={dict.team_name_placeholder} className="input-field" />
         </div>
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-[#64748B]">Klubbnavn</label>
-          <input value={clubName} onChange={(e) => setClubName(e.target.value)} required placeholder="f.eks. Rosenborg BK" className="input-field" />
+          <label className="text-xs font-medium text-[#64748B]">{dict.club_name}</label>
+          <input value={clubName} onChange={(e) => setClubName(e.target.value)} required placeholder={dict.club_name_placeholder} className="input-field" />
         </div>
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-[#64748B]">Aldersgruppe</label>
+          <label className="text-xs font-medium text-[#64748B]">{dict.age_group}</label>
           <select value={ageGroup} onChange={(e) => setAgeGroup(e.target.value)} className="input-field">
-            {AGE_GROUPS.map((ag) => <option key={ag.value} value={ag.value}>{ag.label}</option>)}
+            {AGE_GROUP_KEYS.map((key) => (
+              <option key={key} value={key}>{dict.age_labels[key] ?? key}</option>
+            ))}
           </select>
         </div>
         {error && (
@@ -84,9 +81,9 @@ export default function OpprettLagForm() {
         )}
         <div className="flex gap-2 pt-1">
           <Button type="submit" disabled={loading} className="flex-1">
-            {loading ? "Oppretter..." : "Opprett lag"}
+            {loading ? dict.creating : dict.create_team}
           </Button>
-          <Button type="button" variant="outline" onClick={() => setOpen(false)}>Avbryt</Button>
+          <Button type="button" variant="outline" onClick={() => setOpen(false)}>{dict.cancel}</Button>
         </div>
       </form>
     </div>

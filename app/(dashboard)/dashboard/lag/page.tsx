@@ -3,16 +3,16 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
 import { ChevronRight, Users } from "lucide-react";
+import { getLang, getDictionary } from "@/lib/dict";
 import OpprettLagForm from "./OpprettLagForm";
-
-const AGE_LABELS: Record<string, string> = {
-  AGE_6_7: "6–7 år", AGE_8_9: "8–9 år", AGE_10_12: "10–12 år",
-  AGE_13_14: "13–14 år", AGE_15_16: "15–16 år", AGE_17_18: "17–18 år",
-};
 
 export default async function LagPage() {
   const session = await getSession();
   if (!session) redirect("/login");
+
+  const lang = await getLang();
+  const dict = await getDictionary(lang);
+  const d = dict.teams;
 
   const teams = await prisma.team.findMany({
     where: { coach_id: session.coachId, is_active: true },
@@ -23,11 +23,11 @@ export default async function LagPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A2E]">Lag & Spillere</h1>
-        <p className="text-[#64748B] mt-1 text-sm">Administrer dine lag og spillere.</p>
+        <h1 className="text-2xl font-bold text-[#1A1A2E]">{d.title}</h1>
+        <p className="text-[#64748B] mt-1 text-sm">{d.subtitle}</p>
       </div>
 
-      <OpprettLagForm />
+      <OpprettLagForm dict={{ create_button: d.create_button, form_title: d.form_title, team_name: d.team_name, team_name_placeholder: d.team_name_placeholder, club_name: d.club_name, club_name_placeholder: d.club_name_placeholder, age_group: d.age_group, creating: d.creating, create_team: d.create_team, cancel: dict.common.cancel, error_generic: dict.common.error_generic, age_labels: d.age_labels }} />
 
       <div className="space-y-2">
         {teams.length === 0 ? (
@@ -35,8 +35,8 @@ export default async function LagPage() {
             <div className="w-16 h-16 rounded-2xl bg-white border border-[#E4E2F5] flex items-center justify-center mx-auto mb-4">
               <Users className="h-7 w-7 text-[#94A3B8]" />
             </div>
-            <p className="text-[#64748B] text-sm">Ingen lag ennå</p>
-            <p className="text-[#94A3B8] text-xs mt-1">Opprett ditt første lag ovenfor</p>
+            <p className="text-[#64748B] text-sm">{d.no_teams}</p>
+            <p className="text-[#94A3B8] text-xs mt-1">{d.no_teams_hint}</p>
           </div>
         ) : (
           teams.map((team) => (
@@ -49,7 +49,7 @@ export default async function LagPage() {
                   <div>
                     <p className="font-semibold text-[#1A1A2E] text-sm">{team.name}</p>
                     <p className="text-xs text-[#94A3B8] mt-0.5">
-                      {team.club_name} · {AGE_LABELS[team.age_group]} · {team._count.players} spillere
+                      {team.club_name} · {d.age_labels[team.age_group as keyof typeof d.age_labels]} · {team._count.players} {d.players_count}
                     </p>
                   </div>
                 </div>
