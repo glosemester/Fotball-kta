@@ -3,11 +3,11 @@
 import { useRouter } from "next/navigation";
 import { Trash2 } from "lucide-react";
 
-export default function SlettSpillerKnapp({ playerId, teamId }: { playerId: string; teamId: string }) {
+export default function SlettSpillerKnapp({ playerId, teamId, confirmText = "Fjerne denne spilleren fra laget?" }: { playerId: string; teamId: string; confirmText?: string }) {
   const router = useRouter();
 
   async function handleDelete() {
-    if (!confirm("Fjerne denne spilleren fra laget?")) return;
+    if (!confirm(confirmText)) return;
     await fetch(`/api/lag/${teamId}/spillere/${playerId}`, { method: "DELETE" });
     router.refresh();
   }

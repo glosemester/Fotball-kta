@@ -1,6 +1,7 @@
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { getLang, getDictionary } from "@/lib/dict";
 import VelvareKlient from "./VelvareKlient";
 
 function currentWeek() {
@@ -17,16 +18,16 @@ export default async function VelvarePage() {
   const session = await getSession();
   if (!session) redirect("/login");
 
+  const lang = await getLang();
+  const dict = await getDictionary(lang);
+  const dw = dict.wellbeing;
+  const dc = dict.common;
+
   const { week, year } = currentWeek();
 
   const teams = await prisma.team.findMany({
     where: { coach_id: session.coachId, is_active: true },
-    include: {
-      players: {
-        where: { is_active: true },
-        orderBy: { last_name: "asc" },
-      },
-    },
+    include: { players: { where: { is_active: true }, orderBy: { last_name: "asc" } } },
     orderBy: { name: "asc" },
   });
 
@@ -39,9 +40,9 @@ export default async function VelvarePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A2E]">Velvære</h1>
+        <h1 className="text-2xl font-bold text-[#1A1A2E]">{dw.title}</h1>
         <p className="text-[#64748B] mt-1 text-sm">
-          Uke {week}, {year} · Kun symptombasert — ingen kroppsmål
+          {dc.week} {week}, {year} · {dw.subtitle_week}
         </p>
       </div>
 
@@ -50,6 +51,7 @@ export default async function VelvarePage() {
         reports={reports as never}
         week={week}
         year={year}
+        dict={dw}
       />
     </div>
   );

@@ -1,6 +1,7 @@
 import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { getLang, getDictionary } from "@/lib/dict";
 import UkesplanKlient from "./UkesplanKlient";
 
 function currentWeek() {
@@ -17,6 +18,10 @@ export default async function UkesplanPage() {
   const session = await getSession();
   if (!session) redirect("/login");
 
+  const lang = await getLang();
+  const dict = await getDictionary(lang);
+  const d = dict.weekplan;
+
   const { week, year } = currentWeek();
 
   const teams = await prisma.team.findMany({
@@ -24,22 +29,16 @@ export default async function UkesplanPage() {
     orderBy: { name: "asc" },
   });
 
-  // Load plans for current week and adjacent weeks so navigation feels instant
   const existingPlans = await prisma.weeklyPlan.findMany({
-    where: {
-      team: { coach_id: session.coachId },
-      year,
-    },
+    where: { team: { coach_id: session.coachId }, year },
     orderBy: { week_number: "asc" },
   });
 
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A2E]">Ukesplan</h1>
-        <p className="text-[#64748B] mt-1 text-sm">
-          Planlegg treningsbelastning og kampdag per uke
-        </p>
+        <h1 className="text-2xl font-bold text-[#1A1A2E]">{d.title}</h1>
+        <p className="text-[#64748B] mt-1 text-sm">{d.subtitle}</p>
       </div>
 
       <UkesplanKlient
@@ -47,6 +46,8 @@ export default async function UkesplanPage() {
         week={week}
         year={year}
         existingPlans={existingPlans as never}
+        dict={d}
+        weekLabel={dict.common.week}
       />
     </div>
   );
