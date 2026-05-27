@@ -24,6 +24,7 @@ model Coach {
 
   teams    Team[]
   sessions TrainingSession[]
+  matches  Match[]
 
   @@map("coaches")
 }
@@ -52,6 +53,7 @@ model Team {
   players      Player[]
   sessions     TrainingSession[]
   weekly_plans WeeklyPlan[]
+  matches      Match[]
 
   @@map("teams")
 }
@@ -185,6 +187,29 @@ model WeeklyPlan {
 
   @@unique([team_id, week_number, year])
   @@map("weekly_plans")
+}
+
+// ============================================================
+// KAMPER
+// ============================================================
+model Match {
+  id          String   @id @default(cuid())
+  coach_id    String
+  team_id     String?
+  date        DateTime
+  opponent    String
+  is_home     Boolean  @default(true)
+  location    String?
+  competition String?
+  notes       String?
+  player_ids  String[] @default([])
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  coach Coach  @relation(fields: [coach_id], references: [id])
+  team  Team?  @relation(fields: [team_id], references: [id])
+
+  @@map("matches")
 }
 
 // ============================================================

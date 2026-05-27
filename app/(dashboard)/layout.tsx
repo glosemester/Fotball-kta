@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CalendarDays, Users, Dumbbell, LayoutDashboard, Activity, Settings } from "lucide-react";
+import { CalendarDays, Calendar, Users, Dumbbell, LayoutDashboard, Activity, Settings } from "lucide-react";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { getLang, getDictionary } from "@/lib/dict";
@@ -25,6 +25,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
     { href: "/dashboard/treninger", label: dict.nav.training,  icon: Dumbbell },
     { href: "/dashboard/lag",       label: dict.nav.teams,     icon: Users },
     { href: "/dashboard/ukesplan",  label: dict.nav.weekplan,  icon: CalendarDays },
+    { href: "/dashboard/kalender",  label: dict.nav.calendar,  icon: Calendar },
     ...(enabledFeatures.includes("wellbeing")
       ? [{ href: "/dashboard/velvare", label: dict.nav.wellbeing, icon: Activity }]
       : []),
