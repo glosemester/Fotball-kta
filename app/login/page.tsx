@@ -30,7 +30,7 @@ export default function LoginPage() {
         <div className="text-center space-y-2">
           <div className="text-5xl mb-4">⚽</div>
           <h1 className="text-2xl font-bold text-[#1A1A2E]">Velkommen tilbake</h1>
-          <p className="text-[#64748B] text-sm">Logg inn på FotballKTA</p>
+          <p className="text-[#64748B] text-sm">Logg inn på PitchPlan</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-[#E4E2F5] p-6 space-y-4">

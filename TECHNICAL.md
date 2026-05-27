@@ -1,4 +1,4 @@
-# FotballKTA — Teknisk dokumentasjon
+# PitchPlan — Teknisk dokumentasjon
 
 > **Regler for AI-agenter og utviklere:** Oppdater denne filen hver gang ny funksjonalitet implementeres, feil fikses eller arkitektur endres. Logg endringer under [Endringslogg](#endringslogg).
 
@@ -6,7 +6,7 @@
 
 ## Oversikt
 
-FotballKTA er en AI-drevet treningsplanlegger for barne- og ungdomsfotball, basert på retningslinjer fra NFF, SvFF, DBU, The FA, RFEF og KNVB. Filosofi: *Flest mulig · Lengst mulig · Best mulig*.
+PitchPlan er en AI-drevet treningsplanlegger for barne- og ungdomsfotball, basert på retningslinjer fra NFF, SvFF, DBU, The FA, RFEF og KNVB. Filosofi: *Flest mulig · Lengst mulig · Best mulig*.
 
 ---
 
