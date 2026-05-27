@@ -306,6 +306,6 @@
     "optional_modules": "Optional modules",
     "language_title": "Language",
     "wellbeing_label": "Wellbeing",
-    "wellbeing_desc": "Let players and parents log weekly wellbeing (Green/Yellow/Red). Shown in the menu and alerts you before training."
+    "wellbeing_desc": "Log weekly wellbeing for your players (Green/Yellow/Red). Symptom-based — no body metrics. Gives you an overview and alerts before training."
   }
 }
