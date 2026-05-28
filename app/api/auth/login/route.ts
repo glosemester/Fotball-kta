@@ -15,6 +15,10 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "Feil e-post eller passord" }, { status: 401 });
   }
 
+  if (!coach.password) {
+    return NextResponse.json({ error: "Denne kontoen bruker Google-pålogging" }, { status: 401 });
+  }
+
   const valid = await bcrypt.compare(password, coach.password);
   if (!valid) {
     return NextResponse.json({ error: "Feil e-post eller passord" }, { status: 401 });
