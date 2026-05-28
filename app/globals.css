@@ -70,3 +70,41 @@ h1, h2, h3, h4 {
 ::-webkit-scrollbar { width: 6px; height: 6px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 3px; }
+
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+
+/* Football loading animations */
+@keyframes football-bounce {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    animation-timing-function: cubic-bezier(0.8, 0, 1, 1);
+  }
+  50% {
+    transform: translateY(-22px) rotate(180deg);
+    animation-timing-function: cubic-bezier(0, 0, 0.2, 1);
+  }
+}
+
+@keyframes football-shadow {
+  0%, 100% { transform: scaleX(1); opacity: 0.25; }
+  50% { transform: scaleX(0.45); opacity: 0.08; }
+}
+
+@keyframes football-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes dot-pulse {
+  0%, 60%, 100% { transform: scale(1); opacity: 0.4; }
+  30% { transform: scale(1.4); opacity: 1; }
+}
+
+.football-bounce { animation: football-bounce 0.7s ease-in-out infinite; display: inline-block; }
+.football-shadow { animation: football-shadow 0.7s ease-in-out infinite; }
+.football-spin   { animation: football-spin 0.6s linear infinite; display: inline-block; }
+
+.dot-1 { animation: dot-pulse 1.2s ease-in-out infinite; animation-delay: 0ms; }
+.dot-2 { animation: dot-pulse 1.2s ease-in-out infinite; animation-delay: 200ms; }
+.dot-3 { animation: dot-pulse 1.2s ease-in-out infinite; animation-delay: 400ms; }

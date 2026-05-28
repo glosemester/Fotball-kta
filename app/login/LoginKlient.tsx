@@ -64,7 +64,7 @@ export default function LoginKlient({ dict }: { dict: LoginDict }) {
                 <p className="text-sm text-[#EF4444]">{error}</p>
               </div>
             )}
-            <Button type="submit" disabled={loading} className="w-full" size="lg">
+            <Button type="submit" loading={loading} className="w-full" size="lg">
               {loading ? dict.loading : dict.submit}
             </Button>
           </form>
