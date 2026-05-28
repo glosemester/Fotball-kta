@@ -83,13 +83,13 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Feature strip — horisontal scroll */}
-      <div className="overflow-x-auto scrollbar-hide -mx-0 pb-20">
-        <div className="flex gap-3 px-4" style={{ width: "max-content" }}>
-          {FEATURES.map(({ icon: Icon, title, desc }) => (
+      {/* Feature strip — auto-scrolling marquee */}
+      <div className="overflow-hidden pb-20">
+        <div className="marquee-track flex gap-4" style={{ width: "max-content" }}>
+          {[...FEATURES, ...FEATURES].map(({ icon: Icon, title, desc }, i) => (
             <div
-              key={title}
-              className="w-52 flex-shrink-0 bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-5"
+              key={i}
+              className="w-56 flex-shrink-0 bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-5"
             >
               <div className="w-10 h-10 rounded-2xl bg-[#22C55E]/15 flex items-center justify-center mb-4">
                 <Icon className="text-[#22C55E]" style={{ width: 20, height: 20 }} />
@@ -98,8 +98,6 @@ export default function Home() {
               <p className="text-xs text-[#94A3B8] leading-relaxed">{desc}</p>
             </div>
           ))}
-          {/* Trailing spacer so last card isn't flush to edge */}
-          <div className="w-4 flex-shrink-0" />
         </div>
       </div>
     </main>
