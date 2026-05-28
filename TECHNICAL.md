@@ -212,3 +212,4 @@ Prisma-klienten genereres til `lib/generated/prisma/` (gitignorert).
 | 2026-05-26 | AI-øvelser: Claude genererer tilpassede øvelser per fase i treningsøkt-wizarden |
 | 2026-05-27 | App omdøpt til PitchPlan; GitHub Actions auto-deploy til Hetzner via SSH |
 | 2026-05-27 | Flerspråklig støtte (nb/sv/da/en): cookie-basert i18n, JSON-ordbøker, LangSwitcher |
+| 2026-05-28 | Full branding-overhaul: Pitch Black mørkt tema, Turf Green aksent, Barlow Condensed + Inter-fonter, NavLink-komponent med aktiv-state, tone-of-voice-oppdatering i alle fire ordbøker |

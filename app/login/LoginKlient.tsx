@@ -29,39 +29,39 @@ export default function LoginKlient({ dict }: { dict: LoginDict }) {
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#EDE9FF] via-[#F0EEFF] to-[#E0EAFF] flex items-center justify-center px-4">
+    <main className="min-h-screen bg-[#0A0F14] flex items-center justify-center px-4">
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center space-y-2">
           <div className="text-5xl mb-4">⚽</div>
-          <h1 className="text-2xl font-bold text-[#1A1A2E]">{dict.title}</h1>
-          <p className="text-[#64748B] text-sm">{dict.subtitle}</p>
+          <h1 className="text-2xl font-bold text-[#F8FAFC]">{dict.title}</h1>
+          <p className="text-[#94A3B8] text-sm">{dict.subtitle}</p>
         </div>
 
         <a href="/api/auth/google"
-          className="flex items-center justify-center gap-2.5 w-full rounded-2xl bg-white border border-[#E4E2F5] px-5 py-3 text-[#1A1A2E] font-semibold text-sm hover:bg-[#F8F7FF] hover:border-[#6D28D9]/30 transition-all shadow-sm">
+          className="flex items-center justify-center gap-2.5 w-full rounded-[8px] bg-[#141D26] border border-[#2E4057] px-5 py-3 text-[#F8FAFC] font-semibold text-sm hover:bg-[#1E2D3D] hover:border-[#22C55E]/40 transition-all shadow-sm">
           <GoogleIcon />
           Fortsett med Google
         </a>
 
         <div className="flex items-center gap-3">
-          <div className="flex-1 h-px bg-[#E4E2F5]" />
+          <div className="flex-1 h-px bg-[#2E4057]" />
           <span className="text-xs text-[#94A3B8]">eller</span>
-          <div className="flex-1 h-px bg-[#E4E2F5]" />
+          <div className="flex-1 h-px bg-[#2E4057]" />
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E4E2F5] p-6 space-y-4">
+        <div className="bg-[#141D26] rounded-xl shadow-sm border border-[#2E4057] p-6 space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#1A1A2E]">{dict.email}</label>
+              <label className="text-sm font-medium text-[#F8FAFC]">{dict.email}</label>
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" placeholder="trener@klubb.no" className="input-field" />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#1A1A2E]">{dict.password}</label>
+              <label className="text-sm font-medium text-[#F8FAFC]">{dict.password}</label>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" className="input-field" />
             </div>
             {error && (
-              <div className="bg-[#DC2626]/8 border border-[#DC2626]/15 rounded-xl px-4 py-3">
-                <p className="text-sm text-[#DC2626]">{error}</p>
+              <div className="bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-lg px-4 py-3">
+                <p className="text-sm text-[#EF4444]">{error}</p>
               </div>
             )}
             <Button type="submit" disabled={loading} className="w-full" size="lg">
@@ -72,7 +72,7 @@ export default function LoginKlient({ dict }: { dict: LoginDict }) {
 
         <p className="text-center text-sm text-[#94A3B8]">
           {dict.no_account}{" "}
-          <Link href="/registrer" className="text-[#6D28D9] font-medium hover:text-[#5B21B6]">{dict.register_link}</Link>
+          <Link href="/registrer" className="text-[#22C55E] font-medium hover:underline">{dict.register_link}</Link>
         </p>
       </div>
     </main>

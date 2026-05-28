@@ -6,6 +6,7 @@ import { prisma } from "@/lib/prisma";
 import { getLang, getDictionary } from "@/lib/dict";
 import LoggUtKnapp from "./LoggUtKnapp";
 import LangSwitcher from "./LangSwitcher";
+import NavLink from "./NavLink";
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const session = await getSession();
@@ -33,11 +34,11 @@ export default async function DashboardLayout({ children }: { children: React.Re
   ];
 
   return (
-    <div className="min-h-screen bg-[#F0EEFF] flex flex-col">
-      <header className="bg-white border-b border-[#E4E2F5] px-4 py-3 flex items-center justify-between sticky top-0 z-20">
-        <Link href="/dashboard" className="flex items-center gap-2 font-bold text-lg text-[#1A1A2E]">
+    <div className="min-h-screen bg-[#0A0F14] flex flex-col">
+      <header className="bg-[#141D26] border-b border-[#2E4057] px-4 py-3 flex items-center justify-between sticky top-0 z-20">
+        <Link href="/dashboard" className="flex items-center gap-2 font-bold text-lg text-[#F8FAFC]">
           <PitchPlanLogo size={28} />
-          <span>Pitch<span className="text-[#6D28D9]">Plan</span></span>
+          <span>Pitch<span className="text-[#22C55E]">Plan</span></span>
         </Link>
         <div className="flex items-center gap-1">
           {session && (
@@ -46,7 +47,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
           <LangSwitcher current={lang} />
           <Link
             href="/dashboard/innstillinger"
-            className="flex items-center justify-center w-8 h-8 rounded-lg text-[#94A3B8] hover:text-[#6D28D9] hover:bg-[#F5F3FF] transition-colors"
+            className="flex items-center justify-center w-8 h-8 rounded-lg text-[#94A3B8] hover:text-[#22C55E] hover:bg-[#1E2D3D] transition-colors"
           >
             <Settings className="h-4 w-4" />
           </Link>
@@ -58,16 +59,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
         {children}
       </main>
 
-      <nav className="fixed bottom-0 left-0 right-0 bg-white border-t border-[#E4E2F5] flex justify-around py-1.5 z-20 shadow-[0_-4px_16px_rgba(0,0,0,0.06)]">
-        {navItems.map(({ href, label, icon: Icon }) => (
-          <Link
-            key={href}
-            href={href}
-            className="flex flex-col items-center gap-0.5 text-[#94A3B8] hover:text-[#6D28D9] px-3 py-1 transition-colors min-w-0"
-          >
-            <Icon className="h-5 w-5 shrink-0" />
-            <span className="text-[10px] font-semibold truncate">{label}</span>
-          </Link>
+      <nav className="fixed bottom-0 left-0 right-0 bg-[#141D26] border-t border-[#2E4057] flex justify-around py-1.5 z-20 shadow-[0_-4px_16px_rgba(0,0,0,0.4)]">
+        {navItems.map(({ href, label, icon }) => (
+          <NavLink key={href} href={href} label={label} icon={icon} />
         ))}
       </nav>
     </div>
