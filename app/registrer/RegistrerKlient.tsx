@@ -32,44 +32,44 @@ export default function RegistrerKlient({ dict }: { dict: RegisterDict }) {
       body: JSON.stringify({ full_name: fullName, club_name: clubName, email, password }),
     });
     const data = await res.json();
-    if (!res.ok) { setError(data.error || "Noe gikk galt"); setLoading(false); return; }
+    if (!res.ok) { setError(data.error || "Hmm, vi satt fast i offside. Prøv igjen om litt."); setLoading(false); return; }
     window.location.href = "/dashboard";
   }
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-[#EDE9FF] via-[#F0EEFF] to-[#E0EAFF] flex items-center justify-center px-4 py-8">
+    <main className="min-h-screen bg-[#0A0F14] flex items-center justify-center px-4 py-8">
       <div className="w-full max-w-sm space-y-6">
         <div className="text-center space-y-2">
           <div className="text-5xl mb-4">⚽</div>
-          <h1 className="text-2xl font-bold text-[#1A1A2E]">{dict.title}</h1>
-          <p className="text-[#64748B] text-sm">{dict.subtitle}</p>
+          <h1 className="text-2xl font-bold text-[#F8FAFC]">{dict.title}</h1>
+          <p className="text-[#94A3B8] text-sm">{dict.subtitle}</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-[#E4E2F5] p-6 space-y-4">
+        <div className="bg-[#141D26] rounded-xl shadow-sm border border-[#2E4057] p-6 space-y-4">
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#1A1A2E]">{dict.full_name}</label>
+              <label className="text-sm font-medium text-[#F8FAFC]">{dict.full_name}</label>
               <input type="text" value={fullName} onChange={(e) => setFullName(e.target.value)} required placeholder={dict.full_name_placeholder} className="input-field" />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#1A1A2E]">{dict.club_name}</label>
+              <label className="text-sm font-medium text-[#F8FAFC]">{dict.club_name}</label>
               <input type="text" value={clubName} onChange={(e) => setClubName(e.target.value)} placeholder={dict.club_name_placeholder} className="input-field" />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#1A1A2E]">{dict.email}</label>
+              <label className="text-sm font-medium text-[#F8FAFC]">{dict.email}</label>
               <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required autoComplete="email" placeholder={dict.email_placeholder} className="input-field" />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#1A1A2E]">{dict.password}</label>
+              <label className="text-sm font-medium text-[#F8FAFC]">{dict.password}</label>
               <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required autoComplete="new-password" placeholder={dict.password_placeholder} className="input-field" />
             </div>
             <div className="space-y-1.5">
-              <label className="text-sm font-medium text-[#1A1A2E]">{dict.confirm_password}</label>
+              <label className="text-sm font-medium text-[#F8FAFC]">{dict.confirm_password}</label>
               <input type="password" value={password2} onChange={(e) => setPassword2(e.target.value)} required autoComplete="new-password" className="input-field" />
             </div>
             {error && (
-              <div className="bg-[#DC2626]/8 border border-[#DC2626]/15 rounded-xl px-4 py-3">
-                <p className="text-sm text-[#DC2626]">{error}</p>
+              <div className="bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-lg px-4 py-3">
+                <p className="text-sm text-[#EF4444]">{error}</p>
               </div>
             )}
             <Button type="submit" disabled={loading} className="w-full" size="lg">
@@ -80,7 +80,7 @@ export default function RegistrerKlient({ dict }: { dict: RegisterDict }) {
 
         <p className="text-center text-sm text-[#94A3B8]">
           {dict.has_account}{" "}
-          <Link href="/login" className="text-[#6D28D9] font-medium hover:text-[#5B21B6]">{dict.login_link}</Link>
+          <Link href="/login" className="text-[#22C55E] font-medium hover:underline">{dict.login_link}</Link>
         </p>
       </div>
     </main>

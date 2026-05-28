@@ -9,31 +9,31 @@ export default function PitchPlanLogo({ size = 40, className = "" }: { size?: nu
       className={className}
     >
       {/* Pitch background */}
-      <rect x="1" y="7" width="38" height="26" rx="4" fill="#F5F3FF" />
+      <rect x="1" y="7" width="38" height="26" rx="4" fill="#141D26" />
 
       {/* Pitch outline */}
-      <rect x="1" y="7" width="38" height="26" rx="4" stroke="#6D28D9" strokeWidth="2.2" />
+      <rect x="1" y="7" width="38" height="26" rx="4" stroke="#22C55E" strokeWidth="2.2" />
 
       {/* Center line */}
-      <line x1="20" y1="7" x2="20" y2="33" stroke="#6D28D9" strokeWidth="1.6" />
+      <line x1="20" y1="7" x2="20" y2="33" stroke="#22C55E" strokeWidth="1.6" />
 
       {/* Center circle */}
-      <circle cx="20" cy="20" r="5.5" stroke="#6D28D9" strokeWidth="1.6" />
+      <circle cx="20" cy="20" r="5.5" stroke="#22C55E" strokeWidth="1.6" />
 
       {/* Center dot */}
-      <circle cx="20" cy="20" r="1.8" fill="#6D28D9" />
+      <circle cx="20" cy="20" r="1.8" fill="#22C55E" />
 
       {/* Left penalty area */}
-      <rect x="1" y="14" width="9" height="12" rx="1.5" stroke="#6D28D9" strokeWidth="1.4" />
+      <rect x="1" y="14" width="9" height="12" rx="1.5" stroke="#22C55E" strokeWidth="1.4" />
 
       {/* Right penalty area */}
-      <rect x="30" y="14" width="9" height="12" rx="1.5" stroke="#6D28D9" strokeWidth="1.4" />
+      <rect x="30" y="14" width="9" height="12" rx="1.5" stroke="#22C55E" strokeWidth="1.4" />
 
       {/* Left goal */}
-      <rect x="0" y="17" width="3" height="6" rx="1" fill="#6D28D9" />
+      <rect x="0" y="17" width="3" height="6" rx="1" fill="#22C55E" />
 
       {/* Right goal */}
-      <rect x="37" y="17" width="3" height="6" rx="1" fill="#6D28D9" />
+      <rect x="37" y="17" width="3" height="6" rx="1" fill="#22C55E" />
     </svg>
   );
 }
