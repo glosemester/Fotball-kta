@@ -9,6 +9,7 @@ import { getAllAgeGroups, getAgeGroupRules, isHeadingForbidden } from "@/lib/rul
 import { applyConstraints, getRecommendedGameForm, getOddPlayerSolution } from "@/lib/constraints-engine";
 import type { AgeGroupKey, SessionTheme, FieldSize, Equipment } from "@/types";
 import { AlertTriangle, CheckCircle2, Users, Clock, Target, Dumbbell, Sparkles, ChevronDown, ChevronUp } from "lucide-react";
+import { FootballLoader } from "@/components/FootballLoader";
 
 const THEME_EMOJI: Record<string, string> = {
   pasning_mottak: "🎯", dribling_vendinger: "🌀", avslutninger: "🥅",
@@ -187,22 +188,22 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A2E]">{dict.new_session_title}</h1>
-        <p className="text-[#64748B] mt-1 text-sm">{dict.new_session_subtitle}</p>
+        <h1 className="text-2xl font-bold text-[#F8FAFC]">{dict.new_session_title}</h1>
+        <p className="text-[#94A3B8] mt-1 text-sm">{dict.new_session_subtitle}</p>
       </div>
 
       <div className="flex items-center gap-2">
         {[1, 2, 3].map((s) => (
           <div key={s} className="flex items-center gap-2">
             <div className={`h-8 w-8 rounded-full flex items-center justify-center text-sm font-semibold transition-colors ${
-              step >= s ? "bg-[#6D28D9] text-white" : "bg-[#E4E2F5] text-[#94A3B8]"
+              step >= s ? "bg-[#22C55E] text-white" : "bg-[#2E4057] text-[#94A3B8]"
             }`}>
               {step > s ? <CheckCircle2 className="h-4 w-4" /> : s}
             </div>
-            {s < 3 && <div className={`h-0.5 w-8 ${step > s ? "bg-[#6D28D9]" : "bg-[#E4E2F5]"}`} />}
+            {s < 3 && <div className={`h-0.5 w-8 ${step > s ? "bg-[#22C55E]" : "bg-[#2E4057]"}`} />}
           </div>
         ))}
-        <span className="text-sm text-[#64748B] ml-2">
+        <span className="text-sm text-[#94A3B8] ml-2">
           {step === 1 ? dict.step1_label : step === 2 ? dict.step2_label : dict.step3_label}
         </span>
       </div>
@@ -214,7 +215,7 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
             <Card>
               <CardHeader>
                 <CardTitle className="text-base flex items-center gap-2">
-                  <Dumbbell className="h-4 w-4 text-[#6D28D9]" />
+                  <Dumbbell className="h-4 w-4 text-[#22C55E]" />
                   {dict.which_team}
                 </CardTitle>
               </CardHeader>
@@ -232,7 +233,7 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <Users className="h-4 w-4 text-[#6D28D9]" />
+                <Users className="h-4 w-4 text-[#22C55E]" />
                 {dict.which_age}
               </CardTitle>
             </CardHeader>
@@ -244,8 +245,8 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
                     onClick={() => setAgeGroup(key)}
                     className={`rounded-xl border-2 p-3 text-sm font-semibold text-left transition-all ${
                       ageGroup === key
-                        ? "border-[#6D28D9] bg-[#F5F3FF] text-[#6D28D9]"
-                        : "border-[#E4E2F5] hover:border-[#6D28D9]/40 text-[#1A1A2E]"
+                        ? "border-[#22C55E] bg-[#1E2D3D] text-[#22C55E]"
+                        : "border-[#2E4057] hover:border-[#22C55E]/40 text-[#F8FAFC]"
                     }`}
                   >
                     {label}
@@ -256,19 +257,19 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
           </Card>
 
           {rules && (
-            <Card className="border-[#6D28D9]/20 bg-[#F5F3FF]">
+            <Card className="border-[#22C55E]/20 bg-[#1E2D3D]">
               <CardContent className="p-4 space-y-2">
-                <p className="text-xs font-semibold text-[#6D28D9] uppercase tracking-wider">{dict.nff_rules} {rules.label}</p>
-                <div className="grid grid-cols-2 gap-2 text-sm text-[#1A1A2E]">
+                <p className="text-xs font-semibold text-[#22C55E] uppercase tracking-wider">{dict.nff_rules} {rules.label}</p>
+                <div className="grid grid-cols-2 gap-2 text-sm text-[#F8FAFC]">
                   <div><span className="font-medium">{dict.game_form}:</span> {rules.recommended_game_form}</div>
                   <div><span className="font-medium">{dict.ball}:</span> str. {rules.ball_size}</div>
                   <div><span className="font-medium">{dict.max_duration}:</span> {rules.max_session_duration_minutes} min</div>
                   <div><span className="font-medium">{dict.heading}:</span> {rules.heading_label}</div>
                 </div>
                 {headingForbidden && (
-                  <div className="flex items-center gap-2 mt-1 p-2 bg-[#FEF2F2] rounded-lg border border-[#DC2626]/20">
-                    <AlertTriangle className="h-4 w-4 text-[#DC2626] shrink-0" />
-                    <span className="text-xs text-[#DC2626] font-medium">{dict.heading_forbidden_alert}</span>
+                  <div className="flex items-center gap-2 mt-1 p-2 bg-[#EF4444]/10 rounded-lg border border-[#EF4444]/20">
+                    <AlertTriangle className="h-4 w-4 text-[#EF4444] shrink-0" />
+                    <span className="text-xs text-[#EF4444] font-medium">{dict.heading_forbidden_alert}</span>
                   </div>
                 )}
               </CardContent>
@@ -278,7 +279,7 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <Target className="h-4 w-4 text-[#6D28D9]" />
+                <Target className="h-4 w-4 text-[#22C55E]" />
                 {dict.theme_title}
               </CardTitle>
               <CardDescription>{dict.theme_subtitle}</CardDescription>
@@ -291,8 +292,8 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
                     onClick={() => setTheme(value)}
                     className={`rounded-xl border-2 p-3 text-sm text-left transition-all ${
                       theme === value
-                        ? "border-[#6D28D9] bg-[#F5F3FF] text-[#6D28D9] font-semibold"
-                        : "border-[#E4E2F5] hover:border-[#6D28D9]/40 text-[#1A1A2E]"
+                        ? "border-[#22C55E] bg-[#1E2D3D] text-[#22C55E] font-semibold"
+                        : "border-[#2E4057] hover:border-[#22C55E]/40 text-[#F8FAFC]"
                     }`}
                   >
                     <span className="mr-2">{THEME_EMOJI[value]}</span>{dict.themes[value] ?? value}
@@ -321,18 +322,18 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
           <Card>
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <Users className="h-4 w-4 text-[#6D28D9]" />
+                <Users className="h-4 w-4 text-[#22C55E]" />
                 {dict.players_card}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-[#64748B] mb-1">{dict.planned_count}</label>
+                  <label className="block text-sm font-medium text-[#94A3B8] mb-1">{dict.planned_count}</label>
                   <input type="number" min={2} max={30} value={plannedCount} onChange={(e) => setPlannedCount(Number(e.target.value))} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#64748B] mb-1">{dict.actual_count}</label>
+                  <label className="block text-sm font-medium text-[#94A3B8] mb-1">{dict.actual_count}</label>
                   <input type="number" min={2} max={30} value={playerCount} onChange={(e) => setPlayerCount(Number(e.target.value))} className="input-field" />
                 </div>
               </div>
@@ -359,11 +360,11 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
             <CardContent className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-[#64748B] mb-1">{dict.field_length}</label>
+                  <label className="block text-sm font-medium text-[#94A3B8] mb-1">{dict.field_length}</label>
                   <input type="number" min={10} max={110} value={fieldLength} onChange={(e) => setFieldLength(Number(e.target.value))} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#64748B] mb-1">{dict.field_width}</label>
+                  <label className="block text-sm font-medium text-[#94A3B8] mb-1">{dict.field_width}</label>
                   <input type="number" min={10} max={70} value={fieldWidth} onChange={(e) => setFieldWidth(Number(e.target.value))} className="input-field" />
                 </div>
               </div>
@@ -379,7 +380,7 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
             <CardHeader><CardTitle className="text-base">{dict.equipment_card}</CardTitle></CardHeader>
             <CardContent className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-[#64748B] mb-2">{dict.goals}</label>
+                <label className="block text-sm font-medium text-[#94A3B8] mb-2">{dict.goals}</label>
                 <div className="grid grid-cols-2 gap-2">
                   {GOAL_TYPE_KEYS.map((value) => (
                     <button
@@ -387,8 +388,8 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
                       onClick={() => setGoalType(value)}
                       className={`rounded-xl border-2 p-2.5 text-sm transition-all ${
                         goalType === value
-                          ? "border-[#6D28D9] bg-[#F5F3FF] text-[#6D28D9] font-semibold"
-                          : "border-[#E4E2F5] hover:border-[#6D28D9]/40 text-[#1A1A2E]"
+                          ? "border-[#22C55E] bg-[#1E2D3D] text-[#22C55E] font-semibold"
+                          : "border-[#2E4057] hover:border-[#22C55E]/40 text-[#F8FAFC]"
                       }`}
                     >
                       {GOAL_LABELS[value]}
@@ -398,11 +399,11 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-[#64748B] mb-1">{dict.balls_count}</label>
+                  <label className="block text-sm font-medium text-[#94A3B8] mb-1">{dict.balls_count}</label>
                   <input type="number" min={1} max={30} value={balls} onChange={(e) => setBalls(Number(e.target.value))} className="input-field" />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-[#64748B] mb-1">{dict.cones_count}</label>
+                  <label className="block text-sm font-medium text-[#94A3B8] mb-1">{dict.cones_count}</label>
                   <input type="number" min={0} max={100} value={cones} onChange={(e) => setCones(Number(e.target.value))} className="input-field" />
                 </div>
               </div>
@@ -435,15 +436,15 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
       {/* STEG 3 */}
       {step === 3 && ageGroup && theme && rules && (
         <div className="space-y-5">
-          <Card className="border-[#6D28D9]/20 bg-[#F5F3FF]">
+          <Card className="border-[#22C55E]/20 bg-[#1E2D3D]">
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="text-[#1A1A2E]">
+                <CardTitle className="text-[#F8FAFC]">
                   {THEME_EMOJI[theme]}{" "}{dict.themes[theme] ?? theme}
                 </CardTitle>
                 <Badge variant="default">{rules.label}</Badge>
               </div>
-              <CardDescription className="text-[#64748B]">
+              <CardDescription className="text-[#94A3B8]">
                 {new Date(sessionDate).toLocaleDateString(locale, { weekday: "long", day: "numeric", month: "long" })}
                 {" · "}{playerCount} · {fieldLength}m × {fieldWidth}m · {dict.max_duration} {rules.max_session_duration_minutes} min
               </CardDescription>
@@ -459,15 +460,14 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
             </Button>
 
             {aiLoading && (
-              <div className="text-center py-8 space-y-2">
-                <div className="w-8 h-8 border-2 border-[#6D28D9] border-t-transparent rounded-full animate-spin mx-auto" />
-                <p className="text-xs text-[#94A3B8]">{dict.ai_adapting} {playerCount}...</p>
+              <div className="flex justify-center py-8">
+                <FootballLoader variant="bounce" text={`${dict.ai_adapting} ${playerCount}...`} size="lg" />
               </div>
             )}
 
             {aiError && (
-              <div className="bg-[#FEF2F2] border border-[#DC2626]/20 rounded-xl px-4 py-3">
-                <p className="text-sm text-[#DC2626]">{aiError}</p>
+              <div className="bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-xl px-4 py-3">
+                <p className="text-sm text-[#EF4444]">{aiError}</p>
               </div>
             )}
 
@@ -475,8 +475,8 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
           </div>
 
           {saveError && (
-            <div className="bg-[#FEF2F2] border border-[#DC2626]/20 rounded-xl px-4 py-3">
-              <p className="text-sm text-[#DC2626]">{saveError}</p>
+            <div className="bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-xl px-4 py-3">
+              <p className="text-sm text-[#EF4444]">{saveError}</p>
             </div>
           )}
 
@@ -499,17 +499,17 @@ function AiExerciseList({ exercises, dict }: { exercises: AiExercise[]; dict: Tr
     <div className="space-y-2">
       <p className="text-xs font-semibold text-[#94A3B8] uppercase tracking-widest px-1">{dict.ai_exercises}</p>
       {exercises.map((ex, i) => (
-        <div key={i} className="bg-white border border-[#E4E2F5] rounded-xl overflow-hidden">
+        <div key={i} className="bg-white border border-[#2E4057] rounded-xl overflow-hidden">
           <button
             onClick={() => setExpanded(expanded === i ? null : i)}
             className="w-full flex items-center justify-between p-4 text-left hover:bg-[#F8F7FF] transition-colors"
           >
             <div className="flex items-center gap-3 min-w-0">
               <div className="shrink-0">
-                <span className="text-[10px] font-semibold text-[#6D28D9] bg-[#F5F3FF] px-2 py-0.5 rounded-full">{ex.phase}</span>
+                <span className="text-[10px] font-semibold text-[#22C55E] bg-[#1E2D3D] px-2 py-0.5 rounded-full">{ex.phase}</span>
               </div>
               <div className="min-w-0">
-                <p className="font-semibold text-[#1A1A2E] text-sm truncate">{ex.name}</p>
+                <p className="font-semibold text-[#F8FAFC] text-sm truncate">{ex.name}</p>
                 <p className="text-xs text-[#94A3B8]">{ex.duration_minutes} min</p>
               </div>
             </div>
@@ -517,21 +517,21 @@ function AiExerciseList({ exercises, dict }: { exercises: AiExercise[]; dict: Tr
           </button>
 
           {expanded === i && (
-            <div className="px-4 pb-4 space-y-3 border-t border-[#E4E2F5] pt-3">
-              <p className="text-sm text-[#64748B]">{ex.description}</p>
+            <div className="px-4 pb-4 space-y-3 border-t border-[#2E4057] pt-3">
+              <p className="text-sm text-[#94A3B8]">{ex.description}</p>
               {ex.setup && (
                 <div>
-                  <p className="text-xs font-semibold text-[#1A1A2E] mb-1">{dict.ai_setup}</p>
-                  <p className="text-xs text-[#64748B]">{ex.setup}</p>
+                  <p className="text-xs font-semibold text-[#F8FAFC] mb-1">{dict.ai_setup}</p>
+                  <p className="text-xs text-[#94A3B8]">{ex.setup}</p>
                 </div>
               )}
               {ex.instructions?.length > 0 && (
                 <div>
-                  <p className="text-xs font-semibold text-[#1A1A2E] mb-1">{dict.ai_execution}</p>
+                  <p className="text-xs font-semibold text-[#F8FAFC] mb-1">{dict.ai_execution}</p>
                   <ol className="space-y-1">
                     {ex.instructions.map((step, j) => (
-                      <li key={j} className="text-xs text-[#64748B] flex gap-2">
-                        <span className="text-[#6D28D9] font-bold shrink-0">{j + 1}.</span>
+                      <li key={j} className="text-xs text-[#94A3B8] flex gap-2">
+                        <span className="text-[#22C55E] font-bold shrink-0">{j + 1}.</span>
                         {step}
                       </li>
                     ))}
@@ -539,8 +539,8 @@ function AiExerciseList({ exercises, dict }: { exercises: AiExercise[]; dict: Tr
                 </div>
               )}
               {ex.coaching_points?.length > 0 && (
-                <div className="bg-[#F5F3FF] rounded-lg p-3">
-                  <p className="text-xs font-semibold text-[#6D28D9] mb-1.5">{dict.ai_coaching}</p>
+                <div className="bg-[#1E2D3D] rounded-lg p-3">
+                  <p className="text-xs font-semibold text-[#22C55E] mb-1.5">{dict.ai_coaching}</p>
                   <ul className="space-y-1">
                     {ex.coaching_points.map((pt, j) => (
                       <li key={j} className="text-xs text-[#5B21B6] flex gap-1.5">
@@ -552,10 +552,10 @@ function AiExerciseList({ exercises, dict }: { exercises: AiExercise[]; dict: Tr
               )}
               {ex.variations?.length > 0 && (
                 <div>
-                  <p className="text-xs font-semibold text-[#1A1A2E] mb-1">{dict.ai_variations}</p>
+                  <p className="text-xs font-semibold text-[#F8FAFC] mb-1">{dict.ai_variations}</p>
                   <ul className="space-y-1">
                     {ex.variations.map((v, j) => (
-                      <li key={j} className="text-xs text-[#64748B] flex gap-1.5">
+                      <li key={j} className="text-xs text-[#94A3B8] flex gap-1.5">
                         <span className="text-[#16A34A] shrink-0">→</span>{v}
                       </li>
                     ))}
@@ -594,33 +594,33 @@ function SessionPreview({
 
   return (
     <div className="space-y-3">
-      <h3 className="font-semibold text-[#1A1A2E] flex items-center gap-2">
-        <Clock className="h-4 w-4 text-[#6D28D9]" />
+      <h3 className="font-semibold text-[#F8FAFC] flex items-center gap-2">
+        <Clock className="h-4 w-4 text-[#22C55E]" />
         {dict.session_structure}
       </h3>
       {phases.map((phase, i) => (
         <div key={i} className="flex gap-4 items-start">
           <div className="text-right shrink-0 w-12">
-            <span className="text-xs font-semibold text-[#6D28D9]">{phase.duration_minutes} min</span>
+            <span className="text-xs font-semibold text-[#22C55E]">{phase.duration_minutes} min</span>
           </div>
-          <div className="flex-1 border-l-2 border-[#E4E2F5] pl-4 pb-3">
-            <p className="font-semibold text-sm text-[#1A1A2E]">{phase.phase}</p>
-            <p className="text-xs text-[#64748B] mt-0.5">{phase.description}</p>
+          <div className="flex-1 border-l-2 border-[#2E4057] pl-4 pb-3">
+            <p className="font-semibold text-sm text-[#F8FAFC]">{phase.phase}</p>
+            <p className="text-xs text-[#94A3B8] mt-0.5">{phase.description}</p>
           </div>
         </div>
       ))}
       {headingForbidden && (
-        <div className="flex items-center gap-2 p-3 bg-[#FEF2F2] rounded-xl border border-[#DC2626]/20">
-          <AlertTriangle className="h-4 w-4 text-[#DC2626] shrink-0" />
-          <p className="text-xs text-[#DC2626] font-medium">{dict.heading_forbidden_session}</p>
+        <div className="flex items-center gap-2 p-3 bg-[#EF4444]/10 rounded-xl border border-[#EF4444]/20">
+          <AlertTriangle className="h-4 w-4 text-[#EF4444] shrink-0" />
+          <p className="text-xs text-[#EF4444] font-medium">{dict.heading_forbidden_session}</p>
         </div>
       )}
-      <div className="p-3 bg-white rounded-xl border border-[#E4E2F5]">
-        <p className="text-xs font-semibold text-[#1A1A2E] mb-1.5">{dict.pedagogic_goals} {rules.label}:</p>
-        <ul className="text-xs text-[#64748B] space-y-1">
+      <div className="p-3 bg-white rounded-xl border border-[#2E4057]">
+        <p className="text-xs font-semibold text-[#F8FAFC] mb-1.5">{dict.pedagogic_goals} {rules.label}:</p>
+        <ul className="text-xs text-[#94A3B8] space-y-1">
           {(rules.technical_focus as string[]).slice(0, 3).map((focus, i) => (
             <li key={i} className="flex items-start gap-1.5">
-              <span className="text-[#6D28D9] shrink-0">•</span>
+              <span className="text-[#22C55E] shrink-0">•</span>
               {focus}
             </li>
           ))}

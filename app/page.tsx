@@ -11,29 +11,29 @@ const FEATURES = [
   {
     icon: CalendarDays,
     title: "Kalender & kamper",
-    desc: "Importer kamprogrammet fra fotball.no og planlegg belastningen uke for uke.",
+    desc: "Importer kamprogrammet og planlegg belastningen uke for uke.",
   },
   {
     icon: Activity,
     title: "Velvære-oversikt",
-    desc: "Hold styr på spillernes form med rask Grønn/Gul/Rød-registrering før trening.",
+    desc: "Hold styr på spillernes form med rask Grønn/Gul/Rød-registrering.",
   },
   {
     icon: Users,
     title: "Lag & spillere",
-    desc: "Administrer alle lagene dine med spillerlister, posisjoner og aldersgrupper.",
+    desc: "Administrer lagene dine med spillerlister, posisjoner og aldersgrupper.",
   },
 ];
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-[#0A0F14]">
+    <main className="min-h-screen bg-[#0A0F14] overflow-x-hidden">
       {/* Hero */}
       <div className="flex flex-col items-center justify-center px-4 pt-20 pb-12 text-center">
-        <div className="flex flex-col items-center gap-4 mb-8">
+        <div className="flex flex-col items-center gap-5 mb-10">
           {/* Logo mark */}
-          <div className="w-20 h-20 rounded-3xl bg-[#141D26] shadow-lg shadow-black/40 flex items-center justify-center border border-[#2E4057]">
-            <PitchPlanLogo size={52} />
+          <div className="w-24 h-24 rounded-[32px] bg-white/5 backdrop-blur-sm shadow-2xl shadow-black/50 flex items-center justify-center border border-white/10">
+            <PitchPlanLogo size={56} />
           </div>
 
           {/* Wordmark */}
@@ -41,33 +41,24 @@ export default function Home() {
             <h1 className="text-5xl font-extrabold tracking-tight text-[#F8FAFC]">
               Pitch<span className="text-[#22C55E]">Plan</span>
             </h1>
-            <p className="text-[#94A3B8] text-lg mt-2 font-medium">
+            <p className="text-[#94A3B8] text-base mt-2">
               AI-drevet treningsplanlegging for barne- og ungdomsfotball
             </p>
-          </div>
-
-          {/* Badge row */}
-          <div className="flex flex-wrap gap-1.5 justify-center mt-1">
-            {["NFF", "SvFF", "DBU", "The FA"].map((org) => (
-              <span key={org} className="text-xs font-semibold px-2.5 py-1 rounded-full bg-[#141D26] border border-[#2E4057] text-[#22C55E] shadow-sm">
-                {org}
-              </span>
-            ))}
           </div>
         </div>
 
         {/* CTA buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 w-full max-w-sm">
+        <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
           <Link
             href="/api/auth/google"
-            className="flex-1 inline-flex items-center justify-center gap-2.5 rounded-[8px] bg-[#141D26] border border-[#2E4057] px-5 py-3.5 text-[#F8FAFC] font-semibold text-sm hover:bg-[#1E2D3D] hover:border-[#22C55E]/40 transition-all shadow-sm"
+            className="flex-1 inline-flex items-center justify-center gap-2.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/12 px-5 py-3.5 text-[#F8FAFC] font-semibold text-sm hover:bg-white/12 transition-all"
           >
             <GoogleIcon />
-            Fortsett med Google
+            Google
           </Link>
           <Link
             href="/login"
-            className="flex-1 inline-flex items-center justify-center rounded-[8px] bg-[#22C55E] px-5 py-3.5 text-[#0A0F14] font-bold text-sm uppercase tracking-wide hover:bg-[#16A34A] transition-colors shadow-sm shadow-[#22C55E]/20"
+            className="flex-1 inline-flex items-center justify-center rounded-full bg-[#22C55E] px-5 py-3.5 text-[#0A0F14] font-bold text-sm uppercase tracking-wide hover:bg-[#16A34A] transition-colors shadow-lg shadow-[#22C55E]/25"
           >
             Logg inn
           </Link>
@@ -83,27 +74,32 @@ export default function Home() {
 
       {/* Filosofi-banner */}
       <div className="max-w-lg mx-auto px-4 mb-10">
-        <div className="bg-[#141D26] rounded-xl border border-[#2E4057] p-5 text-center shadow-sm">
-          <p className="text-[#22C55E] text-xs font-bold uppercase tracking-widest mb-1.5">Filosofi</p>
+        <div className="bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-6 text-center">
+          <p className="text-[#22C55E] text-xs font-bold uppercase tracking-widest mb-2">Filosofi</p>
           <p className="text-[#F8FAFC] text-xl font-bold leading-snug">
             "Flest mulig · Lengst mulig · Best mulig"
           </p>
-          <p className="text-[#94A3B8] text-sm mt-1.5">Trygghet → Mestring → Trivsel</p>
+          <p className="text-[#94A3B8] text-sm mt-2">Trygghet → Mestring → Trivsel</p>
         </div>
       </div>
 
-      {/* Feature grid */}
-      <div className="max-w-lg mx-auto px-4 pb-20">
-        <div className="grid grid-cols-2 gap-3">
+      {/* Feature strip — horisontal scroll */}
+      <div className="overflow-x-auto scrollbar-hide -mx-0 pb-20">
+        <div className="flex gap-3 px-4" style={{ width: "max-content" }}>
           {FEATURES.map(({ icon: Icon, title, desc }) => (
-            <div key={title} className="bg-[#141D26] rounded-xl border border-[#2E4057] p-4 shadow-sm">
-              <div className="w-9 h-9 rounded-lg bg-[#1E2D3D] flex items-center justify-center mb-3">
-                <Icon className="h-4.5 w-4.5 text-[#22C55E]" style={{ width: 18, height: 18 }} />
+            <div
+              key={title}
+              className="w-52 flex-shrink-0 bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-5"
+            >
+              <div className="w-10 h-10 rounded-2xl bg-[#22C55E]/15 flex items-center justify-center mb-4">
+                <Icon className="text-[#22C55E]" style={{ width: 20, height: 20 }} />
               </div>
-              <p className="font-semibold text-[#F8FAFC] text-sm mb-1">{title}</p>
+              <p className="font-semibold text-[#F8FAFC] text-sm mb-1.5 leading-snug">{title}</p>
               <p className="text-xs text-[#94A3B8] leading-relaxed">{desc}</p>
             </div>
           ))}
+          {/* Trailing spacer so last card isn't flush to edge */}
+          <div className="w-4 flex-shrink-0" />
         </div>
       </div>
     </main>
