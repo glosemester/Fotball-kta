@@ -135,17 +135,38 @@ prisma/schema.prisma          # Datamodeller
 
 ## Kom i gang
 
-### Forutsetninger
-- Node.js 22.x
-- PostgreSQL-database (f.eks. Neon)
+Appen kjører på serveren — du jobber lokalt i din editor og pusher til GitHub. GitHub Actions deployer automatisk til serveren når du merger til `main`.
 
-### Installasjon
+### Klon repoet
 
 ```bash
 git clone https://github.com/glosemester/Fotball-kta.git
 cd Fotball-kta
 npm install
 ```
+
+### Vanlig arbeidsflyt
+
+```bash
+git checkout -b ny-feature       # Opprett ny branch
+# ... gjør endringer i editoren ...
+git add .
+git commit -m "Beskrivelse av endringen"
+git push origin ny-feature       # Push til GitHub
+# Opprett PR på GitHub → merge til main → auto-deploy kjører
+```
+
+Appen er live på serveren så snart PR er merget til `main`.
+
+---
+
+## Kjøre appen lokalt (valgfritt)
+
+Kun nødvendig hvis du vil teste endringer uten å deploye til serveren.
+
+### Forutsetninger
+- Node.js 22.x
+- PostgreSQL-database (f.eks. Neon eller lokal instans)
 
 ### Miljøvariabler
 
@@ -162,12 +183,13 @@ GOOGLE_CLIENT_ID="fra-google-cloud-console"
 GOOGLE_CLIENT_SECRET="fra-google-cloud-console"
 ```
 
-### Kjør lokalt
+### Start
 
 ```bash
-npx prisma db push      # Opprett tabeller
+npx prisma db push      # Opprett tabeller (kun første gang)
 npm run dev             # Start på localhost:3000
 ```
+
 
 ### Bygg for produksjon
 
