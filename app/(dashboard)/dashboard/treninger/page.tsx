@@ -52,8 +52,8 @@ export default async function TreningerPage() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-[#1A1A2E]">{d.title}</h1>
-          <p className="text-[#64748B] mt-1 text-sm">
+          <h1 className="text-2xl font-bold text-[#F8FAFC]">{d.title}</h1>
+          <p className="text-[#94A3B8] mt-1 text-sm">
             {sessions.length === 0
               ? d.no_sessions
               : `${sessions.length} ${sessions.length !== 1 ? d.sessions_total_plural : d.sessions_total}`}
@@ -69,11 +69,11 @@ export default async function TreningerPage() {
 
       {sessions.length === 0 ? (
         <div className="text-center py-20">
-          <div className="w-16 h-16 rounded-2xl bg-white border border-[#E4E2F5] flex items-center justify-center mx-auto mb-4">
+          <div className="w-16 h-16 rounded-2xl bg-[#1E2D3D] border border-[#2E4057] flex items-center justify-center mx-auto mb-4">
             <Dumbbell className="h-7 w-7 text-[#94A3B8]" />
           </div>
-          <p className="text-[#64748B] text-sm font-medium">{d.no_sessions}</p>
-          <p className="text-[#94A3B8] text-xs mt-1 mb-6">{d.no_sessions_hint}</p>
+          <p className="text-[#94A3B8] text-sm font-medium">{d.no_sessions}</p>
+          <p className="text-[#4E5A72] text-xs mt-1 mb-6">{d.no_sessions_hint}</p>
           <Link href="/dashboard/treninger/ny">
             <Button>
               <Plus className="h-4 w-4" />
@@ -89,16 +89,17 @@ export default async function TreningerPage() {
             const emoji = THEME_EMOJIS[s.theme] ?? "⚽";
             const statusInfo = STATUS_BADGE[s.status] ?? STATUS_BADGE.DRAFT;
             return (
-              <div
+              <Link
                 key={s.id}
-                className="bg-white border border-[#E4E2F5] rounded-2xl p-4 flex items-center justify-between hover:border-[#6D28D9]/20 hover:shadow-sm transition-all"
+                href={`/dashboard/treninger/${s.id}`}
+                className="bg-[#141D26] border border-[#2E4057] rounded-2xl p-4 flex items-center justify-between hover:border-[#22C55E]/40 hover:bg-[#1E2D3D] transition-all"
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 rounded-xl bg-[#F5F3FF] flex items-center justify-center shrink-0 text-xl">
+                  <div className="w-11 h-11 rounded-xl bg-[#1E2D3D] border border-[#2E4057] flex items-center justify-center shrink-0 text-xl">
                     {emoji}
                   </div>
                   <div>
-                    <p className="font-semibold text-[#1A1A2E] text-sm">{themeLabel}</p>
+                    <p className="font-semibold text-[#F8FAFC] text-sm">{themeLabel}</p>
                     <div className="flex items-center gap-3 mt-1">
                       <span className="flex items-center gap-1 text-xs text-[#94A3B8]">
                         <CalendarDays className="h-3 w-3" />
@@ -109,7 +110,7 @@ export default async function TreningerPage() {
                         {s.actual_player_count} {dict.common.players}
                       </span>
                       {s.team && (
-                        <span className="text-xs text-[#94A3B8] hidden sm:inline">{s.team.name}</span>
+                        <span className="text-xs text-[#4E5A72] hidden sm:inline">{s.team.name}</span>
                       )}
                     </div>
                   </div>
@@ -118,7 +119,7 @@ export default async function TreningerPage() {
                   <Badge variant={statusInfo.variant}>{statusInfo.label}</Badge>
                   <ChevronRight className="h-4 w-4 text-[#94A3B8]" />
                 </div>
-              </div>
+              </Link>
             );
           })}
         </div>

@@ -59,15 +59,16 @@ export async function POST(req: NextRequest) {
     title,
   } = body;
 
-  if (!team_id || !age_group || !theme) {
+  if (!age_group || !theme) {
     return NextResponse.json({ error: "Mangler påkrevde felt" }, { status: 400 });
   }
 
-  // Verify team belongs to this coach
-  const team = await prisma.team.findFirst({
-    where: { id: team_id, coach_id: session.coachId },
-  });
-  if (!team) return NextResponse.json({ error: "Lag ikke funnet" }, { status: 404 });
+  if (team_id) {
+    const team = await prisma.team.findFirst({
+      where: { id: team_id, coach_id: session.coachId },
+    });
+    if (!team) return NextResponse.json({ error: "Lag ikke funnet" }, { status: 404 });
+  }
 
   const trainingSession = await prisma.trainingSession.create({
     data: {

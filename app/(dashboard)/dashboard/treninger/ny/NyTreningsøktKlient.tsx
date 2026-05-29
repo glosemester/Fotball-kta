@@ -158,6 +158,12 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
   async function handleSave() {
     if (!ageGroup || !theme) return;
     setSaving(true); setSaveError("");
+
+    const phasesWithExercises = getPhases().map((phase) => {
+      const exercise = aiExercises?.find((ex) => ex.phase === phase.phase);
+      return exercise ? { ...phase, exercise } : phase;
+    });
+
     const res = await fetch("/api/treninger", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -167,7 +173,7 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
         actual_player_count: playerCount, planned_player_count: plannedCount,
         field_length_meters: fieldLength, field_width_meters: fieldWidth,
         goal_type: goalType, balls_available: balls, cones_available: cones,
-        phases: getPhases(),
+        phases: phasesWithExercises,
         constraints_applied: constraints?.adjustments_made.map((a) => a.description) ?? [],
       }),
     });
@@ -338,9 +344,9 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
                 </div>
               </div>
               {playerCount !== plannedCount && (
-                <div className="flex items-start gap-2 p-3 bg-[#FFFBEB] rounded-xl border border-[#D97706]/20">
-                  <AlertTriangle className="h-4 w-4 text-[#D97706] shrink-0 mt-0.5" />
-                  <div className="text-xs text-[#92400E]">
+                <div className="flex items-start gap-2 p-3 bg-[#F97316]/10 rounded-xl border border-[#F97316]/20">
+                  <AlertTriangle className="h-4 w-4 text-[#F97316] shrink-0 mt-0.5" />
+                  <div className="text-xs text-[#F97316]">
                     <span className="font-semibold">{Math.abs(plannedCount - playerCount)} {playerCount < plannedCount ? dict.fewer_than_planned : dict.more_than_planned}</span>
                     {" "}{dict.auto_adjusted}
                     {oddSolution && <p className="mt-1">{oddSolution}</p>}
@@ -348,7 +354,7 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
                 </div>
               )}
               {gameForm && (
-                <div className="p-3 bg-[#F0FDF4] rounded-xl border border-[#16A34A]/20 text-sm text-[#166534]">
+                <div className="p-3 bg-[#22C55E]/10 rounded-xl border border-[#22C55E]/20 text-sm text-[#22C55E]">
                   <span className="font-semibold">{dict.recommended_form}:</span> {gameForm.description}
                 </div>
               )}
@@ -411,14 +417,14 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
           </Card>
 
           {constraints && constraints.adjustments_made.length > 0 && (
-            <Card className="border-[#2563EB]/20 bg-[#EFF6FF]">
+            <Card className="border-[#3B82F6]/20 bg-[#1E2D3D]">
               <CardHeader className="pb-2">
-                <CardTitle className="text-sm text-[#1D4ED8]">{dict.auto_adjustments}</CardTitle>
+                <CardTitle className="text-sm text-[#3B82F6]">{dict.auto_adjustments}</CardTitle>
               </CardHeader>
               <CardContent className="space-y-2">
                 {constraints.adjustments_made.map((adj, i) => (
-                  <div key={i} className="flex items-start gap-2 text-xs text-[#1D4ED8]">
-                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 mt-0.5 text-[#2563EB]" />
+                  <div key={i} className="flex items-start gap-2 text-xs text-[#94A3B8]">
+                    <CheckCircle2 className="h-3.5 w-3.5 shrink-0 mt-0.5 text-[#3B82F6]" />
                     <span>{adj.description}</span>
                   </div>
                 ))}
@@ -499,10 +505,10 @@ function AiExerciseList({ exercises, dict }: { exercises: AiExercise[]; dict: Tr
     <div className="space-y-2">
       <p className="text-xs font-semibold text-[#94A3B8] uppercase tracking-widest px-1">{dict.ai_exercises}</p>
       {exercises.map((ex, i) => (
-        <div key={i} className="bg-white border border-[#2E4057] rounded-xl overflow-hidden">
+        <div key={i} className="bg-[#141D26] border border-[#2E4057] rounded-xl overflow-hidden">
           <button
             onClick={() => setExpanded(expanded === i ? null : i)}
-            className="w-full flex items-center justify-between p-4 text-left hover:bg-[#F8F7FF] transition-colors"
+            className="w-full flex items-center justify-between p-4 text-left hover:bg-[#1E2D3D] transition-colors"
           >
             <div className="flex items-center gap-3 min-w-0">
               <div className="shrink-0">
@@ -543,8 +549,8 @@ function AiExerciseList({ exercises, dict }: { exercises: AiExercise[]; dict: Tr
                   <p className="text-xs font-semibold text-[#22C55E] mb-1.5">{dict.ai_coaching}</p>
                   <ul className="space-y-1">
                     {ex.coaching_points.map((pt, j) => (
-                      <li key={j} className="text-xs text-[#5B21B6] flex gap-1.5">
-                        <span className="shrink-0">•</span>{pt}
+                      <li key={j} className="text-xs text-[#94A3B8] flex gap-1.5">
+                        <span className="shrink-0 text-[#22C55E]">•</span>{pt}
                       </li>
                     ))}
                   </ul>
@@ -615,7 +621,7 @@ function SessionPreview({
           <p className="text-xs text-[#EF4444] font-medium">{dict.heading_forbidden_session}</p>
         </div>
       )}
-      <div className="p-3 bg-white rounded-xl border border-[#2E4057]">
+      <div className="p-3 bg-[#1E2D3D] rounded-xl border border-[#2E4057]">
         <p className="text-xs font-semibold text-[#F8FAFC] mb-1.5">{dict.pedagogic_goals} {rules.label}:</p>
         <ul className="text-xs text-[#94A3B8] space-y-1">
           {(rules.technical_focus as string[]).slice(0, 3).map((focus, i) => (
