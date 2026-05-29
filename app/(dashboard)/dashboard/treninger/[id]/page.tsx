@@ -2,10 +2,11 @@ import { getSession } from "@/lib/auth";
 import { redirect, notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import Link from "next/link";
-import { ArrowLeft, Calendar, Users, Ruler, Target, Clock, AlertTriangle, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, Calendar, Users, Ruler, Target, Clock, AlertTriangle, CheckCircle2, Printer } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import TreningStatusKnapp from "./TreningStatusKnapp";
+import SlettTreningKnapp from "./SlettTreningKnapp";
 
 const THEME_EMOJIS: Record<string, string> = {
   PASNING_MOTTAK: "🎯", DRIBLING_VENDINGER: "🌀", AVSLUTNINGER: "🥅",
@@ -223,9 +224,13 @@ export default async function TreningDetaljPage({ params }: { params: Promise<{ 
         )}
       </div>
 
-      <div className="flex justify-end">
-        <Link href="/dashboard/treninger">
-          <Button variant="outline" size="sm">Tilbake</Button>
+      <div className="flex items-center justify-between">
+        <SlettTreningKnapp id={trening.id} />
+        <Link href={`/treninger/${trening.id}/print`}>
+          <Button variant="outline" size="sm" className="gap-2">
+            <Printer className="h-4 w-4" />
+            Lagre som PDF
+          </Button>
         </Link>
       </div>
     </div>
