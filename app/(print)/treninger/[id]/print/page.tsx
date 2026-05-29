@@ -52,7 +52,7 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
 
   if (!trening) notFound();
 
-  const phases = (trening.phases as Phase[]) ?? [];
+  const phases = (trening.phases as unknown as Phase[]) ?? [];
   const emoji = THEME_EMOJIS[trening.theme] ?? "⚽";
   const themeLabel = THEME_LABELS[trening.theme] ?? trening.theme;
   const ageLabel = AGE_LABELS[trening.age_group] ?? trening.age_group;

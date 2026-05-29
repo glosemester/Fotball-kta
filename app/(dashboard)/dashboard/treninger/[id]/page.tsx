@@ -53,7 +53,7 @@ export default async function TreningDetaljPage({ params }: { params: Promise<{ 
 
   if (!trening) notFound();
 
-  const phases = (trening.phases as Phase[]) ?? [];
+  const phases = (trening.phases as unknown as Phase[]) ?? [];
   const hasExercises = phases.some((p) => p.exercise);
 
   const STATUS_BADGE: Record<string, { label: string; variant: "green" | "yellow" | "secondary" }> = {
