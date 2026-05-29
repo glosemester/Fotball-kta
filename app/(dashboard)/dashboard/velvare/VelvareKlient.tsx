@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { UserRound, ChevronDown, ChevronUp, AlertTriangle } from "lucide-react";
+import { ChevronLeft, ChevronRight, UserRound, ChevronDown, ChevronUp, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import type { WellbeingStatus, WellbeingSymptom } from "@/types";
 
@@ -33,6 +32,25 @@ const SYMPTOM_STATUS: Record<string, string[]> = {
   sleep_issues: ["yellow"], low_motivation: ["yellow"],
 };
 const SYMPTOM_KEYS = Object.keys(SYMPTOM_STATUS);
+
+function isoWeekFromDate(date: Date): { week: number; year: number } {
+  const d = new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()));
+  const dayNum = d.getUTCDay() || 7;
+  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+  const week = Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
+  return { week, year: d.getUTCFullYear() };
+}
+
+function addWeeks(week: number, year: number, delta: number): { week: number; year: number } {
+  const jan4 = new Date(Date.UTC(year, 0, 4));
+  const dayOfWeek = jan4.getUTCDay() || 7;
+  const firstMonday = new Date(jan4);
+  firstMonday.setUTCDate(jan4.getUTCDate() - dayOfWeek + 1);
+  const target = new Date(firstMonday);
+  target.setUTCDate(firstMonday.getUTCDate() + (week - 1) * 7 + delta * 7);
+  return isoWeekFromDate(target);
+}
 
 function PlayerCard({ player, report, dict, onSaved }: {
   player: Player; report: Report | undefined; dict: WellbeingDict; onSaved: () => void;
@@ -101,11 +119,9 @@ function PlayerCard({ player, report, dict, onSaved }: {
             </div>
           ) : (
             <>
-              <p className="text-sm font-medium text-[#1A1A2E]">
-                {dict.how_is} {player.first_name} {dict.this_week}
-              </p>
-              <div className="space-y-2">
-                {(["green","yellow","red"] as WellbeingStatus[]).map((s) => {
+              <p className="text-xs font-semibold text-[#64748B]">{dict.how_is} {player.first_name} {dict.this_week}?</p>
+              <div className="grid grid-cols-3 gap-2">
+                {(["green", "yellow", "red"] as WellbeingStatus[]).map((s) => {
                   const st = STATUS_STYLE[s.toUpperCase() as keyof typeof STATUS_STYLE];
                   const isSelected = status === s;
                   return (
@@ -153,8 +169,32 @@ function PlayerCard({ player, report, dict, onSaved }: {
   );
 }
 
-export default function VelvareKlient({ teams, reports, week, year, dict }: Props) {
-  const router = useRouter();
+export default function VelvareKlient({ teams, reports: initialReports, week: initialWeek, year: initialYear, dict }: Props) {
+  const [currentWeek, setCurrentWeek] = useState(initialWeek);
+  const [currentYear, setCurrentYear] = useState(initialYear);
+  const [reports, setReports] = useState<Report[]>(initialReports);
+  const [loading, setLoading] = useState(false);
+
+  const todayWeek = isoWeekFromDate(new Date());
+  const isCurrentWeek = currentWeek === todayWeek.week && currentYear === todayWeek.year;
+
+  async function navigateWeek(delta: number) {
+    const next = addWeeks(currentWeek, currentYear, delta);
+    setLoading(true);
+    const res = await fetch(`/api/velvare?week=${next.week}&year=${next.year}`);
+    const data = await res.json();
+    setReports(data.reports ?? []);
+    setCurrentWeek(next.week);
+    setCurrentYear(next.year);
+    setLoading(false);
+  }
+
+  async function refresh() {
+    const res = await fetch(`/api/velvare?week=${currentWeek}&year=${currentYear}`);
+    const data = await res.json();
+    setReports(data.reports ?? []);
+  }
+
   const reportMap = Object.fromEntries(reports.map((r) => [r.player_id, r]));
   const allPlayers = teams.flatMap((t) => t.players);
   const countGreen   = reports.filter((r) => r.status === "GREEN").length;
@@ -164,7 +204,7 @@ export default function VelvareKlient({ teams, reports, week, year, dict }: Prop
 
   const redYellowPlayers = reports
     .filter((r) => r.status === "RED" || r.status === "YELLOW")
-    .map((r) => { const p = allPlayers.find((p) => p.id === r.player_id); return p ? { ...p, report: r } : null; })
+    .map((r) => { const p = allPlayers.find((pl) => pl.id === r.player_id); return p ? { ...p, report: r } : null; })
     .filter(Boolean) as (Player & { report: Report })[];
 
   const counts = [
@@ -176,55 +216,93 @@ export default function VelvareKlient({ teams, reports, week, year, dict }: Prop
 
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-4 gap-2">
-        {counts.map(({ label, count, bg, text, border }) => (
-          <div key={label} className="rounded-xl border p-3 text-center" style={{ background: bg, borderColor: border }}>
-            <p className="text-xl font-bold" style={{ color: text }}>{count}</p>
-            <p className="text-xs font-medium mt-0.5" style={{ color: text }}>{label}</p>
-          </div>
-        ))}
+      {/* Ukesnavigasjon */}
+      <div className="flex items-center justify-between bg-white border border-[#E4E2F5] rounded-2xl px-4 py-3">
+        <button
+          onClick={() => navigateWeek(-1)}
+          disabled={loading}
+          className="flex items-center gap-1 text-sm text-[#64748B] hover:text-[#1A1A2E] transition-colors disabled:opacity-40"
+        >
+          <ChevronLeft className="h-4 w-4" />
+          Forrige uke
+        </button>
+        <div className="text-center">
+          <p className="text-sm font-semibold text-[#1A1A2E]">
+            Uke {currentWeek}, {currentYear}
+            {isCurrentWeek && (
+              <span className="ml-2 text-xs font-medium text-[#6D28D9] bg-[#F5F3FF] px-2 py-0.5 rounded-full">Denne uka</span>
+            )}
+          </p>
+        </div>
+        <button
+          onClick={() => navigateWeek(1)}
+          disabled={loading || isCurrentWeek}
+          className="flex items-center gap-1 text-sm text-[#64748B] hover:text-[#1A1A2E] transition-colors disabled:opacity-40"
+        >
+          Neste uke
+          <ChevronRight className="h-4 w-4" />
+        </button>
       </div>
 
-      {redYellowPlayers.length > 0 && (
-        <div className="bg-[#FFFBEB] border border-[#D97706]/30 rounded-2xl p-4">
-          <div className="flex items-start gap-2 mb-2">
-            <AlertTriangle className="h-4 w-4 text-[#D97706] shrink-0 mt-0.5" />
-            <p className="text-sm font-semibold text-[#92400E]">
-              {redYellowPlayers.length} {dict.alert_needs_followup}
-            </p>
-          </div>
-          <div className="space-y-1 pl-6">
-            {redYellowPlayers.map(({ id, first_name, last_name, report }) => (
-              <p key={id} className="text-xs text-[#92400E]">
-                {STATUS_STYLE[report.status].emoji} {first_name} {last_name}
-                {report.note && <span className="text-[#D97706]"> — {report.note}</span>}
-              </p>
-            ))}
-          </div>
+      {loading && (
+        <div className="text-center py-8">
+          <p className="text-sm text-[#94A3B8]">Laster...</p>
         </div>
       )}
 
-      {teams.map((team) => (
-        <div key={team.id} className="space-y-2">
-          <p className="text-xs font-semibold text-[#94A3B8] uppercase tracking-widest px-1">
-            {team.name} · {team.players.length}
-          </p>
-          {team.players.length === 0 ? (
-            <p className="text-xs text-[#94A3B8] px-1">{dict.no_active_players}</p>
-          ) : (
-            team.players.map((player) => (
-              <PlayerCard key={player.id} player={player} report={reportMap[player.id]}
-                dict={dict} onSaved={() => router.refresh()} />
-            ))
-          )}
-        </div>
-      ))}
+      {!loading && (
+        <>
+          <div className="grid grid-cols-4 gap-2">
+            {counts.map(({ label, count, bg, text, border }) => (
+              <div key={label} className="rounded-xl border p-3 text-center" style={{ background: bg, borderColor: border }}>
+                <p className="text-xl font-bold" style={{ color: text }}>{count}</p>
+                <p className="text-xs font-medium mt-0.5" style={{ color: text }}>{label}</p>
+              </div>
+            ))}
+          </div>
 
-      {allPlayers.length === 0 && (
-        <div className="text-center py-16">
-          <p className="text-[#64748B] text-sm">{dict.no_players}</p>
-          <p className="text-[#94A3B8] text-xs mt-1">{dict.no_players_hint}</p>
-        </div>
+          {redYellowPlayers.length > 0 && (
+            <div className="bg-[#FFFBEB] border border-[#D97706]/30 rounded-2xl p-4">
+              <div className="flex items-start gap-2 mb-2">
+                <AlertTriangle className="h-4 w-4 text-[#D97706] shrink-0 mt-0.5" />
+                <p className="text-sm font-semibold text-[#92400E]">
+                  {redYellowPlayers.length} {dict.alert_needs_followup}
+                </p>
+              </div>
+              <div className="space-y-1 pl-6">
+                {redYellowPlayers.map(({ id, first_name, last_name, report }) => (
+                  <p key={id} className="text-xs text-[#92400E]">
+                    {STATUS_STYLE[report.status].emoji} {first_name} {last_name}
+                    {report.note && <span className="text-[#D97706]"> — {report.note}</span>}
+                  </p>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {teams.map((team) => (
+            <div key={team.id} className="space-y-2">
+              <p className="text-xs font-semibold text-[#94A3B8] uppercase tracking-widest px-1">
+                {team.name} · {team.players.length} spillere
+              </p>
+              {team.players.length === 0 ? (
+                <p className="text-xs text-[#94A3B8] px-1">{dict.no_active_players}</p>
+              ) : (
+                team.players.map((player) => (
+                  <PlayerCard key={player.id} player={player} report={reportMap[player.id]}
+                    dict={dict} onSaved={refresh} />
+                ))
+              )}
+            </div>
+          ))}
+
+          {allPlayers.length === 0 && (
+            <div className="text-center py-16">
+              <p className="text-[#64748B] text-sm">{dict.no_players}</p>
+              <p className="text-[#94A3B8] text-xs mt-1">{dict.no_players_hint}</p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
