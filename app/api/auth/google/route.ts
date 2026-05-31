@@ -2,11 +2,13 @@ import { NextResponse } from "next/server";
 
 export async function GET() {
   const clientId = process.env.GOOGLE_CLIENT_ID;
-  if (!clientId) {
-    return NextResponse.json({ error: "Google OAuth ikke konfigurert" }, { status: 500 });
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
+
+  if (!clientId || !baseUrl) {
+    return NextResponse.redirect(new URL("/login?error=google", baseUrl ?? "http://localhost:3000"));
   }
 
-  const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/google/callback`;
+  const redirectUri = `${baseUrl}/api/auth/google/callback`;
   const scope = "openid email profile";
   const state = crypto.randomUUID();
 

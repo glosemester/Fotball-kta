@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
@@ -9,11 +10,24 @@ interface LoginDict {
   submit: string; loading: string; error: string; no_account: string; register_link: string;
 }
 
+const OAUTH_ERRORS: Record<string, string> = {
+  google: "Noe gikk galt med Google-innlogging. Prøv igjen.",
+  state: "Sikkerhetssjekk feilet. Prøv å logge inn på nytt.",
+  token: "Kunne ikke verifisere Google-kontoen. Prøv igjen.",
+  userinfo: "Kunne ikke hente kontoinformasjon fra Google. Prøv igjen.",
+};
+
 export default function LoginKlient({ dict }: { dict: LoginDict }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const oauthError = searchParams.get("error");
+    if (oauthError) setError(OAUTH_ERRORS[oauthError] ?? "Innlogging feilet. Prøv igjen.");
+  }, [searchParams]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();

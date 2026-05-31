@@ -1,8 +1,13 @@
+import { Suspense } from "react";
 import { getLang, getDictionary } from "@/lib/dict";
 import LoginKlient from "./LoginKlient";
 
 export default async function LoginPage() {
   const lang = await getLang();
   const dict = await getDictionary(lang);
-  return <LoginKlient dict={dict.auth.login} />;
+  return (
+    <Suspense>
+      <LoginKlient dict={dict.auth.login} />
+    </Suspense>
+  );
 }
