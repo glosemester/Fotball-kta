@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
+import { auth } from "@/auth";
 
 const SECRET = process.env.JWT_SECRET!;
 
@@ -22,6 +23,17 @@ export function verifyToken(token: string): SessionPayload | null {
 }
 
 export async function getSession(): Promise<SessionPayload | null> {
+  // Prøv NextAuth (Google) først
+  const nextSession = await auth();
+  if (nextSession?.user?.id) {
+    return {
+      coachId: nextSession.user.id,
+      email: nextSession.user.email || "",
+      fullName: nextSession.user.name || "Trener",
+    };
+  }
+
+  // Fallback til den gamle manuelle innloggingen
   const cookieStore = await cookies();
   const token = cookieStore.get("fotball-token")?.value;
   if (!token) return null;

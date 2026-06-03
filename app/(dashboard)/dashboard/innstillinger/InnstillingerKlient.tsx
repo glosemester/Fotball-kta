@@ -38,24 +38,24 @@ export default function InnstillingerKlient({ features, dict }: Props) {
         {dict.optional_modules}
       </p>
 
-      <div className="bg-white border border-[#E4E2F5] rounded-2xl p-4 flex items-start gap-4">
+      <div className="bg-[#141D26] border border-[#2E4057] rounded-2xl p-4 flex items-start gap-4">
         <div
           className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 mt-0.5"
-          style={{ background: isOn ? "#F0FDF4" : "#F8FAFC" }}
+          style={{ background: isOn ? "#22C55E/10" : "#1E2D3D" }}
         >
-          <Activity className="h-5 w-5" style={{ color: isOn ? "#16A34A" : "#94A3B8" }} />
+          <Activity className="h-5 w-5" style={{ color: isOn ? "#22C55E" : "#94A3B8" }} />
         </div>
 
         <div className="flex-1 min-w-0">
-          <p className="font-semibold text-[#1A1A2E] text-sm">{dict.wellbeing_label}</p>
-          <p className="text-xs text-[#64748B] mt-0.5 leading-relaxed">{dict.wellbeing_desc}</p>
+          <p className="font-semibold text-[#F8FAFC] text-sm">{dict.wellbeing_label}</p>
+          <p className="text-xs text-[#94A3B8] mt-0.5 leading-relaxed">{dict.wellbeing_desc}</p>
         </div>
 
         <button
           onClick={() => toggle("wellbeing")}
           disabled={isSaving}
           className={`relative shrink-0 mt-0.5 w-11 h-6 rounded-full transition-colors duration-200 focus:outline-none disabled:opacity-60 ${
-            isOn ? "bg-[#16A34A]" : "bg-[#E4E2F5]"
+            isOn ? "bg-[#22C55E]" : "bg-[#2E4057]"
           }`}
         >
           <span

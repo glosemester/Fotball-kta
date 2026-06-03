@@ -30,7 +30,7 @@
     "teams": "Lag",
     "weekplan": "Ukesplan",
     "calendar": "Kalender",
-    "wellbeing": "Velvære",
+    "wellbeing": "Belastningsstyring",
     "settings": "Innstillinger",
     "logout": "Logg ut"
   },
@@ -71,11 +71,12 @@
     "subtitle": "Her er alt du trenger.",
     "quick_actions": "Hurtigvalg",
     "quick_new_session": "Ny treningsøkt",
+    "quick_sessions": "Treningsøkter",
     "quick_teams": "Lag & Spillere",
     "quick_weekplan": "Ukesplan",
-    "quick_wellbeing": "Velvære",
-    "wellbeing_reminder_title": "Velværeregistrering denne uken",
-    "wellbeing_reminder_body": "Husk å be spillere/foreldre registrere velvære før trening. Kun Grønn/Gul/Rød — ingen kroppsmål.",
+    "quick_wellbeing": "Belastningsstyring",
+    "wellbeing_reminder_title": "Belastningsstyring denne uken",
+    "wellbeing_reminder_body": "Husk å registrere belastning på spillerne før trening. Kun Grønn/Gul/Rød — ingen kroppsmål.",
     "age_rules_title": "Aldersspesifikke regler",
     "heading_forbidden": "⛔ Heading forbudt",
     "sessions_per_week": "økt/uke",
@@ -189,6 +190,30 @@
     "status_draft": "Utkast",
     "status_active": "Aktiv",
     "status_completed": "Fullført",
+    "status_button": {
+      "start": "Start økt",
+      "complete": "Merk som gjennomført",
+      "reopen": "Gjenåpne",
+      "saving": "Lagrer…"
+    },
+    "back_to_sessions": "Tilbake til treninger",
+    "session_structure_heading": "Øktstruktur",
+    "detail_setup": "Oppsett",
+    "detail_execution": "Gjennomføring",
+    "detail_coaching_points": "Trenerpunkter",
+    "detail_variations": "Variasjoner",
+    "no_phases": "Ingen faser lagret.",
+    "age_group_label": "Aldersgruppe:",
+    "auto_adjustments_label": "Automatiske tilpasninger:",
+    "no_exercises_warning": "Denne økten ble lagret uten AI-øvelser. Opprett en ny økt og generer øvelser før du lagrer for å se dem her.",
+    "save_as_pdf": "Lagre som PDF",
+    "delete_session": "Slett økt",
+    "delete_confirm": "Er du sikker?",
+    "delete_yes": "Ja, slett",
+    "deleting": "Sletter...",
+    "mark_completed": "Merk som gjennomført",
+    "marking_completed": "Lagrer...",
+    "locale": "nb-NO",
     "themes": {
       "pasning_mottak": "Pasning & Mottak",
       "dribling_vendinger": "Dribling & Vendinger",
@@ -202,7 +227,7 @@
     }
   },
   "wellbeing": {
-    "title": "Velvære",
+    "title": "Belastningsstyring",
     "subtitle_week": "Kun symptombasert — ingen kroppsmål",
     "count_green": "Grønn",
     "count_yellow": "Gul",
@@ -214,7 +239,7 @@
     "this_week": "denne uken?",
     "symptoms_optional": "Symptomer (valgfritt):",
     "extra_info": "Tilleggsinfo til treneren (valgfritt)...",
-    "register_button": "Registrer velvære",
+    "register_button": "Registrer belastning",
     "registered": "Økt levert! Laget ditt er klart til kamp.",
     "no_players": "Ingen spillere registrert ennå.",
     "no_players_hint": "Legg til spillere under Lag & Spillere.",
@@ -305,7 +330,7 @@
     "account_title": "Din konto",
     "optional_modules": "Valgfrie moduler",
     "language_title": "Språk",
-    "wellbeing_label": "Velvære",
-    "wellbeing_desc": "Registrer ukentlig velvære for spillerne dine (Grønn/Gul/Rød). Symptombasert — ingen kroppsmål. Gir deg oversikt og varsler før trening."
+    "wellbeing_label": "Belastningsstyring",
+    "wellbeing_desc": "Registrer ukentlig belastning for spillerne dine (Grønn/Gul/Rød). Symptombasert — ingen kroppsmål. Gir deg oversikt og varsler før trening."
   }
 }

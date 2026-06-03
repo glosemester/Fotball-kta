@@ -22,12 +22,24 @@ const THEME_KEYS: SessionTheme[] = [
   "posisjonsspill", "pressing", "overganger", "keeperteknikk", "fritt_spill",
 ];
 
+const REVERSE_THEME_MAP: Record<string, SessionTheme> = {
+  PASNING_MOTTAK: "pasning_mottak",
+  DRIBLING_VENDINGER: "dribling_vendinger",
+  AVSLUTNINGER: "avslutninger",
+  FORSVAR: "forsvar",
+  POSISJONSSPILL: "posisjonsspill",
+  PRESSING: "pressing",
+  OVERGANGER: "overganger",
+  KEEPERTEKNIKK: "keeperteknikk",
+  FRITT_SPILL: "fritt_spill",
+};
+
 const GOAL_TYPE_KEYS = ["full", "small", "cone_goals", "none"] as const;
 type GoalType = typeof GOAL_TYPE_KEYS[number];
 
 interface AiExercise {
   phase: string; name: string; duration_minutes: number;
-  description: string; setup: string; instructions: string[];
+  description: string; setup: string; rules: string[]; instructions: string[];
   coaching_points: string[]; variations: string[];
 }
 
@@ -60,23 +72,23 @@ interface TrainingDict {
 
 function todayISO() { return new Date().toISOString().split("T")[0]; }
 
-export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingDict; locale: string }) {
+export default function TreningSkjemaKlient({ dict, locale, initialSession }: { dict: TrainingDict; locale: string; initialSession?: any }) {
   const router = useRouter();
   const ageGroups = getAllAgeGroups();
 
-  const [step, setStep] = useState(1);
+  const [step, setStep] = useState(initialSession ? 2 : 1);
   const [teams, setTeams] = useState<TeamOption[]>([]);
-  const [teamId, setTeamId] = useState("");
-  const [ageGroup, setAgeGroup] = useState<AgeGroupKey | null>(null);
-  const [theme, setTheme] = useState<SessionTheme | null>(null);
-  const [sessionDate, setSessionDate] = useState(todayISO());
-  const [playerCount, setPlayerCount] = useState(12);
-  const [plannedCount, setPlannedCount] = useState(14);
-  const [fieldLength, setFieldLength] = useState(60);
-  const [fieldWidth, setFieldWidth] = useState(40);
-  const [goalType, setGoalType] = useState<GoalType>("full");
-  const [balls, setBalls] = useState(10);
-  const [cones, setCones] = useState(20);
+  const [teamId, setTeamId] = useState(initialSession?.team_id || "");
+  const [ageGroup, setAgeGroup] = useState<AgeGroupKey | null>(initialSession?.age_group ? AGE_GROUP_MAP[initialSession.age_group] || null : null);
+  const [theme, setTheme] = useState<SessionTheme | null>(initialSession?.theme ? REVERSE_THEME_MAP[initialSession.theme] || null : null);
+  const [sessionDate, setSessionDate] = useState(initialSession ? new Date(initialSession.date).toISOString().split("T")[0] : todayISO());
+  const [playerCount, setPlayerCount] = useState(initialSession?.actual_player_count || 12);
+  const [plannedCount, setPlannedCount] = useState(initialSession?.planned_player_count || 14);
+  const [fieldLength, setFieldLength] = useState(initialSession?.field_length_meters || 60);
+  const [fieldWidth, setFieldWidth] = useState(initialSession?.field_width_meters || 40);
+  const [goalType, setGoalType] = useState<GoalType>(initialSession?.goal_type || "full");
+  const [balls, setBalls] = useState(initialSession?.balls_available || 10);
+  const [cones, setCones] = useState(initialSession?.cones_available || 20);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState("");
   const [aiExercises, setAiExercises] = useState<AiExercise[] | null>(null);
@@ -88,7 +100,7 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
       .then((r) => r.json())
       .then((data: TeamOption[]) => {
         setTeams(data);
-        if (data.length === 1) {
+        if (data.length === 1 && !initialSession) {
           setTeamId(data[0].id);
           const mapped = AGE_GROUP_MAP[data[0].age_group];
           if (mapped) setAgeGroup(mapped);
@@ -164,8 +176,11 @@ export default function NyTreningsøktKlient({ dict, locale }: { dict: TrainingD
       return exercise ? { ...phase, exercise } : phase;
     });
 
-    const res = await fetch("/api/treninger", {
-      method: "POST",
+    const url = initialSession ? `/api/treninger/${initialSession.id}` : "/api/treninger";
+    const method = initialSession ? "PUT" : "POST";
+
+    const res = await fetch(url, {
+      method,
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         team_id: teamId || undefined, age_group: ageGroup, theme, date: sessionDate,
@@ -528,7 +543,20 @@ function AiExerciseList({ exercises, dict }: { exercises: AiExercise[]; dict: Tr
               {ex.setup && (
                 <div>
                   <p className="text-xs font-semibold text-[#F8FAFC] mb-1">{dict.ai_setup}</p>
-                  <p className="text-xs text-[#94A3B8]">{ex.setup}</p>
+                  <p className="text-xs text-[#94A3B8] mb-2">{ex.setup}</p>
+                </div>
+              )}
+              {ex.rules?.length > 0 && (
+                <div>
+                  <p className="text-xs font-semibold text-[#F8FAFC] mb-1">Regler</p>
+                  <ul className="space-y-1 mb-2">
+                    {ex.rules.map((rule, j) => (
+                      <li key={j} className="text-xs text-[#94A3B8] flex gap-2">
+                        <span className="text-[#F59E0B] font-bold shrink-0">!</span>
+                        {rule}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               )}
               {ex.instructions?.length > 0 && (

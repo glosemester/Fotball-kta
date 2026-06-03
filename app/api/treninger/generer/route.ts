@@ -26,14 +26,17 @@ Du genererer konkrete, pedagogisk gjennomtenkte treningsøvelser. Returner ALLTI
       "phase": "Oppvarming",
       "name": "Øvelsesnavn",
       "duration_minutes": 10,
-      "description": "En setning som forklarer øvelsens mål.",
-      "setup": "Slik setter du opp øvelsen med kjegler/spillere/baller.",
-      "instructions": ["Trinn 1", "Trinn 2", "Trinn 3"],
+      "description": "En setning som forklarer øvelsens pedagogiske mål.",
+      "setup": "Nøyaktig hvordan øvelsen settes opp med mål, kjegler, vester og baller.",
+      "rules": ["Regel 1 (f.eks max 3 touch)", "Regel 2"],
+      "instructions": ["Steg 1 i gjennomføringen", "Steg 2", "Steg 3"],
       "coaching_points": ["Hva trener ser etter", "Nøkkelprinsipp"],
       "variations": ["Enklere variant for de som sliter", "Vanskeligere variant for de som mestrer"]
     }
   ]
 }
+
+VIKTIG: Du skal gi dype, nøyaktige og lette-å-forstå beskrivelser av "setup", "rules" og "instructions". Beskrivelsene skal gjøre det enkelt for en fotballtrener å visualisere øvelsen umiddelbart, uten behov for tegninger.
 
 Pedagogisk filosofi: «Flest mulig · Lengst mulig · Best mulig» — Trygghet → Mestring → Trivsel.
 Alltid: høy ball-rolling-tid (>70%), minimale instruksjonspauser, alderstilpasset kompleksitet, lekbasert tilnærming for yngre.`;
@@ -86,32 +89,37 @@ export async function POST(req: NextRequest) {
 ${phaseList}
 
 Tilpass alle øvelser til nøyaktig ${player_count} spillere og en bane på ${field_length}m × ${field_width}m.
-${headingForbidden ? "VIKTIG: Absolutt headingsforbud — ingen del av noen øvelse skal inneholde heading." : ""}`;
+${headingForbidden ? "VIKTIG: Absolutt headingsforbud — ingen del av noen øvelse skal inneholde heading.\n" : ""}${rules.injury_prevention_mandatory ? "VIKTIG: Aldersgruppen KREVER skadeforebyggende trening (Skadefri / FIFA 11+). Du MÅ inkludere øvelser for dette som en del av oppvarmingsfasen." : ""}`;
 
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
   const model = genAI.getGenerativeModel({
-    model: "gemini-3-flash-preview",
+    model: "gemini-3.1-flash-lite",
     systemInstruction: SYSTEM_PROMPT,
     generationConfig: {
       responseMimeType: "application/json",
     },
   });
 
-  const result = await model.generateContent(userPrompt);
-  const raw = result.response.text();
-
   try {
-    const parsed = JSON.parse(raw);
-    return NextResponse.json(parsed);
-  } catch {
-    const match = raw.match(/```(?:json)?\s*([\s\S]*?)```/);
-    if (match) {
-      try {
-        return NextResponse.json(JSON.parse(match[1]));
-      } catch {
-        // fall through
+    const result = await model.generateContent(userPrompt);
+    const raw = result.response.text();
+
+    try {
+      const parsed = JSON.parse(raw);
+      return NextResponse.json(parsed);
+    } catch {
+      const match = raw.match(/```(?:json)?\s*([\s\S]*?)```/);
+      if (match) {
+        try {
+          return NextResponse.json(JSON.parse(match[1]));
+        } catch {
+          // fall through
+        }
       }
+      return NextResponse.json({ error: "Kunne ikke tolke AI-svar", raw }, { status: 500 });
     }
-    return NextResponse.json({ error: "Kunne ikke tolke AI-svar", raw }, { status: 500 });
+  } catch (error: any) {
+    console.error("AI Generation Error:", error);
+    return NextResponse.json({ error: "Feil ved kommunikasjon med AI: " + (error?.message || "Ukjent feil") }, { status: 500 });
   }
 }

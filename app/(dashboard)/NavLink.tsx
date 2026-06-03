@@ -3,13 +3,15 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { LucideIcon } from "lucide-react";
 
+import { ReactNode } from "react";
+
 interface NavLinkProps {
   href: string;
   label: string;
-  icon: LucideIcon;
+  icon: ReactNode;
 }
 
-export default function NavLink({ href, label, icon: Icon }: NavLinkProps) {
+export default function NavLink({ href, label, icon }: NavLinkProps) {
   const pathname = usePathname();
   const isActive = pathname === href || (href !== "/dashboard" && pathname.startsWith(href));
 
@@ -20,8 +22,9 @@ export default function NavLink({ href, label, icon: Icon }: NavLinkProps) {
         isActive ? "text-[#22C55E]" : "text-[#94A3B8] hover:text-[#22C55E]"
       }`}
     >
-      <Icon className="h-5 w-5 shrink-0" />
+      {icon}
       <span className="text-[10px] font-semibold truncate">{label}</span>
     </Link>
+
   );
 }

@@ -56,12 +56,12 @@ export async function POST(req: NextRequest) {
     return -1;
   };
 
-  const iDate     = colIndex(["dato", "date"]);
+  const iDate     = colIndex(["dato", "date", "datum"]);
   const iTime     = colIndex(["tid", "time", "kl"]);
-  const iHome     = colIndex(["hjemmelag", "home"]);
-  const iAway     = colIndex(["bortelag", "away"]);
-  const iVenue    = colIndex(["bane", "venue", "arena", "sted"]);
-  const iComp     = colIndex(["turnering", "competition", "kamp", "liga"]);
+  const iHome     = colIndex(["hjemmelag", "home", "hemmalag"]);
+  const iAway     = colIndex(["bortelag", "away", "bortalag"]);
+  const iVenue    = colIndex(["bane", "venue", "arena", "sted", "anläggning"]);
+  const iComp     = colIndex(["turnering", "competition", "kamp", "liga", "tävling"]);
 
   if (iDate < 0 || iHome < 0 || iAway < 0) {
     return NextResponse.json({ error: "Fant ikke kolonnene Dato, Hjemmelag og Bortelag i CSV-filen" }, { status: 400 });

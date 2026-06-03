@@ -55,13 +55,13 @@ export default async function DashboardLayout({ children }: { children: React.Re
         </div>
       </header>
 
-      <main className="flex-1 p-4 md:p-6 max-w-2xl w-full mx-auto pb-52">
+      <main className="flex-1 px-4 pt-4 md:px-6 md:pt-6 pb-[calc(8rem+env(safe-area-inset-bottom))] max-w-2xl w-full mx-auto">
         {children}
       </main>
 
       <nav className="fixed bottom-0 left-0 right-0 bg-[#141D26] border-t border-[#2E4057] flex justify-around py-1.5 z-20 shadow-[0_-4px_16px_rgba(0,0,0,0.4)]">
-        {navItems.map(({ href, label, icon }) => (
-          <NavLink key={href} href={href} label={label} icon={icon} />
+        {navItems.map(({ href, label, icon: Icon }) => (
+          <NavLink key={href} href={href} label={label} icon={<Icon className="h-5 w-5 shrink-0" />} />
         ))}
       </nav>
     </div>

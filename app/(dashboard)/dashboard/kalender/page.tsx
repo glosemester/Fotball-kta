@@ -35,8 +35,8 @@ export default async function KalenderPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A2E]">{dict.calendar.title}</h1>
-        <p className="text-[#64748B] mt-1 text-sm">{dict.calendar.subtitle}</p>
+        <h1 className="text-2xl font-bold text-[#F8FAFC]">{dict.calendar.title}</h1>
+        <p className="text-[#94A3B8] mt-1 text-sm">{dict.calendar.subtitle}</p>
       </div>
       <KalenderKlient
         teams={teams as never}

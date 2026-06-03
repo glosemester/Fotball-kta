@@ -23,8 +23,8 @@
         "max": 1
       },
       "target_ball_rolling_time_percentage": 85,
-      "heading_rule": "forbidden",
-      "heading_label": "Forbudt",
+      "heading_rule": "discouraged",
+      "heading_label": "Ikke anbefalt",
       "forbidden_rules": ["throw_in", "offside"],
       "allowed_restarts": ["kick_in", "dribble_in"],
       "methodology": "part_to_whole",
@@ -88,7 +88,7 @@
       },
       "target_ball_rolling_time_percentage": 80,
       "heading_rule": "discouraged",
-      "heading_label": "Frarådes aktivt",
+      "heading_label": "Ikke anbefalt",
       "forbidden_rules": ["offside"],
       "methodology": "part_to_whole",
       "session_structure": {
@@ -159,6 +159,8 @@
       "heading_label": "Kun kontrollert med spesialball — maks 5 pr. spiller per uke",
       "heading_max_per_player_per_week": 5,
       "methodology": "part_to_whole",
+      "injury_prevention_mandatory": true,
+      "injury_prevention_framework": "Skadefri / FIFA 11+",
       "session_structure": {
         "ramp_warmup": true,
         "ramp_breakdown": [

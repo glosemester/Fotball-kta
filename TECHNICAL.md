@@ -185,13 +185,7 @@ Prisma-klienten genereres til `lib/generated/prisma/` (gitignorert).
 
 ## Mangler / Planlagt
 
-- [ ] Lagre treningsøkter til database
-- [ ] Liste over tidligere treningsøkter
-- [ ] Velværeregistrering (Grønn/Gul/Rød per spiller)
-- [ ] Ukesplan/periodisering
-- [ ] Google OAuth (i tillegg til e-post/passord)
 - [ ] Vercel-deploy med HTTPS
-- [ ] Treningsøkt-wizard — mørkt design (ikke redesignet ennå)
 
 ---
 
@@ -213,3 +207,7 @@ Prisma-klienten genereres til `lib/generated/prisma/` (gitignorert).
 | 2026-05-27 | App omdøpt til PitchPlan; GitHub Actions auto-deploy til Hetzner via SSH |
 | 2026-05-27 | Flerspråklig støtte (nb/sv/da/en): cookie-basert i18n, JSON-ordbøker, LangSwitcher |
 | 2026-05-28 | Full branding-overhaul: Pitch Black mørkt tema, Turf Green aksent, Barlow Condensed + Inter-fonter, NavLink-komponent med aktiv-state, tone-of-voice-oppdatering i alle fire ordbøker |
+| 2026-06-02 | TreningStatusKnapp: Full livssyklus-knapp (DRAFT→ACTIVE→COMPLETED→DRAFT) med riktige ikoner, i18n-dict-prop, og design-system-farger. Nye ordbok-nøkler `training.status_button` i alle 4 språk. |
+| 2026-06-02 | Bugfix: Fjernet hardkodet norsk og la til manglende i18n-støtte på treningsøkt-detaljsiden (`[id]/page.tsx` og slette-knapp). La til hurtiglenke til treningslisten på dashboardet. Ryddejobb i dokumentasjon for implementerte funksjoner. |
+| 2026-06-03 | Fjernet AI-genererte SVG-tegninger og erstattet med bedre tekstlige instrukser. La til Månedsplan-generator med støtte for faste dager, månedstema og "Rediger"-funksjon for DRAFT-økter. |
+| 2026-06-03 | Re-designet hele plattformen til PitchPlan Dark Theme. Oppdaterte UI/UX for lag, spillere, kalender, ukesplan, velvære og innstillinger. Oppdatert print-vennlig PDF-visning med ny branding. |

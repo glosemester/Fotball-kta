@@ -30,6 +30,7 @@ interface Phase {
     name: string;
     description: string;
     setup: string;
+    svg_diagram?: string;
     instructions: string[];
     coaching_points: string[];
     variations: string[];
@@ -65,8 +66,8 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
       <style>{`
         @media print {
           .no-print { display: none !important; }
-          body { background: white !important; color: black !important; }
-          @page { margin: 18mm 15mm; size: A4; }
+          body { background: white !important; color: #0A0F14 !important; }
+          @page { margin: 15mm; size: A4; }
         }
       `}</style>
 
@@ -81,13 +82,13 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
         <PrintKnapp />
       </div>
 
-      <div className="max-w-2xl mx-auto p-10 font-[Arial,Helvetica,sans-serif]">
+      <div className="max-w-2xl mx-auto p-10 font-sans text-[#0B131D]">
 
         {/* Header */}
         <div className="border-b-2 border-black pb-5 mb-6">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-gray-400 mb-1">PitchPlan · Treningsøkt</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-[#22C55E] mb-1">PitchPlan</p>
               <h1 className="text-3xl font-bold leading-tight">{emoji} {themeLabel}</h1>
               {trening.team && (
                 <p className="text-gray-500 mt-1 text-sm">{trening.team.name} — {trening.team.club_name}</p>
@@ -134,10 +135,10 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
             <div key={i} className="border-l-4 border-black pl-5">
               <div className="flex items-baseline gap-3 mb-2">
                 <span className="text-xl font-bold">{phase.phase}</span>
-                <span className="text-sm text-gray-400 font-normal">{phase.duration_minutes} min</span>
+                <span className="text-sm text-gray-500 font-medium bg-gray-100 px-2 py-0.5 rounded">{phase.duration_minutes} min</span>
               </div>
               {phase.description && (
-                <p className="text-sm text-gray-500 mb-3 italic">{phase.description}</p>
+                <p className="text-sm text-gray-600 mb-3 italic">{phase.description}</p>
               )}
 
               {phase.exercise && (
@@ -149,8 +150,8 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
 
                   {phase.exercise.setup && (
                     <div>
-                      <p className="text-[10px] font-bold uppercase text-gray-400 mb-1">Oppsett</p>
-                      <p className="text-sm text-gray-700">{phase.exercise.setup}</p>
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Oppsett</p>
+                      <p className="text-sm text-gray-700 mb-2">{phase.exercise.setup}</p>
                     </div>
                   )}
 
@@ -169,8 +170,8 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
                   )}
 
                   {phase.exercise.coaching_points?.length > 0 && (
-                    <div className="bg-gray-50 rounded-lg p-3">
-                      <p className="text-[10px] font-bold uppercase text-gray-400 mb-1.5">Trenerpunkter</p>
+                    <div className="bg-[#22C55E]/5 border border-[#22C55E]/20 rounded-lg p-3">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-[#16A34A] mb-1.5">Trenerpunkter</p>
                       <ul className="space-y-0.5">
                         {phase.exercise.coaching_points.map((pt, j) => (
                           <li key={j} className="text-sm text-gray-700 flex gap-1.5">

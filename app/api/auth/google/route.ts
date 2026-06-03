@@ -6,7 +6,8 @@ export async function GET() {
     return NextResponse.json({ error: "Google OAuth ikke konfigurert" }, { status: 500 });
   }
 
-  const redirectUri = `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/google/callback`;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
+  const redirectUri = `${baseUrl}/api/auth/google/callback`;
   const scope = "openid email profile";
   const state = crypto.randomUUID();
 

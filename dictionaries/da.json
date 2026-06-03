@@ -30,7 +30,7 @@
     "teams": "Hold",
     "weekplan": "Ugeplan",
     "calendar": "Kalender",
-    "wellbeing": "Velvære",
+    "wellbeing": "Belastningsstyring",
     "settings": "Indstillinger",
     "logout": "Log ud"
   },
@@ -71,11 +71,12 @@
     "subtitle": "Her er alt du behøver.",
     "quick_actions": "Hurtigvalg",
     "quick_new_session": "Ny træning",
+    "quick_sessions": "Træninger",
     "quick_teams": "Hold & Spillere",
     "quick_weekplan": "Ugeplan",
-    "quick_wellbeing": "Velvære",
-    "wellbeing_reminder_title": "Velværeregistrering denne uge",
-    "wellbeing_reminder_body": "Husk at bede spillere/forældre registrere velvære før træning. Kun Grøn/Gul/Rød — ingen kropsdata.",
+    "quick_wellbeing": "Belastningsstyring",
+    "wellbeing_reminder_title": "Belastningsstyring denne uge",
+    "wellbeing_reminder_body": "Husk at registrere belastning på spillerne før træning. Kun Grøn/Gul/Rød — ingen kropsdata.",
     "age_rules_title": "Aldersspecifikke regler",
     "heading_forbidden": "⛔ Heading forbudt",
     "sessions_per_week": "træn./uge",
@@ -189,6 +190,12 @@
     "status_draft": "Kladde",
     "status_active": "Aktiv",
     "status_completed": "Afsluttet",
+    "status_button": {
+      "start": "Start træning",
+      "complete": "Markér som afsluttet",
+      "reopen": "Genåbn",
+      "saving": "Gemmer…"
+    },
     "themes": {
       "pasning_mottak": "Afleveringer & Modtagelse",
       "dribling_vendinger": "Dribling & Vendinger",
@@ -202,7 +209,7 @@
     }
   },
   "wellbeing": {
-    "title": "Velvære",
+    "title": "Belastningsstyring",
     "subtitle_week": "Kun symptombaseret — ingen kropsdata",
     "count_green": "Grøn",
     "count_yellow": "Gul",
@@ -214,7 +221,7 @@
     "this_week": "det denne uge?",
     "symptoms_optional": "Symptomer (valgfrit):",
     "extra_info": "Yderligere info til træneren (valgfrit)...",
-    "register_button": "Registrer velvære",
+    "register_button": "Registrer belastning",
     "registered": "Træning leveret! Holdet er klar til kamp.",
     "no_players": "Ingen spillere registreret endnu.",
     "no_players_hint": "Tilføj spillere under Hold & Spillere.",
@@ -305,7 +312,7 @@
     "account_title": "Din konto",
     "optional_modules": "Valgfrie moduler",
     "language_title": "Sprog",
-    "wellbeing_label": "Velvære",
-    "wellbeing_desc": "Registrer ugentlig velvære for dine spillere (Grøn/Gul/Rød). Symptombaseret — ingen kropstal. Giver dig overblik og advarsler før træning."
+    "wellbeing_label": "Belastningsstyring",
+    "wellbeing_desc": "Registrer ugentlig belastning for dine spillere (Grøn/Gul/Rød). Symptombaseret — ingen kropsdata. Giver dig overblik og advarsler før træning."
   }
 }

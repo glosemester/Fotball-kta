@@ -30,7 +30,7 @@
     "teams": "Lag",
     "weekplan": "Veckoplan",
     "calendar": "Kalender",
-    "wellbeing": "Välmående",
+    "wellbeing": "Belastningsstyrning",
     "settings": "Inställningar",
     "logout": "Logga ut"
   },
@@ -71,11 +71,12 @@
     "subtitle": "Här är allt du behöver.",
     "quick_actions": "Snabbval",
     "quick_new_session": "Ny träning",
+    "quick_sessions": "Träningar",
     "quick_teams": "Lag & Spelare",
     "quick_weekplan": "Veckoplan",
-    "quick_wellbeing": "Välmående",
-    "wellbeing_reminder_title": "Välmåenderegistrering den här veckan",
-    "wellbeing_reminder_body": "Kom ihåg att be spelare/föräldrar registrera välmående före träning. Endast Grön/Gul/Röd — inga kroppsmått.",
+    "quick_wellbeing": "Belastningsstyrning",
+    "wellbeing_reminder_title": "Belastningsstyrning den här veckan",
+    "wellbeing_reminder_body": "Kom ihåg att registrera belastning på spelarna före träning. Endast Grön/Gul/Röd — inga kroppsmått.",
     "age_rules_title": "Åldersspecifika regler",
     "heading_forbidden": "⛔ Nickning förbjuden",
     "sessions_per_week": "pass/vecka",
@@ -189,10 +190,16 @@
     "status_draft": "Utkast",
     "status_active": "Aktiv",
     "status_completed": "Genomförd",
+    "status_button": {
+      "start": "Starta träning",
+      "complete": "Markera som genomförd",
+      "reopen": "Öppna igen",
+      "saving": "Sparar…"
+    },
     "themes": {
       "pasning_mottak": "Passning & Mottagning",
       "dribling_vendinger": "Dribbling & Vändningar",
-      "avslutningar": "Avslutningar",
+      "avslutninger": "Avslutningar",
       "forsvar": "Försvar",
       "posisjonsspill": "Positionsspel",
       "pressing": "Pressing & Återerövring",
@@ -202,7 +209,7 @@
     }
   },
   "wellbeing": {
-    "title": "Välmående",
+    "title": "Belastningsstyrning",
     "subtitle_week": "Endast symptombaserat — inga kroppsmått",
     "count_green": "Grön",
     "count_yellow": "Gul",
@@ -214,7 +221,7 @@
     "this_week": "den här veckan?",
     "symptoms_optional": "Symptom (valfritt):",
     "extra_info": "Tilläggsinformation till tränaren (valfritt)...",
-    "register_button": "Registrera välmående",
+    "register_button": "Registrera belastning",
     "registered": "Träning levererad! Laget är redo för match.",
     "no_players": "Inga spelare registrerade ännu.",
     "no_players_hint": "Lägg till spelare under Lag & Spelare.",
@@ -305,7 +312,7 @@
     "account_title": "Ditt konto",
     "optional_modules": "Valfria moduler",
     "language_title": "Språk",
-    "wellbeing_label": "Välmående",
-    "wellbeing_desc": "Registrera veckovis välmående för dina spelare (Grön/Gul/Röd). Symtombaserat — inga kroppsmått. Ger dig överblick och varningar före träning."
+    "wellbeing_label": "Belastningsstyrning",
+    "wellbeing_desc": "Registrera veckovis belastning för dina spelare (Grön/Gul/Röd). Symtombaserat — inga kroppsmått. Ger dig överblick och varningar före träning."
   }
 }

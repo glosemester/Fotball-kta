@@ -15,7 +15,7 @@ const THEME_EMOJIS: Record<string, string> = {
 
 const THEME_KEYS: Record<string, string> = {
   PASNING_MOTTAK: "pasning_mottak", DRIBLING_VENDINGER: "dribling_vendinger",
-  AVSLUTNINGER: "avslutningar", FORSVAR: "forsvar", POSISJONSSPILL: "posisjonsspill",
+  AVSLUTNINGER: "avslutninger", FORSVAR: "forsvar", POSISJONSSPILL: "posisjonsspill",
   PRESSING: "pressing", OVERGANGER: "overganger", KEEPERTEKNIKK: "keeperteknikk",
   FRITT_SPILL: "fritt_spill",
 };
@@ -59,12 +59,20 @@ export default async function TreningerPage() {
               : `${sessions.length} ${sessions.length !== 1 ? d.sessions_total_plural : d.sessions_total}`}
           </p>
         </div>
-        <Link href="/dashboard/treninger/ny">
-          <Button>
-            <Plus className="h-4 w-4" />
-            {d.new_session}
-          </Button>
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link href="/dashboard/manedsplan/ny">
+            <Button variant="secondary" className="hidden sm:flex">
+              <CalendarDays className="h-4 w-4" />
+              Månedsplan
+            </Button>
+          </Link>
+          <Link href="/dashboard/treninger/ny">
+            <Button>
+              <Plus className="h-4 w-4" />
+              {d.new_session}
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {sessions.length === 0 ? (

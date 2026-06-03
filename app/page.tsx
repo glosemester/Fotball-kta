@@ -1,6 +1,7 @@
 import Link from "next/link";
 import PitchPlanLogo from "@/components/PitchPlanLogo";
 import { CalendarDays, Brain, Activity, Users } from "lucide-react";
+import { auth, signIn, signOut } from "@/auth";
 
 const FEATURES = [
   {
@@ -25,7 +26,9 @@ const FEATURES = [
   },
 ];
 
-export default function Home() {
+export default async function Home() {
+  const session = await auth();
+
   return (
     <main className="min-h-screen bg-[#0A0F14] overflow-x-hidden">
       {/* Hero */}
@@ -49,19 +52,48 @@ export default function Home() {
 
         {/* CTA buttons */}
         <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
-          <Link
-            href="/api/auth/google"
-            className="flex-1 inline-flex items-center justify-center gap-2.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/12 px-5 py-3.5 text-[#F8FAFC] font-semibold text-sm hover:bg-white/12 transition-all"
-          >
-            <GoogleIcon />
-            Google
-          </Link>
-          <Link
-            href="/login"
-            className="flex-1 inline-flex items-center justify-center rounded-full bg-[#22C55E] px-5 py-3.5 text-[#0A0F14] font-bold text-sm uppercase tracking-wide hover:bg-[#16A34A] transition-colors shadow-lg shadow-[#22C55E]/25"
-          >
-            Logg inn
-          </Link>
+          {session ? (
+            <>
+              <Link
+                href="/dashboard"
+                className="flex-1 inline-flex items-center justify-center rounded-full bg-[#22C55E] px-5 py-3.5 text-[#0A0F14] font-bold text-sm uppercase tracking-wide hover:bg-[#16A34A] transition-colors shadow-lg shadow-[#22C55E]/25"
+              >
+                Gå til Dashboard
+              </Link>
+              <form action={async () => {
+                "use server";
+                await signOut();
+              }} className="flex-1">
+                <button
+                  type="submit"
+                  className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/12 px-5 py-3.5 text-[#F8FAFC] font-semibold text-sm hover:bg-white/12 transition-all"
+                >
+                  Logg ut
+                </button>
+              </form>
+            </>
+          ) : (
+            <>
+              <form action={async () => {
+                "use server";
+                await signIn("google");
+              }} className="flex-1">
+                <button
+                  type="submit"
+                  className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/12 px-5 py-3.5 text-[#F8FAFC] font-semibold text-sm hover:bg-white/12 transition-all"
+                >
+                  <GoogleIcon />
+                  Google
+                </button>
+              </form>
+              <Link
+                href="/login"
+                className="flex-1 inline-flex items-center justify-center rounded-full bg-[#22C55E] px-5 py-3.5 text-[#0A0F14] font-bold text-sm uppercase tracking-wide hover:bg-[#16A34A] transition-colors shadow-lg shadow-[#22C55E]/25"
+              >
+                Logg inn
+              </Link>
+            </>
+          )}
         </div>
 
         <p className="text-xs text-[#94A3B8] mt-4">

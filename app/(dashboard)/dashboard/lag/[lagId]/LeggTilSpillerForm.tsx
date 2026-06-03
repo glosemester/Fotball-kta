@@ -50,31 +50,31 @@ export default function LeggTilSpillerForm({ teamId, dict }: { teamId: string; d
   }
 
   return (
-    <div className="bg-white border border-[#E4E2F5] rounded-2xl p-5 space-y-4">
+    <div className="bg-[#141D26] border border-[#2E4057] rounded-2xl p-5 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-[#1A1A2E]">{dict.player_form_title}</h3>
-        <button onClick={() => setOpen(false)} className="text-[#94A3B8] hover:text-[#1A1A2E] transition-colors">
+        <h3 className="font-semibold text-[#F8FAFC]">{dict.player_form_title}</h3>
+        <button onClick={() => setOpen(false)} className="text-[#94A3B8] hover:text-[#F8FAFC] transition-colors">
           <X className="h-4 w-4" />
         </button>
       </div>
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-[#64748B]">{dict.first_name}</label>
+            <label className="text-xs font-medium text-[#94A3B8]">{dict.first_name}</label>
             <input value={firstName} onChange={(e) => setFirstName(e.target.value)} required className="input-field" />
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-[#64748B]">{dict.last_name}</label>
+            <label className="text-xs font-medium text-[#94A3B8]">{dict.last_name}</label>
             <input value={lastName} onChange={(e) => setLastName(e.target.value)} required className="input-field" />
           </div>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-[#64748B]">{dict.birth_year}</label>
+            <label className="text-xs font-medium text-[#94A3B8]">{dict.birth_year}</label>
             <input type="number" value={birthYear} onChange={(e) => setBirthYear(Number(e.target.value))} min={2000} max={new Date().getFullYear()} required className="input-field" />
           </div>
           <div className="space-y-1.5">
-            <label className="text-xs font-medium text-[#64748B]">{dict.position}</label>
+            <label className="text-xs font-medium text-[#94A3B8]">{dict.position}</label>
             <select value={position} onChange={(e) => setPosition(e.target.value)} className="input-field">
               {POSITION_KEYS.map((key) => (
                 <option key={key} value={key}>{dict.positions[key] ?? key}</option>
@@ -83,8 +83,8 @@ export default function LeggTilSpillerForm({ teamId, dict }: { teamId: string; d
           </div>
         </div>
         {error && (
-          <div className="bg-[#DC2626]/8 border border-[#DC2626]/15 rounded-xl px-4 py-3">
-            <p className="text-sm text-[#DC2626]">{error}</p>
+          <div className="bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-xl px-4 py-3">
+            <p className="text-sm text-[#EF4444]">{error}</p>
           </div>
         )}
         <div className="flex gap-2 pt-1">

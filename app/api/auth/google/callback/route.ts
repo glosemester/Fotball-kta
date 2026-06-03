@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.redirect(new URL("/login?error=state", req.url));
   }
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL!;
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000");
   const redirectUri = `${baseUrl}/api/auth/google/callback`;
 
   // Exchange code for tokens

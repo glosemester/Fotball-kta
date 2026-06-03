@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import TreningStatusKnapp from "./TreningStatusKnapp";
 import SlettTreningKnapp from "./SlettTreningKnapp";
+import { getLang, getDictionary } from "@/lib/dict";
 
 const THEME_EMOJIS: Record<string, string> = {
   PASNING_MOTTAK: "🎯", DRIBLING_VENDINGER: "🌀", AVSLUTNINGER: "🥅",
@@ -34,6 +35,7 @@ interface Phase {
     name: string;
     description: string;
     setup: string;
+    rules: string[];
     instructions: string[];
     coaching_points: string[];
     variations: string[];
@@ -43,6 +45,11 @@ interface Phase {
 export default async function TreningDetaljPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await getSession();
   if (!session) redirect("/login");
+
+  const lang = await getLang();
+  const dict = await getDictionary(lang);
+  const d = dict.training;
+  const common = dict.common;
 
   const { id } = await params;
 
@@ -57,9 +64,9 @@ export default async function TreningDetaljPage({ params }: { params: Promise<{ 
   const hasExercises = phases.some((p) => p.exercise);
 
   const STATUS_BADGE: Record<string, { label: string; variant: "green" | "yellow" | "secondary" }> = {
-    DRAFT:     { label: "Utkast",       variant: "secondary" },
-    ACTIVE:    { label: "Aktiv",        variant: "yellow" },
-    COMPLETED: { label: "Gjennomført",  variant: "green" },
+    DRAFT:     { label: d.status_draft,       variant: "secondary" },
+    ACTIVE:    { label: d.status_active,        variant: "yellow" },
+    COMPLETED: { label: d.status_completed,  variant: "green" },
   };
 
   const statusInfo = STATUS_BADGE[trening.status] ?? STATUS_BADGE.DRAFT;
@@ -71,7 +78,7 @@ export default async function TreningDetaljPage({ params }: { params: Promise<{ 
     <div className="space-y-6 max-w-2xl mx-auto">
       <Link href="/dashboard/treninger" className="inline-flex items-center gap-1.5 text-sm text-[#94A3B8] hover:text-[#F8FAFC] transition-colors">
         <ArrowLeft className="h-4 w-4" />
-        Tilbake til treninger
+        {d.back_to_sessions}
       </Link>
 
       <div className="bg-[#141D26] border border-[#2E4057] rounded-2xl p-5 space-y-4">
@@ -93,11 +100,11 @@ export default async function TreningDetaljPage({ params }: { params: Promise<{ 
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
           <div className="flex items-center gap-2 text-sm text-[#94A3B8]">
             <Calendar className="h-4 w-4 text-[#22C55E]" />
-            {new Date(trening.date).toLocaleDateString("nb-NO", { weekday: "short", day: "numeric", month: "short" })}
+            {new Date(trening.date).toLocaleDateString(d.locale, { weekday: "short", day: "numeric", month: "short" })}
           </div>
           <div className="flex items-center gap-2 text-sm text-[#94A3B8]">
             <Users className="h-4 w-4 text-[#22C55E]" />
-            {trening.actual_player_count} spillere
+            {trening.actual_player_count} {common.players}
           </div>
           <div className="flex items-center gap-2 text-sm text-[#94A3B8]">
             <Ruler className="h-4 w-4 text-[#22C55E]" />
@@ -105,19 +112,19 @@ export default async function TreningDetaljPage({ params }: { params: Promise<{ 
           </div>
           <div className="flex items-center gap-2 text-sm text-[#94A3B8]">
             <Clock className="h-4 w-4 text-[#22C55E]" />
-            {trening.duration_minutes} min
+            {trening.duration_minutes} {common.min}
           </div>
         </div>
 
         <div className="flex items-center gap-2 text-sm">
           <Target className="h-4 w-4 text-[#22C55E]" />
-          <span className="text-[#94A3B8]">Aldersgruppe:</span>
+          <span className="text-[#94A3B8]">{d.age_group_label}</span>
           <span className="font-medium text-[#F8FAFC]">{ageLabel}</span>
         </div>
 
         {trening.constraints_applied.length > 0 && (
           <div className="bg-[#1E2D3D] border border-[#3B82F6]/30 rounded-xl p-3 space-y-1">
-            <p className="text-xs font-semibold text-[#3B82F6]">Automatiske tilpasninger:</p>
+            <p className="text-xs font-semibold text-[#3B82F6]">{d.auto_adjustments_label}</p>
             {trening.constraints_applied.map((c: string, i: number) => (
               <div key={i} className="flex items-start gap-1.5 text-xs text-[#94A3B8]">
                 <CheckCircle2 className="h-3.5 w-3.5 shrink-0 mt-0.5 text-[#3B82F6]" />
@@ -127,19 +134,17 @@ export default async function TreningDetaljPage({ params }: { params: Promise<{ 
           </div>
         )}
 
-        {trening.status !== "COMPLETED" && (
-          <TreningStatusKnapp id={trening.id} currentStatus={trening.status} />
-        )}
+        <TreningStatusKnapp id={trening.id} currentStatus={trening.status} d={d} />
       </div>
 
       <div className="bg-[#141D26] border border-[#2E4057] rounded-2xl p-5">
         <h2 className="font-semibold text-[#F8FAFC] mb-4 flex items-center gap-2">
           <Clock className="h-4 w-4 text-[#22C55E]" />
-          Øktstruktur
+          {d.session_structure_heading}
         </h2>
 
         {phases.length === 0 ? (
-          <p className="text-sm text-[#94A3B8]">Ingen faser lagret.</p>
+          <p className="text-sm text-[#94A3B8]">{d.no_phases}</p>
         ) : (
           <div className="space-y-4">
             {phases.map((phase, i) => (
@@ -162,14 +167,28 @@ export default async function TreningDetaljPage({ params }: { params: Promise<{ 
 
                       {phase.exercise.setup && (
                         <div>
-                          <p className="text-xs font-semibold text-[#F8FAFC] mb-1">Oppsett</p>
-                          <p className="text-xs text-[#94A3B8]">{phase.exercise.setup}</p>
+                          <p className="text-xs font-semibold text-[#F8FAFC] mb-1">{d.detail_setup}</p>
+                          <p className="text-xs text-[#94A3B8] mb-2">{phase.exercise.setup}</p>
+                        </div>
+                      )}
+
+                      {phase.exercise.rules?.length > 0 && (
+                        <div>
+                          <p className="text-xs font-semibold text-[#F8FAFC] mb-1">Regler</p>
+                          <ul className="space-y-1 mb-2">
+                            {phase.exercise.rules.map((rule, j) => (
+                              <li key={j} className="text-xs text-[#94A3B8] flex gap-2">
+                                <span className="text-[#F59E0B] font-bold shrink-0">!</span>
+                                {rule}
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                       )}
 
                       {phase.exercise.instructions?.length > 0 && (
                         <div>
-                          <p className="text-xs font-semibold text-[#F8FAFC] mb-1">Gjennomføring</p>
+                          <p className="text-xs font-semibold text-[#F8FAFC] mb-1">{d.detail_execution}</p>
                           <ol className="space-y-1">
                             {phase.exercise.instructions.map((step, j) => (
                               <li key={j} className="text-xs text-[#94A3B8] flex gap-2">
@@ -183,7 +202,7 @@ export default async function TreningDetaljPage({ params }: { params: Promise<{ 
 
                       {phase.exercise.coaching_points?.length > 0 && (
                         <div className="bg-[#141D26] rounded-lg p-2.5">
-                          <p className="text-xs font-semibold text-[#22C55E] mb-1.5">Trenerpunkter</p>
+                          <p className="text-xs font-semibold text-[#22C55E] mb-1.5">{d.detail_coaching_points}</p>
                           <ul className="space-y-1">
                             {phase.exercise.coaching_points.map((pt, j) => (
                               <li key={j} className="text-xs text-[#94A3B8] flex gap-1.5">
@@ -196,7 +215,7 @@ export default async function TreningDetaljPage({ params }: { params: Promise<{ 
 
                       {phase.exercise.variations?.length > 0 && (
                         <div>
-                          <p className="text-xs font-semibold text-[#F8FAFC] mb-1">Variasjoner</p>
+                          <p className="text-xs font-semibold text-[#F8FAFC] mb-1">{d.detail_variations}</p>
                           <ul className="space-y-1">
                             {phase.exercise.variations.map((v, j) => (
                               <li key={j} className="text-xs text-[#94A3B8] flex gap-1.5">
@@ -215,21 +234,28 @@ export default async function TreningDetaljPage({ params }: { params: Promise<{ 
         )}
 
         {!hasExercises && (
-          <div className="mt-4 flex items-start gap-2 p-3 bg-[#F97316]/10 border border-[#F97316]/20 rounded-xl">
-            <AlertTriangle className="h-4 w-4 text-[#F97316] shrink-0 mt-0.5" />
-            <p className="text-xs text-[#F97316]">
-              Denne økten ble lagret uten AI-øvelser. Opprett en ny økt og generer øvelser før du lagrer for å se dem her.
-            </p>
+          <div className="mt-4 flex flex-col sm:flex-row items-center justify-between gap-4 p-4 bg-[#1E2D3D] border border-[#F97316]/30 rounded-xl">
+            <div className="flex items-start gap-2">
+              <AlertTriangle className="h-4 w-4 text-[#F97316] shrink-0 mt-0.5" />
+              <p className="text-sm text-[#F8FAFC]">
+                {d.no_exercises_warning ?? "Denne økten har ingen øvelser enda."}
+              </p>
+            </div>
+            <Link href={`/dashboard/treninger/${trening.id}/rediger`}>
+              <Button className="shrink-0 bg-[#F97316] hover:bg-[#EA580C] text-white">
+                Ferdigstill & Generer
+              </Button>
+            </Link>
           </div>
         )}
       </div>
 
       <div className="flex items-center justify-between">
-        <SlettTreningKnapp id={trening.id} />
-        <Link href={`/treninger/${trening.id}/print`}>
+        <SlettTreningKnapp id={trening.id} d={d} common={common} />
+        <Link href={`/print/treninger/${trening.id}`}>
           <Button variant="outline" size="sm" className="gap-2">
             <Printer className="h-4 w-4" />
-            Lagre som PDF
+            {d.save_as_pdf}
           </Button>
         </Link>
       </div>

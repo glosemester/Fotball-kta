@@ -30,7 +30,7 @@
     "teams": "Teams",
     "weekplan": "Week Plan",
     "calendar": "Calendar",
-    "wellbeing": "Wellbeing",
+    "wellbeing": "Load Management",
     "settings": "Settings",
     "logout": "Log out"
   },
@@ -71,11 +71,12 @@
     "subtitle": "Here's everything you need.",
     "quick_actions": "Quick actions",
     "quick_new_session": "New session",
+    "quick_sessions": "Sessions",
     "quick_teams": "Teams & Players",
     "quick_weekplan": "Week Plan",
-    "quick_wellbeing": "Wellbeing",
-    "wellbeing_reminder_title": "Wellbeing check-in this week",
-    "wellbeing_reminder_body": "Remember to ask players/parents to log their wellbeing before training. Only Green/Yellow/Red — no body measurements.",
+    "quick_wellbeing": "Load Management",
+    "wellbeing_reminder_title": "Load management this week",
+    "wellbeing_reminder_body": "Remember to log the training load for your players before training. Only Green/Yellow/Red — no body measurements.",
     "age_rules_title": "Age-specific rules",
     "heading_forbidden": "⛔ Heading banned",
     "sessions_per_week": "sessions/week",
@@ -189,6 +190,30 @@
     "status_draft": "Draft",
     "status_active": "Active",
     "status_completed": "Completed",
+    "status_button": {
+      "start": "Start session",
+      "complete": "Mark as completed",
+      "reopen": "Reopen",
+      "saving": "Saving…"
+    },
+    "back_to_sessions": "Back to sessions",
+    "session_structure_heading": "Session structure",
+    "detail_setup": "Setup",
+    "detail_execution": "Instructions",
+    "detail_coaching_points": "Coaching points",
+    "detail_variations": "Variations",
+    "no_phases": "No phases saved.",
+    "age_group_label": "Age group:",
+    "auto_adjustments_label": "Automatic adjustments:",
+    "no_exercises_warning": "This session was saved without AI exercises. Create a new session and generate exercises before saving to see them here.",
+    "save_as_pdf": "Save as PDF",
+    "delete_session": "Delete session",
+    "delete_confirm": "Are you sure?",
+    "delete_yes": "Yes, delete",
+    "deleting": "Deleting...",
+    "mark_completed": "Mark as completed",
+    "marking_completed": "Saving...",
+    "locale": "en-GB",
     "themes": {
       "pasning_mottak": "Passing & Receiving",
       "dribling_vendinger": "Dribbling & Turning",
@@ -202,7 +227,7 @@
     }
   },
   "wellbeing": {
-    "title": "Wellbeing",
+    "title": "Load Management",
     "subtitle_week": "Symptom-based only — no body measurements",
     "count_green": "Green",
     "count_yellow": "Yellow",
@@ -214,7 +239,7 @@
     "this_week": "doing this week?",
     "symptoms_optional": "Symptoms (optional):",
     "extra_info": "Additional info for the coach (optional)...",
-    "register_button": "Log wellbeing",
+    "register_button": "Log training load",
     "registered": "Session delivered! Your squad is match-ready.",
     "no_players": "No players registered yet.",
     "no_players_hint": "Add players under Teams & Players.",
@@ -305,7 +330,7 @@
     "account_title": "Your account",
     "optional_modules": "Optional modules",
     "language_title": "Language",
-    "wellbeing_label": "Wellbeing",
-    "wellbeing_desc": "Log weekly wellbeing for your players (Green/Yellow/Red). Symptom-based — no body metrics. Gives you an overview and alerts before training."
+    "wellbeing_label": "Load Management",
+    "wellbeing_desc": "Log weekly training load for your players (Green/Yellow/Red). Symptom-based — no body metrics. Gives you an overview and alerts before training."
   }
 }

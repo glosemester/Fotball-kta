@@ -23,8 +23,8 @@ export default async function LagPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A2E]">{d.title}</h1>
-        <p className="text-[#64748B] mt-1 text-sm">{d.subtitle}</p>
+        <h1 className="text-2xl font-bold text-[#F8FAFC]">{d.title}</h1>
+        <p className="text-[#94A3B8] mt-1 text-sm">{d.subtitle}</p>
       </div>
 
       <OpprettLagForm dict={{ create_button: d.create_button, form_title: d.form_title, team_name: d.team_name, team_name_placeholder: d.team_name_placeholder, club_name: d.club_name, club_name_placeholder: d.club_name_placeholder, age_group: d.age_group, creating: d.creating, create_team: d.create_team, cancel: dict.common.cancel, error_generic: dict.common.error_generic, age_labels: d.age_labels }} />
@@ -32,28 +32,28 @@ export default async function LagPage() {
       <div className="space-y-2">
         {teams.length === 0 ? (
           <div className="text-center py-16">
-            <div className="w-16 h-16 rounded-2xl bg-white border border-[#E4E2F5] flex items-center justify-center mx-auto mb-4">
+            <div className="w-16 h-16 rounded-2xl bg-[#1E2D3D] border border-[#2E4057] flex items-center justify-center mx-auto mb-4">
               <Users className="h-7 w-7 text-[#94A3B8]" />
             </div>
-            <p className="text-[#64748B] text-sm">{d.no_teams}</p>
+            <p className="text-[#F8FAFC] text-sm">{d.no_teams}</p>
             <p className="text-[#94A3B8] text-xs mt-1">{d.no_teams_hint}</p>
           </div>
         ) : (
           teams.map((team) => (
             <Link key={team.id} href={`/dashboard/lag/${team.id}`} className="group block">
-              <div className="bg-white border border-[#E4E2F5] rounded-2xl p-4 flex items-center justify-between hover:border-[#6D28D9]/30 hover:shadow-sm transition-all active:scale-[0.99]">
+              <div className="bg-[#141D26] border border-[#2E4057] rounded-2xl p-4 flex items-center justify-between hover:border-[#22C55E]/40 hover:bg-[#1E2D3D] transition-all">
                 <div className="flex items-center gap-4">
-                  <div className="w-11 h-11 rounded-xl bg-[#F5F3FF] flex items-center justify-center shrink-0">
-                    <Users className="h-5 w-5 text-[#6D28D9]" />
+                  <div className="w-11 h-11 rounded-xl bg-[#1E2D3D] border border-[#2E4057] flex items-center justify-center shrink-0">
+                    <Users className="h-5 w-5 text-[#22C55E]" />
                   </div>
                   <div>
-                    <p className="font-semibold text-[#1A1A2E] text-sm">{team.name}</p>
+                    <p className="font-semibold text-[#F8FAFC] text-sm">{team.name}</p>
                     <p className="text-xs text-[#94A3B8] mt-0.5">
                       {team.club_name} · {d.age_labels[team.age_group as keyof typeof d.age_labels]} · {team._count.players} {d.players_count}
                     </p>
                   </div>
                 </div>
-                <ChevronRight className="h-4 w-4 text-[#94A3B8] group-hover:text-[#6D28D9] transition-colors" />
+                <ChevronRight className="h-4 w-4 text-[#94A3B8] group-hover:text-[#22C55E] transition-colors" />
               </div>
             </Link>
           ))

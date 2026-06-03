@@ -34,15 +34,21 @@ export default async function UkesplanPage() {
     orderBy: { week_number: "asc" },
   });
 
+  const matches = await prisma.match.findMany({
+    where: { coach_id: session.coachId, date: { gte: new Date(year, 0, 1) } },
+    select: { id: true, team_id: true, date: true, opponent: true },
+  });
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#1A1A2E]">{d.title}</h1>
-        <p className="text-[#64748B] mt-1 text-sm">{d.subtitle}</p>
+        <h1 className="text-2xl font-bold text-[#F8FAFC]">{d.title}</h1>
+        <p className="text-[#94A3B8] mt-1 text-sm">{d.subtitle}</p>
       </div>
 
       <UkesplanKlient
         teams={teams as never}
+        matches={matches as never}
         week={week}
         year={year}
         existingPlans={existingPlans as never}

@@ -82,17 +82,17 @@ function PlayerCard({ player, report, dict, onSaved }: {
   }
 
   return (
-    <div className="bg-white border border-[#E4E2F5] rounded-xl overflow-hidden">
+    <div className="bg-[#141D26] border border-[#2E4057] rounded-xl overflow-hidden">
       <button
         onClick={() => { setOpen((o) => !o); setDone(false); setStatus(null); setSymptoms([]); setNote(""); }}
-        className="w-full flex items-center justify-between p-3.5 hover:bg-[#F8F7FF] transition-colors text-left"
+        className="w-full flex items-center justify-between p-3.5 hover:bg-[#1E2D3D] transition-colors text-left"
       >
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#F5F3FF] flex items-center justify-center shrink-0">
-            <UserRound className="h-4 w-4 text-[#6D28D9]" />
+          <div className="w-9 h-9 rounded-xl bg-[#1E2D3D] flex items-center justify-center shrink-0">
+            <UserRound className="h-4 w-4 text-[#22C55E]" />
           </div>
           <div>
-            <p className="font-semibold text-[#1A1A2E] text-sm">{player.first_name} {player.last_name}</p>
+            <p className="font-semibold text-[#F8FAFC] text-sm">{player.first_name} {player.last_name}</p>
             {style && statusLabel ? (
               <p className="text-xs mt-0.5" style={{ color: style.text }}>{style.emoji} {statusLabel}</p>
             ) : (
@@ -111,27 +111,27 @@ function PlayerCard({ player, report, dict, onSaved }: {
       </button>
 
       {open && (
-        <div className="border-t border-[#E4E2F5] p-4 space-y-4 bg-[#FAFAFA]">
+        <div className="border-t border-[#2E4057] p-4 space-y-4 bg-[#0A0F14]">
           {done ? (
             <div className="text-center py-4">
               <div className="text-2xl mb-1">✅</div>
-              <p className="text-sm font-semibold text-[#16A34A]">{dict.registered}</p>
+              <p className="text-sm font-semibold text-[#22C55E]">{dict.registered}</p>
             </div>
           ) : (
             <>
-              <p className="text-xs font-semibold text-[#64748B]">{dict.how_is} {player.first_name} {dict.this_week}?</p>
+              <p className="text-xs font-semibold text-[#94A3B8]">{dict.how_is} {player.first_name} {dict.this_week}?</p>
               <div className="grid grid-cols-3 gap-2">
                 {(["green", "yellow", "red"] as WellbeingStatus[]).map((s) => {
                   const st = STATUS_STYLE[s.toUpperCase() as keyof typeof STATUS_STYLE];
                   const isSelected = status === s;
                   return (
                     <button key={s} onClick={() => { setStatus(s); setSymptoms([]); }}
-                      className="w-full text-left rounded-xl border-2 p-3 transition-all"
-                      style={{ background: isSelected ? st.bg : "#FFFFFF", borderColor: isSelected ? st.border : "#E4E2F5" }}
+                      className="w-full text-left rounded-xl border p-3 transition-all"
+                      style={{ background: isSelected ? st.bg : "#141D26", borderColor: isSelected ? st.border : "#2E4057" }}
                     >
                       <div className="flex items-center gap-2">
                         <span>{st.emoji}</span>
-                        <p className="font-semibold text-sm" style={{ color: isSelected ? st.text : "#1A1A2E" }}>
+                        <p className="font-semibold text-sm" style={{ color: isSelected ? st.text : "#F8FAFC" }}>
                           {dict.statuses[s.toUpperCase()]}
                         </p>
                       </div>
@@ -142,12 +142,12 @@ function PlayerCard({ player, report, dict, onSaved }: {
 
               {visibleSymptoms.length > 0 && (
                 <div className="space-y-1.5">
-                  <p className="text-xs font-medium text-[#64748B]">{dict.symptoms_optional}</p>
+                  <p className="text-xs font-medium text-[#94A3B8]">{dict.symptoms_optional}</p>
                   {visibleSymptoms.map((key) => (
-                    <label key={key} className="flex items-center gap-2.5 rounded-lg border border-[#E4E2F5] bg-white p-2.5 cursor-pointer hover:bg-[#F8F7FF]">
+                    <label key={key} className="flex items-center gap-2.5 rounded-lg border border-[#2E4057] bg-[#141D26] p-2.5 cursor-pointer hover:bg-[#1E2D3D]">
                       <input type="checkbox" checked={symptoms.includes(key as WellbeingSymptom)}
-                        onChange={() => toggleSymptom(key as WellbeingSymptom)} className="h-4 w-4 accent-[#6D28D9]" />
-                      <span className="text-xs text-[#1A1A2E]">{dict.symptoms[key] ?? key}</span>
+                        onChange={() => toggleSymptom(key as WellbeingSymptom)} className="h-4 w-4 accent-[#22C55E]" />
+                      <span className="text-xs text-[#F8FAFC]">{dict.symptoms[key] ?? key}</span>
                     </label>
                   ))}
                 </div>
@@ -211,33 +211,33 @@ export default function VelvareKlient({ teams, reports: initialReports, week: in
     { label: dict.count_green,   count: countGreen,   bg: "#F0FDF4", text: "#15803D", border: "#16A34A" },
     { label: dict.count_yellow,  count: countYellow,  bg: "#FFFBEB", text: "#92400E", border: "#D97706" },
     { label: dict.count_red,     count: countRed,     bg: "#FEF2F2", text: "#991B1B", border: "#DC2626" },
-    { label: dict.count_missing, count: countMissing, bg: "#F8FAFC", text: "#64748B", border: "#E4E2F5" },
+    { label: dict.count_missing, count: countMissing, bg: "#141D26", text: "#94A3B8", border: "#2E4057" },
   ];
 
   return (
     <div className="space-y-6">
       {/* Ukesnavigasjon */}
-      <div className="flex items-center justify-between bg-white border border-[#E4E2F5] rounded-2xl px-4 py-3">
+      <div className="flex items-center justify-between bg-[#141D26] border border-[#2E4057] rounded-2xl px-4 py-3">
         <button
           onClick={() => navigateWeek(-1)}
           disabled={loading}
-          className="flex items-center gap-1 text-sm text-[#64748B] hover:text-[#1A1A2E] transition-colors disabled:opacity-40"
+          className="flex items-center gap-1 text-sm text-[#94A3B8] hover:text-[#F8FAFC] transition-colors disabled:opacity-40"
         >
           <ChevronLeft className="h-4 w-4" />
           Forrige uke
         </button>
         <div className="text-center">
-          <p className="text-sm font-semibold text-[#1A1A2E]">
+          <p className="text-sm font-semibold text-[#F8FAFC]">
             Uke {currentWeek}, {currentYear}
             {isCurrentWeek && (
-              <span className="ml-2 text-xs font-medium text-[#6D28D9] bg-[#F5F3FF] px-2 py-0.5 rounded-full">Denne uka</span>
+              <span className="ml-2 text-xs font-medium text-[#22C55E] bg-[#1E2D3D] px-2 py-0.5 rounded-full">Denne uka</span>
             )}
           </p>
         </div>
         <button
           onClick={() => navigateWeek(1)}
           disabled={loading || isCurrentWeek}
-          className="flex items-center gap-1 text-sm text-[#64748B] hover:text-[#1A1A2E] transition-colors disabled:opacity-40"
+          className="flex items-center gap-1 text-sm text-[#94A3B8] hover:text-[#F8FAFC] transition-colors disabled:opacity-40"
         >
           Neste uke
           <ChevronRight className="h-4 w-4" />
@@ -298,7 +298,7 @@ export default function VelvareKlient({ teams, reports: initialReports, week: in
 
           {allPlayers.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-[#64748B] text-sm">{dict.no_players}</p>
+              <p className="text-[#F8FAFC] text-sm">{dict.no_players}</p>
               <p className="text-[#94A3B8] text-xs mt-1">{dict.no_players_hint}</p>
             </div>
           )}
