@@ -2,66 +2,46 @@ import { getSession } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { getLang, getDictionary } from "@/lib/dict";
-import DashboardHomeClient from "./DashboardHomeClient";
+import DashboardCalendarClient from "./DashboardCalendarClient";
 
-function currentWeek() {
-  const now = new Date();
-  const d = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
-  const dayNum = d.getUTCDay() || 7;
-  d.setUTCDate(d.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
-  const week = Math.ceil((((d.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
-  return { week, year: d.getUTCFullYear() };
-}
-
-export default async function DashboardPage() {
+export default async function KalenderPage() {
   const session = await getSession();
   if (!session) redirect("/login");
 
   const lang = await getLang();
   const dict = await getDictionary(lang);
 
-  const { week, year } = currentWeek();
+  const now = new Date();
+  const thirtyDaysLater = new Date(now);
+  thirtyDaysLater.setDate(thirtyDaysLater.getDate() + 60);
 
-  // Hent lag
-  const teams = await prisma.team.findMany({
-    where: { coach_id: session.coachId, is_active: true },
-    orderBy: { name: "asc" },
-  });
-
-  // Hent ukens plan
-  const existingPlans = await prisma.weeklyPlan.findMany({
-    where: { team: { coach_id: session.coachId }, year, week_number: week },
-  });
-
-  // Beregn start og slutt for denne uken
-  const d = new Date();
-  d.setUTCHours(0, 0, 0, 0);
-  const dayNum = d.getUTCDay() || 7; // 1 (mandag) til 7 (søndag)
-  
-  const monday = new Date(d);
-  monday.setUTCDate(d.getUTCDate() - dayNum + 1);
-  
-  const sunday = new Date(monday);
-  sunday.setUTCDate(monday.getUTCDate() + 6);
-
-  // Hent ukens kamper
-  const matches = await prisma.match.findMany({
-    where: { 
-      coach_id: session.coachId, 
-      date: { gte: monday, lte: sunday } 
-    },
-    select: { id: true, team_id: true, date: true, opponent: true },
-  });
+  const [teams, matches, sessions] = await Promise.all([
+    prisma.team.findMany({
+      where: { coach_id: session.coachId, is_active: true },
+      include: { players: { where: { is_active: true }, orderBy: { last_name: "asc" } } },
+      orderBy: { name: "asc" },
+    }),
+    prisma.match.findMany({
+      where: { coach_id: session.coachId, date: { gte: new Date(now.getFullYear(), now.getMonth() - 1, 1) } },
+      include: { team: { select: { id: true, name: true } } },
+      orderBy: { date: "asc" },
+    }),
+    prisma.trainingSession.findMany({
+      where: { coach_id: session.coachId, date: { gte: new Date(now.getFullYear(), now.getMonth() - 1, 1) } },
+      orderBy: { date: "asc" },
+    }),
+  ]);
 
   return (
-    <DashboardHomeClient
-      fullName={session.fullName}
-      teams={teams}
-      existingPlans={existingPlans}
-      matches={matches}
-      week={week}
-      dict={dict}
-    />
+    <div className="space-y-6">
+
+      <DashboardCalendarClient
+        teams={teams as never}
+        matches={matches as never}
+        sessions={sessions as never}
+        dict={dict.calendar}
+        teamsDict={dict.teams}
+      />
+    </div>
   );
 }

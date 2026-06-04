@@ -40,7 +40,7 @@ export default async function VelvarePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#F8FAFC]">{dw.title}</h1>
+        <h1 className="text-2xl font-semibold text-[#F8FAFC]">{dw.title}</h1>
         <p className="text-[#94A3B8] mt-1 text-sm">
           {dc.week} {week}, {year} · {dw.subtitle_week}
         </p>

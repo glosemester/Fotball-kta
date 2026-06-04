@@ -9,12 +9,12 @@ import { ChevronLeft, ChevronRight, Save, Trophy, TrendingUp, Zap, Target, Batte
 const DAY_KEYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
 const FOCUS_STYLE: Record<string, { icon: React.ElementType; bg: string; border: string; text: string }> = {
-  high_volume: { icon: TrendingUp, bg: "#1E2D3D", border: "#3B82F6", text: "#60A5FA" },
-  sharpness:   { icon: Zap, bg: "#1E2D3D", border: "#A855F7", text: "#C084FC" },
-  technical:   { icon: Target, bg: "#1E2D3D", border: "#22C55E", text: "#4ADE80" },
-  recovery:    { icon: BatteryCharging, bg: "#1E2D3D", border: "#F59E0B", text: "#FBBF24" },
-  match:       { icon: Trophy, bg: "#1E2D3D", border: "#EF4444", text: "#F87171" },
-  rest:        { icon: Moon, bg: "#0A0F14", border: "#2E4057", text: "#94A3B8" },
+  high_volume: { icon: TrendingUp, bg: "#2C2C2E", border: "#3B82F6", text: "#60A5FA" },
+  sharpness:   { icon: Zap, bg: "#2C2C2E", border: "#A855F7", text: "#C084FC" },
+  technical:   { icon: Target, bg: "#2C2C2E", border: "#0A84FF", text: "#4ADE80" },
+  recovery:    { icon: BatteryCharging, bg: "#2C2C2E", border: "#F59E0B", text: "#FBBF24" },
+  match:       { icon: Trophy, bg: "#2C2C2E", border: "#EF4444", text: "#F87171" },
+  rest:        { icon: Moon, bg: "#000000", border: "#38383A", text: "#8E8E93" },
 };
 
 const FOCUS_KEYS = ["high_volume", "sharpness", "technical", "recovery", "match", "rest"];
@@ -185,10 +185,10 @@ export default function UkesplanKlient({ teams, matches, week, year, existingPla
             <button
               key={t.id}
               onClick={() => handleTeamChange(t.id)}
-              className={`px-3 py-1.5 rounded-xl text-sm font-semibold transition-all border-2 ${
+              className={`px-3 py-1.5 rounded-2xl text-sm font-semibold transition-all border-2 ${
                 selectedTeam?.id === t.id
-                  ? "border-[#22C55E] bg-[#1E2D3D] text-[#22C55E]"
-                  : "border-[#2E4057] text-[#94A3B8] hover:border-[#22C55E]/40"
+                  ? "border-[#0A84FF] bg-[#2C2C2E] text-[#0A84FF]"
+                  : "border-[#38383A] text-[#8E8E93] hover:border-[#0A84FF]/40"
               }`}
             >
               {t.name}
@@ -197,26 +197,26 @@ export default function UkesplanKlient({ teams, matches, week, year, existingPla
         </div>
       )}
 
-      <div className="flex items-center justify-between bg-[#141D26] border border-[#2E4057] rounded-2xl px-4 py-3">
-        <button onClick={prevWeek} className="p-1.5 rounded-lg hover:bg-[#1E2D3D] text-[#94A3B8] hover:text-[#F8FAFC] transition-colors">
+      <div className="flex items-center justify-between bg-[#1C1C1E] border border-[#38383A] rounded-3xl px-4 py-3">
+        <button onClick={prevWeek} className="p-1.5 rounded-lg hover:bg-[#2C2C2E] text-[#8E8E93] hover:text-[#FFFFFF] transition-colors">
           <ChevronLeft className="h-5 w-5" />
         </button>
         <div className="text-center">
-          <p className="font-bold text-[#F8FAFC]">{weekLabel} {currentWeek}</p>
-          <p className="text-xs text-[#94A3B8]">{currentYear}</p>
+          <p className="font-semibold text-[#FFFFFF]">{weekLabel} {currentWeek}</p>
+          <p className="text-xs text-[#8E8E93]">{currentYear}</p>
         </div>
-        <button onClick={nextWeek} className="p-1.5 rounded-lg hover:bg-[#1E2D3D] text-[#94A3B8] hover:text-[#F8FAFC] transition-colors">
+        <button onClick={nextWeek} className="p-1.5 rounded-lg hover:bg-[#2C2C2E] text-[#8E8E93] hover:text-[#FFFFFF] transition-colors">
           <ChevronRight className="h-5 w-5" />
         </button>
       </div>
 
       {sessionRule && (
-        <div className={`rounded-xl border px-4 py-3 flex items-center justify-between ${
+        <div className={`rounded-2xl border px-4 py-3 flex items-center justify-between ${
           tooMany ? "bg-[#EF4444]/10 border-[#EF4444]/30" :
           tooFew  ? "bg-[#F59E0B]/10 border-[#F59E0B]/30" :
-                    "bg-[#22C55E]/10 border-[#22C55E]/30"
+                    "bg-[#0A84FF]/10 border-[#0A84FF]/30"
         }`}>
-          <p className={`text-xs font-medium ${tooMany ? "text-[#EF4444]" : tooFew ? "text-[#F59E0B]" : "text-[#22C55E]"}`}>
+          <p className={`text-xs font-medium ${tooMany ? "text-[#EF4444]" : tooFew ? "text-[#F59E0B]" : "text-[#0A84FF]"}`}>
             {selectedTeam?.name}: {sessionRule.min}–{sessionRule.max} {dict.sessions_rule} {sessionRule.maxMin} min
           </p>
           <Badge variant={tooMany ? "red" : tooFew ? "yellow" : "green"}>
@@ -235,12 +235,12 @@ export default function UkesplanKlient({ teams, matches, week, year, existingPla
           return (
             <div
               key={key}
-              className="bg-[#141D26] border rounded-2xl overflow-hidden transition-all"
-              style={{ borderColor: day.focus !== "rest" ? focusCfg.border : "#2E4057" }}
+              className="bg-[#1C1C1E] border rounded-3xl overflow-hidden transition-all"
+              style={{ borderColor: day.focus !== "rest" ? focusCfg.border : "#38383A" }}
             >
               <div className="flex items-center gap-3 px-4 py-3">
                 <div className="w-10 shrink-0">
-                  <p className="font-semibold text-sm text-[#F8FAFC]">{dayLabel}</p>
+                  <p className="font-semibold text-sm text-[#FFFFFF]">{dayLabel}</p>
                 </div>
                 {isMatch && <Trophy className="h-3.5 w-3.5 text-[#EF4444] shrink-0" />}
                 <div className="flex gap-1.5 flex-wrap flex-1">
@@ -255,7 +255,7 @@ export default function UkesplanKlient({ teams, matches, week, year, existingPla
                         className={`h-8 px-2.5 rounded-lg transition-all border flex items-center justify-center ${
                           day.focus === fKey
                             ? "text-white border-transparent"
-                            : "bg-[#141D26] border-[#2E4057] text-[#94A3B8] hover:border-[#22C55E]/40 hover:text-[#F8FAFC]"
+                            : "bg-[#1C1C1E] border-[#38383A] text-[#8E8E93] hover:border-[#0A84FF]/40 hover:text-[#FFFFFF]"
                         }`}
                         style={day.focus === fKey ? { background: focusCfg.border } : {}}
                       >
@@ -285,7 +285,7 @@ export default function UkesplanKlient({ teams, matches, week, year, existingPla
         onClick={handleSave}
         disabled={saving || !selectedTeam}
         size="lg"
-        className="w-full bg-[#22C55E] hover:bg-[#16A34A] text-white"
+        className="w-full bg-[#0A84FF] hover:bg-[#007AFF] text-white"
         variant={saved ? "secondary" : "default"}
       >
         {saving ? "..." : saved ? dict.saved : (

@@ -32,7 +32,8 @@
     "calendar": "Kalender",
     "wellbeing": "Belastningsstyring",
     "settings": "Indstillinger",
-    "logout": "Log ud"
+    "logout": "Log ud",
+    "advisor": "AI Rådgivere"
   },
   "auth": {
     "login": {
@@ -206,7 +207,8 @@
       "overganger": "Overgange",
       "keeperteknikk": "Målmandsteknik",
       "fritt_spill": "Fri Leg"
-    }
+    },
+    "back_to_sessions": "Tilbake til treninger"
   },
   "wellbeing": {
     "title": "Belastningsstyring",
@@ -280,7 +282,7 @@
     "title": "Kalender",
     "subtitle": "Kampe og træninger de næste 5 uger",
     "add_match": "Tilføj kamp",
-    "import_csv": "Importer CSV",
+    "import_csv": "Hent kampe (NFF)",
     "today": "I dag",
     "home": "Hjemme",
     "away": "Ude",

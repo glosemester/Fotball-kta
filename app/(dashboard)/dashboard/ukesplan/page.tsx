@@ -42,7 +42,7 @@ export default async function UkesplanPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#F8FAFC]">{d.title}</h1>
+        <h1 className="text-2xl font-semibold text-[#F8FAFC]">{d.title}</h1>
         <p className="text-[#94A3B8] mt-1 text-sm">{d.subtitle}</p>
       </div>
 

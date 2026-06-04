@@ -80,7 +80,7 @@ export function WellbeingSelector({ playerId, playerName, onSubmit }: WellbeingS
 
   if (submitted) {
     return (
-      <div className="rounded-xl border border-green-200 bg-green-50 p-6 text-center">
+      <div className="rounded-2xl border border-green-200 bg-green-50 p-6 text-center">
         <div className="text-3xl mb-2">✅</div>
         <p className="font-semibold text-green-800">Registrert! Takk, {playerName.split(" ")[0]}.</p>
         <p className="text-sm text-green-700 mt-1">Treneren har blitt varslet hvis det trengs.</p>
@@ -105,7 +105,7 @@ export function WellbeingSelector({ playerId, playerName, onSubmit }: WellbeingS
               setSelectedStatus(opt.status);
               setSelectedSymptoms([]);
             }}
-            className={`w-full text-left rounded-xl border-2 p-4 transition-all ${
+            className={`w-full text-left rounded-2xl border-2 p-4 transition-all ${
               selectedStatus === opt.status ? opt.selected : `${opt.bg} ${opt.border} hover:border-gray-400`
             }`}
           >

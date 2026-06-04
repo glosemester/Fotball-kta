@@ -30,7 +30,7 @@ export default async function Home() {
   const session = await auth();
 
   return (
-    <main className="min-h-screen bg-[#0A0F14] overflow-x-hidden">
+    <main className="min-h-screen bg-[#000000] overflow-x-hidden">
       {/* Hero */}
       <div className="flex flex-col items-center justify-center px-4 pt-20 pb-12 text-center">
         <div className="flex flex-col items-center gap-5 mb-10">
@@ -41,11 +41,11 @@ export default async function Home() {
 
           {/* Wordmark */}
           <div>
-            <h1 className="text-5xl font-extrabold tracking-tight text-[#F8FAFC]">
-              Pitch<span className="text-[#22C55E]">Plan</span>
+            <h1 className="text-5xl font-semibold tracking-tight text-[#FFFFFF]">
+              Pitch<span className="text-[#0A84FF]">Plan</span>
             </h1>
-            <p className="text-[#94A3B8] text-base mt-2">
-              AI-drevet treningsplanlegging for barne- og ungdomsfotball
+            <p className="text-[#8E8E93] text-base mt-2">
+              Treningsplanlegger for barne- og ungdomsfotball
             </p>
           </div>
         </div>
@@ -56,7 +56,7 @@ export default async function Home() {
             <>
               <Link
                 href="/dashboard"
-                className="flex-1 inline-flex items-center justify-center rounded-full bg-[#22C55E] px-5 py-3.5 text-[#0A0F14] font-bold text-sm uppercase tracking-wide hover:bg-[#16A34A] transition-colors shadow-lg shadow-[#22C55E]/25"
+                className="flex-1 inline-flex items-center justify-center rounded-full bg-[#0A84FF] px-5 py-3.5 text-white font-semibold text-sm uppercase tracking-wide hover:bg-[#007AFF] transition-colors shadow-lg shadow-[#0A84FF]/25"
               >
                 Gå til Dashboard
               </Link>
@@ -66,7 +66,7 @@ export default async function Home() {
               }} className="flex-1">
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/12 px-5 py-3.5 text-[#F8FAFC] font-semibold text-sm hover:bg-white/12 transition-all"
+                  className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/12 px-5 py-3.5 text-[#FFFFFF] font-semibold text-sm hover:bg-white/12 transition-all"
                 >
                   Logg ut
                 </button>
@@ -80,7 +80,7 @@ export default async function Home() {
               }} className="flex-1">
                 <button
                   type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/12 px-5 py-3.5 text-[#F8FAFC] font-semibold text-sm hover:bg-white/12 transition-all"
+                  className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/12 px-5 py-3.5 text-[#FFFFFF] font-semibold text-sm hover:bg-white/12 transition-all"
                 >
                   <GoogleIcon />
                   Google
@@ -88,7 +88,7 @@ export default async function Home() {
               </form>
               <Link
                 href="/login"
-                className="flex-1 inline-flex items-center justify-center rounded-full bg-[#22C55E] px-5 py-3.5 text-[#0A0F14] font-bold text-sm uppercase tracking-wide hover:bg-[#16A34A] transition-colors shadow-lg shadow-[#22C55E]/25"
+                className="flex-1 inline-flex items-center justify-center rounded-full bg-[#0A84FF] px-5 py-3.5 text-white font-semibold text-sm uppercase tracking-wide hover:bg-[#007AFF] transition-colors shadow-lg shadow-[#0A84FF]/25"
               >
                 Logg inn
               </Link>
@@ -96,9 +96,9 @@ export default async function Home() {
           )}
         </div>
 
-        <p className="text-xs text-[#94A3B8] mt-4">
+        <p className="text-xs text-[#8E8E93] mt-4">
           Ingen konto?{" "}
-          <Link href="/registrer" className="text-[#22C55E] font-medium hover:underline">
+          <Link href="/registrer" className="text-[#0A84FF] font-medium hover:underline">
             Registrer deg gratis
           </Link>
         </p>
@@ -107,11 +107,11 @@ export default async function Home() {
       {/* Filosofi-banner */}
       <div className="max-w-lg mx-auto px-4 mb-10">
         <div className="bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-6 text-center">
-          <p className="text-[#22C55E] text-xs font-bold uppercase tracking-widest mb-2">Filosofi</p>
-          <p className="text-[#F8FAFC] text-xl font-bold leading-snug">
+          <p className="text-[#0A84FF] text-xs font-semibold uppercase tracking-widest mb-2">Filosofi</p>
+          <p className="text-[#FFFFFF] text-xl font-semibold leading-snug">
             "Flest mulig · Lengst mulig · Best mulig"
           </p>
-          <p className="text-[#94A3B8] text-sm mt-2">Trygghet → Mestring → Trivsel</p>
+          <p className="text-[#8E8E93] text-sm mt-2">Trygghet → Mestring → Trivsel</p>
         </div>
       </div>
 
@@ -123,11 +123,11 @@ export default async function Home() {
               key={i}
               className="w-56 flex-shrink-0 bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-5"
             >
-              <div className="w-10 h-10 rounded-2xl bg-[#22C55E]/15 flex items-center justify-center mb-4">
-                <Icon className="text-[#22C55E]" style={{ width: 20, height: 20 }} />
+              <div className="w-10 h-10 rounded-3xl bg-[#0A84FF]/15 flex items-center justify-center mb-4">
+                <Icon className="text-[#0A84FF]" style={{ width: 20, height: 20 }} />
               </div>
-              <p className="font-semibold text-[#F8FAFC] text-sm mb-1.5 leading-snug">{title}</p>
-              <p className="text-xs text-[#94A3B8] leading-relaxed">{desc}</p>
+              <p className="font-semibold text-[#FFFFFF] text-sm mb-1.5 leading-snug">{title}</p>
+              <p className="text-xs text-[#8E8E93] leading-relaxed">{desc}</p>
             </div>
           ))}
         </div>

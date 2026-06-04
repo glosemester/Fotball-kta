@@ -14,6 +14,7 @@ const THEME_LABELS: Record<SessionTheme, string> = {
   overganger:         "Overganger",
   keeperteknikk:      "Keeperteknikk",
   fritt_spill:        "Fritt Spill",
+  venn_med_ballen:    "Venn med ballen",
 };
 
 const SYSTEM_PROMPT = `Du er en ekspert på barne- og ungdomsfotball i Norden med dyp kunnskap om NFF, SvFF og DBU sine retningslinjer.
@@ -51,7 +52,7 @@ export async function POST(req: NextRequest) {
 
   const {
     age_group,
-    theme,
+    themes,
     player_count,
     field_length,
     field_width,
@@ -61,11 +62,16 @@ export async function POST(req: NextRequest) {
     theme: SessionTheme;
     player_count: number;
     field_length: number;
+  }: {
+    age_group: AgeGroupKey;
+    themes: SessionTheme[];
+    player_count: number;
+    field_length: number;
     field_width: number;
     phases: { phase: string; duration_minutes: number; description: string }[];
   } = await req.json();
 
-  if (!age_group || !theme) {
+  if (!age_group || !themes || themes.length === 0) {
     return NextResponse.json({ error: "Mangler aldersgruppe eller tema" }, { status: 400 });
   }
 
@@ -78,7 +84,7 @@ export async function POST(req: NextRequest) {
 
   const userPrompt = `Lag treningsøvelser for:
 - Aldersgruppe: ${rules.label}
-- Tema: ${THEME_LABELS[theme]}
+- Temaer (kombiner disse for en rød tråd): ${themes.map(t => THEME_LABELS[t]).join(" + ")}
 - Antall spillere: ${player_count}
 - Banestørrelse: ${field_length}m × ${field_width}m
 - Heading: ${headingForbidden ? "ABSOLUTT FORBUDT — ingen øvelse skal involvere heading" : rules.heading_label}
@@ -120,6 +126,20 @@ ${headingForbidden ? "VIKTIG: Absolutt headingsforbud — ingen del av noen øve
     }
   } catch (error: any) {
     console.error("AI Generation Error:", error);
-    return NextResponse.json({ error: "Feil ved kommunikasjon med AI: " + (error?.message || "Ukjent feil") }, { status: 500 });
+    
+    // Fallback-logikk: Standardbase hvis AI feiler
+    const fallbackExercises = phases.map((p) => ({
+      phase: p.phase,
+      name: `${p.phase} - ${THEME_LABELS[themes[0]] || "Standardøvelse"}`,
+      duration_minutes: p.duration_minutes,
+      description: "Standardøvelse (AI-systemet er midlertidig overbelastet). Fokus på " + (THEME_LABELS[themes[0]] || "basisferdigheter") + ".",
+      setup: `Bruk et område på ${Math.floor(field_length/2)}x${Math.floor(field_width/2)}m. ${player_count} spillere fordeles jevnt.`,
+      rules: ["Hold ballen i gang", "Høyt tempo"],
+      instructions: ["Spill ballen til ledig spiller", "Beveg deg etter pasning", "Kommuniser med lagkamerater"],
+      coaching_points: ["Kroppsstilling for å motta", "Presisjon i pasning", "Oversikt"],
+      variations: ["Bruk mindre område for å øke press", "Krav om færre touch"]
+    }));
+
+    return NextResponse.json({ exercises: fallbackExercises });
   }
 }

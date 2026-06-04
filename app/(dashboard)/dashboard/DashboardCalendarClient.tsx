@@ -78,6 +78,8 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
   const [csvContent, setCsvContent] = useState("");
   const [csvStatus, setCsvStatus] = useState("");
   const [csvLoading, setCsvLoading] = useState(false);
+  const [previewMatches, setPreviewMatches] = useState<any[]>([]);
+  const [selectedPreviewIds, setSelectedPreviewIds] = useState<Set<string>>(new Set());
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const today = new Date(); today.setHours(0, 0, 0, 0);
@@ -147,12 +149,33 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
     setCsvLoading(true); setCsvStatus("");
     const res = await fetch("/api/kamper/import", {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ csv: csvContent, team_id: csvTeamId || null, my_team_name: csvMyTeam }),
+      body: JSON.stringify({ action: "preview", csv: csvContent, team_id: csvTeamId || null, my_team_name: csvMyTeam }),
+    });
+    const data = await res.json();
+    if (res.ok) {
+      setPreviewMatches(data.matches || []);
+      setSelectedPreviewIds(new Set((data.matches || []).map((m: any) => m.id)));
+    } else {
+      setCsvStatus(data.error ?? "Feil");
+    }
+    setCsvLoading(false);
+  }
+
+  async function handleCsvCommit() {
+    const toCommit = previewMatches.filter(m => selectedPreviewIds.has(m.id));
+    if (toCommit.length === 0) return;
+    setCsvLoading(true); setCsvStatus("");
+    const res = await fetch("/api/kamper/import", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ action: "commit", matches: toCommit, team_id: csvTeamId || null }),
     });
     const data = await res.json();
     if (res.ok) {
       setCsvStatus(`${dict.import_success}: ${data.created} kamper`);
-      router.refresh();
+      setTimeout(() => {
+        setShowCsvModal(false); setCsvContent(""); setPreviewMatches([]);
+        router.refresh();
+      }, 1500);
     } else {
       setCsvStatus(data.error ?? "Feil");
     }
@@ -161,37 +184,57 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
 
   const selectedTeamForForm = teams.find((t) => t.id === fTeamId);
 
+  const middleDay = offsetDays[17] || new Date();
+  const displayMonth = middleDay.toLocaleDateString("nb-NO", { month: "long", year: "numeric" });
+  const capitalizedMonth = displayMonth.charAt(0).toUpperCase() + displayMonth.slice(1);
+  const todayStr = new Date().toLocaleDateString("nb-NO", { weekday: "long", day: "numeric", month: "long", year: "numeric" });
+  const capitalizedToday = todayStr.charAt(0).toUpperCase() + todayStr.slice(1);
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
+      {/* Header med Måned og Dagens dato */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+        <div>
+          <h1 className="text-4xl font-bold text-[#FFFFFF] tracking-tight">{capitalizedMonth}</h1>
+          <p className="text-[#8E8E93] mt-1 text-sm font-medium">{dict.subtitle}</p>
+        </div>
+        <div className="text-right">
+          <p className="text-xs text-[#8E8E93] uppercase tracking-wider font-semibold mb-1">I dag</p>
+          <p className="text-[#FFFFFF] text-sm font-medium bg-[#1C1C1E] border border-[#38383A] px-3 py-1.5 rounded-lg">
+            {capitalizedToday}
+          </p>
+        </div>
+      </div>
+
       {/* Toolbar */}
-      <div className="flex items-center justify-between gap-2 flex-wrap">
+      <div className="flex items-center justify-between gap-2 flex-wrap bg-[#1C1C1E] p-2 rounded-2xl border border-[#38383A]">
         <div className="flex items-center gap-2">
-          <button onClick={() => setWeekOffset((w) => w - 1)} className="p-1.5 rounded-lg border border-[#2E4057] hover:bg-[#1E2D3D] text-[#94A3B8]">
-            <ChevronLeft className="h-4 w-4" />
+            <button onClick={() => setWeekOffset((w) => w - 1)} className="p-2 rounded-xl border border-transparent hover:bg-[#2C2C2E] text-[#8E8E93] hover:text-[#FFFFFF] transition-colors">
+            <ChevronLeft className="h-5 w-5" />
           </button>
-          <button onClick={() => setWeekOffset(0)} className="text-xs font-medium px-3 py-1.5 rounded-lg border border-[#2E4057] hover:bg-[#1E2D3D] text-[#94A3B8]">
+            <button onClick={() => setWeekOffset(0)} className="text-sm font-semibold px-4 py-2 rounded-xl border border-transparent hover:bg-[#2C2C2E] text-[#8E8E93] hover:text-[#FFFFFF] transition-colors">
             {dict.today}
           </button>
-          <button onClick={() => setWeekOffset((w) => w + 1)} className="p-1.5 rounded-lg border border-[#2E4057] hover:bg-[#1E2D3D] text-[#94A3B8]">
-            <ChevronRight className="h-4 w-4" />
+            <button onClick={() => setWeekOffset((w) => w + 1)} className="p-2 rounded-xl border border-transparent hover:bg-[#2C2C2E] text-[#8E8E93] hover:text-[#FFFFFF] transition-colors">
+            <ChevronRight className="h-5 w-5" />
           </button>
         </div>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={() => setShowCsvModal(true)}>
-            <Upload className="h-4 w-4" /> {dict.import_csv}
+        <div className="flex gap-2 pr-1">
+          <Button variant="secondary" className="rounded-xl text-sm font-medium" onClick={() => setShowCsvModal(true)}>
+            <Upload className="h-4 w-4 mr-2" /> {dict.import_csv}
           </Button>
-          <Button size="sm" onClick={() => openAdd()}>
-            <Plus className="h-4 w-4" /> {dict.add_match}
+          <Button className="rounded-xl text-sm font-medium bg-[#0A84FF] hover:bg-[#007AFF] text-white" onClick={() => openAdd()}>
+            <Plus className="h-4 w-4 mr-2" /> {dict.add_match}
           </Button>
         </div>
       </div>
 
       {/* Calendar grid */}
-      <div className="bg-[#141D26] border border-[#2E4057] rounded-2xl overflow-hidden">
+      <div className="bg-[#1C1C1E] border border-[#38383A] rounded-3xl overflow-hidden">
         {/* Day headers */}
-        <div className="grid grid-cols-7 border-b border-[#2E4057]">
+          <div className="grid grid-cols-7 border-b border-[#38383A]">
           {DAY_LABELS.map((d) => (
-            <div key={d} className="py-2 text-center text-xs font-semibold text-[#94A3B8] uppercase tracking-wide">
+            <div key={d} className="py-2 text-center text-xs font-semibold text-[#8E8E93] uppercase tracking-wide">
               {d}
             </div>
           ))}
@@ -211,19 +254,19 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
               <div
                 key={i}
                 onClick={() => setSelectedDay(isSelected ? null : key)}
-                className={`min-h-[72px] p-1.5 border-b border-r border-[#2E4057] cursor-pointer transition-colors
-                  ${isSelected ? "bg-[#1E2D3D]" : isPast ? "bg-[#0A0F14]" : "hover:bg-[#1E2D3D]"}
+                className={`min-h-[72px] p-1.5 border-b border-r border-[#38383A] cursor-pointer transition-colors
+                  ${isSelected ? "bg-[#2C2C2E]" : isPast ? "bg-[#000000]" : "hover:bg-[#2C2C2E]"}
                   ${i % 7 === 6 ? "border-r-0" : ""}
                 `}
               >
                 <div className="flex items-start justify-between mb-1">
                   <span className={`text-xs font-semibold w-5 h-5 flex items-center justify-center rounded-full
-                    ${isToday ? "bg-[#22C55E] text-white" : isPast ? "text-[#475569]" : "text-[#F8FAFC]"}`}>
+                    ${isToday ? "bg-[#0A84FF] text-white" : isPast ? "text-[#475569]" : "text-[#FFFFFF]"}`}>
                     {day.getDate()}
                   </span>
                   <button
                     onClick={(e) => { e.stopPropagation(); openAdd(key); }}
-                    className="opacity-0 group-hover:opacity-100 hover:opacity-100 p-0.5 rounded text-[#94A3B8] hover:text-[#22C55E] hover:bg-[#1E2D3D]"
+                    className="opacity-0 group-hover:opacity-100 hover:opacity-100 p-0.5 rounded text-[#8E8E93] hover:text-[#0A84FF] hover:bg-[#2C2C2E]"
                   >
                     <Plus className="h-3 w-3" />
                   </button>
@@ -254,7 +297,7 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
       </div>
 
       {/* Legend */}
-      <div className="flex gap-4 text-xs text-[#94A3B8]">
+      <div className="flex gap-4 text-xs text-[#8E8E93]">
         <div className="flex items-center gap-1.5">
           <div className="w-3 h-3 rounded bg-[#EF4444]/10 border border-[#EF4444]/20" />
           {dict.match}
@@ -268,10 +311,10 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
       {/* Add/Edit match modal */}
       {showAddMatch && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-4">
-          <div className="bg-[#141D26] rounded-2xl w-full max-w-md max-h-[90vh] overflow-y-auto border border-[#2E4057]">
-            <div className="flex items-center justify-between p-4 border-b border-[#2E4057]">
-              <h3 className="font-semibold text-[#F8FAFC]">{editingMatch ? dict.match : dict.add_match}</h3>
-              <button onClick={() => setShowAddMatch(false)} className="text-[#94A3B8] hover:text-[#F8FAFC]">
+          <div className="bg-[#1C1C1E] rounded-3xl w-full max-w-md max-h-[90vh] overflow-y-auto border border-[#38383A]">
+            <div className="flex items-center justify-between p-4 border-b border-[#38383A]">
+              <h3 className="font-semibold text-[#FFFFFF]">{editingMatch ? dict.match : dict.add_match}</h3>
+              <button onClick={() => setShowAddMatch(false)} className="text-[#8E8E93] hover:text-[#FFFFFF]">
                 <X className="h-4 w-4" />
               </button>
             </div>
@@ -279,18 +322,18 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
               {/* Date + Time */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-[#94A3B8]">{dict.date}</label>
+                  <label className="text-xs font-medium text-[#8E8E93]">{dict.date}</label>
                   <input type="date" value={fDate} onChange={(e) => setFDate(e.target.value)} className="input-field" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-[#94A3B8]">{dict.time}</label>
+                  <label className="text-xs font-medium text-[#8E8E93]">{dict.time}</label>
                   <input type="time" value={fTime} onChange={(e) => setFTime(e.target.value)} className="input-field" />
                 </div>
               </div>
 
               {/* Opponent */}
               <div className="space-y-1">
-                <label className="text-xs font-medium text-[#94A3B8]">{dict.opponent}</label>
+                <label className="text-xs font-medium text-[#8E8E93]">{dict.opponent}</label>
                 <input value={fOpponent} onChange={(e) => setFOpponent(e.target.value)} placeholder="Motstander" className="input-field" />
               </div>
 
@@ -298,7 +341,7 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
               <div className="flex gap-2">
                 {[true, false].map((val) => (
                   <button key={String(val)} onClick={() => setFIsHome(val)}
-                    className={`flex-1 py-2 rounded-xl border-2 text-sm font-medium transition-all ${fIsHome === val ? "border-[#22C55E] bg-[#1E2D3D] text-[#22C55E]" : "border-[#2E4057] text-[#94A3B8] hover:border-[#22C55E]/40"}`}>
+                    className={`flex-1 py-2 rounded-2xl border-2 text-sm font-medium transition-all ${fIsHome === val ? "border-[#0A84FF] bg-[#2C2C2E] text-[#0A84FF]" : "border-[#38383A] text-[#8E8E93] hover:border-[#0A84FF]/40"}`}>
                     {val ? `🏠 ${dict.home}` : `✈️ ${dict.away}`}
                   </button>
                 ))}
@@ -307,11 +350,11 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
               {/* Location + Competition */}
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-[#94A3B8]">{dict.location}</label>
+                  <label className="text-xs font-medium text-[#8E8E93]">{dict.location}</label>
                   <input value={fLocation} onChange={(e) => setFLocation(e.target.value)} className="input-field text-xs" />
                 </div>
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-[#94A3B8]">{dict.competition}</label>
+                  <label className="text-xs font-medium text-[#8E8E93]">{dict.competition}</label>
                   <input value={fComp} onChange={(e) => setFComp(e.target.value)} className="input-field text-xs" />
                 </div>
               </div>
@@ -319,7 +362,7 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
               {/* Team */}
               {teams.length > 0 && (
                 <div className="space-y-1">
-                  <label className="text-xs font-medium text-[#94A3B8]">{dict.team}</label>
+                  <label className="text-xs font-medium text-[#8E8E93]">{dict.team}</label>
                   <select value={fTeamId} onChange={(e) => { setFTeamId(e.target.value); setFPlayers([]); }} className="input-field">
                     <option value="">—</option>
                     {teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
@@ -331,19 +374,19 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
               {selectedTeamForForm && selectedTeamForForm.players.length > 0 && (
                 <div className="space-y-1.5">
                   <div className="flex items-center justify-between">
-                    <label className="text-xs font-medium text-[#94A3B8] flex items-center gap-1">
+                    <label className="text-xs font-medium text-[#8E8E93] flex items-center gap-1">
                       <Users className="h-3.5 w-3.5" /> {dict.select_players}
                     </label>
-                    <span className="text-xs text-[#22C55E]">{fPlayers.length} {dict.players_selected}</span>
+                    <span className="text-xs text-[#0A84FF]">{fPlayers.length} {dict.players_selected}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-1.5 max-h-48 overflow-y-auto pr-1">
                     {selectedTeamForForm.players.map((p) => (
                       <label key={p.id} className={`flex items-center gap-2 rounded-lg border p-2 cursor-pointer text-xs transition-colors
-                        ${fPlayers.includes(p.id) ? "border-[#22C55E] bg-[#1E2D3D]" : "border-[#2E4057] hover:bg-[#1E2D3D]"}`}>
+                        ${fPlayers.includes(p.id) ? "border-[#0A84FF] bg-[#2C2C2E]" : "border-[#38383A] hover:bg-[#2C2C2E]"}`}>
                         <input type="checkbox" checked={fPlayers.includes(p.id)}
                           onChange={() => setFPlayers((prev) => prev.includes(p.id) ? prev.filter((id) => id !== p.id) : [...prev, p.id])}
-                          className="accent-[#22C55E]" />
-                        <span className="text-[#F8FAFC] font-medium truncate">{p.first_name} {p.last_name}</span>
+                          className="accent-[#0A84FF]" />
+                        <span className="text-[#FFFFFF] font-medium truncate">{p.first_name} {p.last_name}</span>
                       </label>
                     ))}
                   </div>
@@ -352,7 +395,7 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
 
               {/* Notes */}
               <div className="space-y-1">
-                <label className="text-xs font-medium text-[#94A3B8]">{dict.notes}</label>
+                <label className="text-xs font-medium text-[#8E8E93]">{dict.notes}</label>
                 <textarea value={fNotes} onChange={(e) => setFNotes(e.target.value)} rows={2} className="input-field resize-none text-xs" />
               </div>
 
@@ -362,10 +405,10 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
                     <X className="h-4 w-4" />
                   </Button>
                 )}
-                <Button onClick={handleSave} disabled={!fOpponent || saving} className="flex-1 bg-[#22C55E] hover:bg-[#16A34A] text-white">
+                <Button onClick={handleSave} disabled={!fOpponent || saving} className="flex-1 bg-[#0A84FF] hover:bg-[#007AFF] text-white">
                   {saving ? "..." : dict.save}
                 </Button>
-                <Button variant="outline" onClick={() => setShowAddMatch(false)} className="text-[#94A3B8]">{dict.cancel}</Button>
+                <Button variant="outline" onClick={() => setShowAddMatch(false)} className="text-[#8E8E93]">{dict.cancel}</Button>
               </div>
             </div>
           </div>
@@ -375,56 +418,97 @@ export default function KalenderKlient({ teams, matches: initialMatches, session
       {/* CSV import modal */}
       {showCsvModal && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-end sm:items-center justify-center p-4">
-          <div className="bg-[#141D26] rounded-2xl w-full max-w-md border border-[#2E4057]">
-            <div className="flex items-center justify-between p-4 border-b border-[#2E4057]">
-              <h3 className="font-semibold text-[#F8FAFC]">{dict.import_csv}</h3>
-              <button onClick={() => { setShowCsvModal(false); setCsvContent(""); setCsvStatus(""); }} className="text-[#94A3B8] hover:text-[#F8FAFC]">
+          <div className="bg-[#1C1C1E] rounded-3xl w-full max-w-md border border-[#38383A]">
+            <div className="flex items-center justify-between p-4 border-b border-[#38383A]">
+              <h3 className="font-semibold text-[#FFFFFF]">{dict.import_csv}</h3>
+              <button onClick={() => { setShowCsvModal(false); setCsvContent(""); setCsvStatus(""); setPreviewMatches([]); }} className="text-[#8E8E93] hover:text-[#FFFFFF]">
                 <X className="h-4 w-4" />
               </button>
             </div>
             <div className="p-4 space-y-3">
-              <p className="text-xs text-[#94A3B8]">{dict.csv_help}</p>
+              {previewMatches.length === 0 ? (
+                <>
+                  <p className="text-xs text-[#8E8E93]">
+                    Lim inn kalender-lenken fra fotball.no (f.eks. https://www.fotball.no/footballapi/Calendar/GetCalendar?teamId=...)
+                    <br /><br />
+                    Systemet vil hente kampene slik at du kan velge hvilke du vil lagre.
+                  </p>
 
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-[#94A3B8]">{dict.csv_my_team}</label>
-                <input value={csvMyTeam} onChange={(e) => setCsvMyTeam(e.target.value)} placeholder="f.eks. Rosenborg" className="input-field text-xs" />
-              </div>
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-[#8E8E93]">{dict.csv_my_team}</label>
+                    <input value={csvMyTeam} onChange={(e) => setCsvMyTeam(e.target.value)} placeholder="f.eks. Rosenborg" className="input-field text-xs" />
+                  </div>
 
-              {teams.length > 0 && (
-                <div className="space-y-1">
-                  <label className="text-xs font-medium text-[#94A3B8]">{dict.csv_team}</label>
-                  <select value={csvTeamId} onChange={(e) => setCsvTeamId(e.target.value)} className="input-field">
-                    <option value="">—</option>
-                    {teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
-                  </select>
-                </div>
+                  {teams.length > 0 && (
+                    <div className="space-y-1">
+                      <label className="text-xs font-medium text-[#8E8E93]">{dict.csv_team}</label>
+                      <select value={csvTeamId} onChange={(e) => setCsvTeamId(e.target.value)} className="input-field">
+                        <option value="">—</option>
+                        {teams.map((t) => <option key={t.id} value={t.id}>{t.name}</option>)}
+                      </select>
+                    </div>
+                  )}
+
+                  <div className="space-y-1">
+                    <label className="text-xs font-medium text-[#8E8E93]">NFF Kalender-lenke</label>
+                    <input
+                      type="text"
+                      value={csvContent}
+                      onChange={(e) => setCsvContent(e.target.value)}
+                      placeholder="https://www.fotball.no/..."
+                      className="input-field text-xs text-[#8E8E93]"
+                    />
+                  </div>
+
+                  {csvStatus && (
+                    <p className={`text-xs ${csvStatus.includes(dict.import_success) ? "text-[#0A84FF]" : "text-[#EF4444]"}`}>{csvStatus}</p>
+                  )}
+
+                  <div className="flex gap-2 pt-1">
+                    <Button onClick={handleCsvImport} disabled={!csvContent || csvLoading} className="flex-1 bg-[#0A84FF] hover:bg-[#007AFF] text-white">
+                      {csvLoading ? dict.importing : "Forhåndsvis kamper"}
+                    </Button>
+                    <Button variant="outline" onClick={() => { setShowCsvModal(false); setCsvContent(""); setCsvStatus(""); setPreviewMatches([]); }} className="text-[#8E8E93]">{dict.cancel}</Button>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <p className="text-xs font-medium text-[#FFFFFF] mb-2">Velg kamper å importere ({selectedPreviewIds.size} av {previewMatches.length} valgt)</p>
+                  <div className="max-h-[50vh] overflow-y-auto space-y-1.5 pr-1">
+                    {previewMatches.map((m) => (
+                      <label key={m.id} className={`flex items-center gap-3 p-2 rounded-lg border cursor-pointer transition-colors ${selectedPreviewIds.has(m.id) ? "bg-[#2C2C2E] border-[#0A84FF]" : "border-[#38383A] hover:bg-[#2C2C2E]"}`}>
+                        <input
+                          type="checkbox"
+                          checked={selectedPreviewIds.has(m.id)}
+                          onChange={(e) => {
+                            const newSet = new Set(selectedPreviewIds);
+                            if (e.target.checked) newSet.add(m.id);
+                            else newSet.delete(m.id);
+                            setSelectedPreviewIds(newSet);
+                          }}
+                          className="accent-[#0A84FF]"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-semibold text-[#FFFFFF] truncate">{m.is_home ? "" : "@"}{m.opponent}</p>
+                          <p className="text-[10px] text-[#8E8E93]">
+                            {new Date(m.date).toLocaleString("nb-NO", { dateStyle: "short", timeStyle: "short" })} 
+                            {m.competition && ` • ${m.competition}`}
+                          </p>
+                        </div>
+                      </label>
+                    ))}
+                  </div>
+                  {csvStatus && (
+                    <p className={`text-xs ${csvStatus.includes(dict.import_success) ? "text-[#0A84FF]" : "text-[#EF4444]"}`}>{csvStatus}</p>
+                  )}
+                  <div className="flex gap-2 pt-2">
+                    <Button onClick={handleCsvCommit} disabled={selectedPreviewIds.size === 0 || csvLoading} className="flex-1 bg-[#0A84FF] hover:bg-[#007AFF] text-white">
+                      {csvLoading ? dict.importing : `Lagre ${selectedPreviewIds.size} kamper`}
+                    </Button>
+                    <Button variant="outline" onClick={() => setPreviewMatches([])} className="text-[#8E8E93]">Tilbake</Button>
+                  </div>
+                </>
               )}
-
-              <div className="space-y-1">
-                <label className="text-xs font-medium text-[#94A3B8]">CSV-fil</label>
-                <input
-                  ref={fileInputRef} type="file" accept=".csv,.txt"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    const reader = new FileReader();
-                    reader.onload = (ev) => setCsvContent(ev.target?.result as string);
-                    reader.readAsText(file, "utf-8");
-                  }}
-                  className="input-field text-xs text-[#94A3B8]"
-                />
-              </div>
-
-              {csvStatus && (
-                <p className={`text-xs ${csvStatus.startsWith(dict.import_success) ? "text-[#22C55E]" : "text-[#EF4444]"}`}>{csvStatus}</p>
-              )}
-
-              <div className="flex gap-2 pt-1">
-                <Button onClick={handleCsvImport} disabled={!csvContent || csvLoading} className="flex-1 bg-[#22C55E] hover:bg-[#16A34A] text-white">
-                  {csvLoading ? dict.importing : dict.import_csv}
-                </Button>
-                <Button variant="outline" onClick={() => { setShowCsvModal(false); setCsvContent(""); setCsvStatus(""); }} className="text-[#94A3B8]">{dict.cancel}</Button>
-              </div>
             </div>
           </div>
         </div>

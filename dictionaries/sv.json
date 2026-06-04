@@ -32,7 +32,8 @@
     "calendar": "Kalender",
     "wellbeing": "Belastningsstyrning",
     "settings": "Inställningar",
-    "logout": "Logga ut"
+    "logout": "Logga ut",
+    "advisor": "AI-Rådgivare"
   },
   "auth": {
     "login": {
@@ -206,7 +207,8 @@
       "overganger": "Övergångar",
       "keeperteknikk": "Målvaktsteknik",
       "fritt_spill": "Fritt Spel"
-    }
+    },
+    "back_to_sessions": "Tilbake til treninger"
   },
   "wellbeing": {
     "title": "Belastningsstyrning",
@@ -280,7 +282,7 @@
     "title": "Kalender",
     "subtitle": "Matcher och träningar de nästa 5 veckorna",
     "add_match": "Lägg till match",
-    "import_csv": "Importera CSV",
+    "import_csv": "Hämta matcher (NFF)",
     "today": "Idag",
     "home": "Hemma",
     "away": "Borta",

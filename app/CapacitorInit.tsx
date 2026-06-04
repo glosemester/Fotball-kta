@@ -9,7 +9,7 @@ export default function CapacitorInit() {
   useEffect(() => {
     if (Capacitor.isNativePlatform()) {
       // 11. Status bar - riktig farge og stil
-      StatusBar.setBackgroundColor({ color: "#0A0F14" }).catch(console.error);
+      StatusBar.setBackgroundColor({ color: "#000000" }).catch(console.error);
       StatusBar.setStyle({ style: Style.Dark }).catch(console.error);
 
       // 15. Skjul tastatur ved trykk utenfor input

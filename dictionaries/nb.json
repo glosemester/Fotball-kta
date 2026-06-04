@@ -26,13 +26,14 @@
   },
   "nav": {
     "overview": "Oversikt",
-    "training": "Treninger",
+    "training": "Planlegging",
     "teams": "Lag",
     "weekplan": "Ukesplan",
     "calendar": "Kalender",
-    "wellbeing": "Belastningsstyring",
+    "wellbeing": "Spillerstatus",
     "settings": "Innstillinger",
-    "logout": "Logg ut"
+    "logout": "Logg ut",
+    "advisor": "AI Rådgivere"
   },
   "auth": {
     "login": {
@@ -298,7 +299,7 @@
     "title": "Kalender",
     "subtitle": "Kamper og treninger de neste 5 ukene",
     "add_match": "Legg til kamp",
-    "import_csv": "Importer CSV",
+    "import_csv": "Hent kamper (NFF)",
     "today": "I dag",
     "home": "Hjemme",
     "away": "Borte",

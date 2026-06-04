@@ -27,7 +27,7 @@ export default function SlettTreningKnapp({ id, d, common }: { id: string; d?: a
   if (confirm) {
     return (
       <div className="flex items-center gap-2">
-        <span className="text-sm text-[#94A3B8]">{t.delete_confirm}</span>
+        <span className="text-sm text-[#8E8E93]">{t.delete_confirm}</span>
         <Button onClick={slett} disabled={loading} size="sm" className="bg-[#EF4444] hover:bg-[#DC2626] text-white border-0">
           {loading ? t.deleting : t.delete_yes}
         </Button>

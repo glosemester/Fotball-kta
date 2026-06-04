@@ -26,6 +26,7 @@ model Coach {
   teams    Team[]
   sessions TrainingSession[]
   matches  Match[]
+  ai_chat_sessions AiChatSession[]
 
   @@map("coaches")
 }
@@ -134,6 +135,7 @@ model TrainingSession {
   date                 DateTime
   age_group            AgeGroup
   theme                SessionTheme
+  secondary_themes     SessionTheme[] @default([])
   duration_minutes     Int
   actual_player_count  Int
   planned_player_count Int
@@ -174,6 +176,7 @@ enum SessionTheme {
   OVERGANGER
   KEEPERTEKNIKK
   FRITT_SPILL
+  VENN_MED_BALLEN
 }
 
 // ============================================================
@@ -231,4 +234,35 @@ enum AgeGroup {
   AGE_13_14
   AGE_15_16
   AGE_17_18
+}
+
+// ============================================================
+// AI RÅDGIVER (CHAT)
+// ============================================================
+model AiChatSession {
+  id           String          @id @default(cuid())
+  coach_id     String
+  advisor_role String          // F.eks. "HEAD_COACH", "GK_COACH", "FITNESS_COACH", "SCOUT"
+  title        String          @default("Ny samtale")
+  created_at   DateTime        @default(now())
+  updated_at   DateTime        @updatedAt
+
+  coach    Coach           @relation(fields: [coach_id], references: [id], onDelete: Cascade)
+  messages AiChatMessage[]
+
+  @@index([coach_id])
+  @@map("ai_chat_sessions")
+}
+
+model AiChatMessage {
+  id         String        @id @default(cuid())
+  session_id String
+  role       String        // "user" eller "model"
+  content    String
+  created_at DateTime      @default(now())
+
+  session AiChatSession @relation(fields: [session_id], references: [id], onDelete: Cascade)
+
+  @@index([session_id])
+  @@map("ai_chat_messages")
 }

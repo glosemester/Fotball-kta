@@ -28,6 +28,7 @@ const THEME_MAP: Record<string, string> = {
   overganger: "OVERGANGER",
   keeperteknikk: "KEEPERTEKNIKK",
   fritt_spill: "FRITT_SPILL",
+  venn_med_ballen: "VENN_MED_BALLEN",
 };
 
 const AGE_MAP: Record<string, string> = {
@@ -57,6 +58,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ id: 
       team_id: body.team_id,
       age_group: AGE_MAP[body.age_group] as any || body.age_group,
       theme: THEME_MAP[body.theme] as any || body.theme,
+      secondary_themes: body.secondary_themes ? body.secondary_themes.map((t: string) => THEME_MAP[t] || t).filter(Boolean) : [],
       date: new Date(body.date),
       duration_minutes: body.duration_minutes,
       actual_player_count: body.actual_player_count,

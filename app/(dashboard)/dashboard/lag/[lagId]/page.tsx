@@ -12,7 +12,7 @@ const POSITION_COLORS: Record<string, { color: string; bg: string }> = {
   DEFENDER:   { color: "#22C55E", bg: "#22C55E/10" },
   MIDFIELDER: { color: "#3B82F6", bg: "#3B82F6/10" },
   FORWARD:    { color: "#EF4444", bg: "#EF4444/10" },
-  UNASSIGNED: { color: "#94A3B8", bg: "#1E2D3D" },
+  UNASSIGNED: { color: "#8E8E93", bg: "#2C2C2E" },
 };
 
 export default async function LagDetaljPage({ params }: { params: Promise<{ lagId: string }> }) {
@@ -41,20 +41,20 @@ export default async function LagDetaljPage({ params }: { params: Promise<{ lagI
   return (
     <div className="space-y-6">
       <div className="flex items-center gap-3">
-        <Link href="/dashboard/lag" className="w-9 h-9 rounded-xl bg-[#141D26] border border-[#2E4057] flex items-center justify-center text-[#94A3B8] hover:text-[#F8FAFC] hover:border-[#22C55E]/40 transition-all">
+        <Link href="/dashboard/lag" className="w-9 h-9 rounded-2xl bg-[#1C1C1E] border border-[#38383A] flex items-center justify-center text-[#8E8E93] hover:text-[#FFFFFF] hover:border-[#0A84FF]/40 transition-all">
           <ArrowLeft className="h-4 w-4" />
         </Link>
         <div>
-          <h1 className="text-2xl font-bold text-[#F8FAFC]">{team.name}</h1>
-          <p className="text-[#94A3B8] text-sm">{team.club_name} · {d.age_labels[team.age_group as keyof typeof d.age_labels]}</p>
+          <h1 className="text-2xl font-semibold text-[#FFFFFF]">{team.name}</h1>
+          <p className="text-[#8E8E93] text-sm">{team.club_name} · {d.age_labels[team.age_group as keyof typeof d.age_labels]}</p>
         </div>
       </div>
 
       <div className="grid grid-cols-3 gap-3">
         {stats.map(({ label, value }) => (
-          <div key={label} className="bg-[#141D26] border border-[#2E4057] rounded-2xl p-4 text-center">
-            <p className="text-2xl font-bold text-[#F8FAFC]">{value}</p>
-            <p className="text-xs text-[#94A3B8] mt-1">{label}</p>
+          <div key={label} className="bg-[#1C1C1E] border border-[#38383A] rounded-3xl p-4 text-center">
+            <p className="text-2xl font-semibold text-[#FFFFFF]">{value}</p>
+            <p className="text-xs text-[#8E8E93] mt-1">{label}</p>
           </div>
         ))}
       </div>
@@ -65,28 +65,28 @@ export default async function LagDetaljPage({ params }: { params: Promise<{ lagI
       />
 
       <div className="space-y-2">
-        <p className="text-xs font-semibold text-[#94A3B8] uppercase tracking-widest px-1">
+        <p className="text-xs font-semibold text-[#8E8E93] uppercase tracking-widest px-1">
           {team.players.length} {team.players.length === 1 ? dc.player : dc.players}
         </p>
         {team.players.length === 0 ? (
           <div className="text-center py-12">
-            <div className="w-14 h-14 rounded-2xl bg-[#1E2D3D] border border-[#2E4057] flex items-center justify-center mx-auto mb-3">
-              <UserRound className="h-6 w-6 text-[#94A3B8]" />
+            <div className="w-14 h-14 rounded-3xl bg-[#2C2C2E] border border-[#38383A] flex items-center justify-center mx-auto mb-3">
+              <UserRound className="h-6 w-6 text-[#8E8E93]" />
             </div>
-            <p className="text-[#F8FAFC] text-sm">{d.no_players}</p>
+            <p className="text-[#FFFFFF] text-sm">{d.no_players}</p>
           </div>
         ) : (
           team.players.map((player) => {
             const colors = POSITION_COLORS[player.position] ?? POSITION_COLORS.UNASSIGNED;
             const posLabel = d.positions[player.position as keyof typeof d.positions] ?? player.position;
             return (
-              <div key={player.id} className="bg-[#141D26] border border-[#2E4057] rounded-xl p-3.5 flex items-center justify-between hover:border-[#22C55E]/20 transition-all">
+              <div key={player.id} className="bg-[#1C1C1E] border border-[#38383A] rounded-2xl p-3.5 flex items-center justify-between hover:border-[#0A84FF]/20 transition-all">
                 <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: colors.bg }}>
+                  <div className="w-9 h-9 rounded-2xl flex items-center justify-center shrink-0" style={{ backgroundColor: colors.bg }}>
                     <UserRound className="h-4 w-4" style={{ color: colors.color }} />
                   </div>
                   <div>
-                    <p className="font-semibold text-[#F8FAFC] text-sm">{player.first_name} {player.last_name}</p>
+                    <p className="font-semibold text-[#FFFFFF] text-sm">{player.first_name} {player.last_name}</p>
                     <p className="text-xs mt-0.5" style={{ color: colors.color }}>{posLabel} · {player.birth_year}</p>
                   </div>
                 </div>

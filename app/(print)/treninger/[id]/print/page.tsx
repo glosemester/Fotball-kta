@@ -88,8 +88,8 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
         <div className="border-b-2 border-black pb-5 mb-6">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="text-[10px] font-bold uppercase tracking-widest text-[#22C55E] mb-1">PitchPlan</p>
-              <h1 className="text-3xl font-bold leading-tight">{emoji} {themeLabel}</h1>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-[#0A84FF] mb-1">PitchPlan</p>
+              <h1 className="text-3xl font-semibold leading-tight">{emoji} {themeLabel}</h1>
               {trening.team && (
                 <p className="text-gray-500 mt-1 text-sm">{trening.team.name} — {trening.team.club_name}</p>
               )}
@@ -106,15 +106,15 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
         {/* Bane og utstyr */}
         <div className="grid grid-cols-3 gap-4 mb-6 p-4 bg-gray-50 rounded-lg text-sm">
           <div>
-            <p className="text-[10px] font-bold uppercase text-gray-400 mb-0.5">Bane</p>
+            <p className="text-[10px] font-semibold uppercase text-gray-400 mb-0.5">Bane</p>
             <p className="font-semibold">{trening.field_length_meters} × {trening.field_width_meters} m</p>
           </div>
           <div>
-            <p className="text-[10px] font-bold uppercase text-gray-400 mb-0.5">Baller</p>
+            <p className="text-[10px] font-semibold uppercase text-gray-400 mb-0.5">Baller</p>
             <p className="font-semibold">{trening.balls_available} stk</p>
           </div>
           <div>
-            <p className="text-[10px] font-bold uppercase text-gray-400 mb-0.5">Kjegler</p>
+            <p className="text-[10px] font-semibold uppercase text-gray-400 mb-0.5">Kjegler</p>
             <p className="font-semibold">{trening.cones_available} stk</p>
           </div>
         </div>
@@ -134,7 +134,7 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
           {phases.map((phase, i) => (
             <div key={i} className="border-l-4 border-black pl-5">
               <div className="flex items-baseline gap-3 mb-2">
-                <span className="text-xl font-bold">{phase.phase}</span>
+                <span className="text-xl font-semibold">{phase.phase}</span>
                 <span className="text-sm text-gray-500 font-medium bg-gray-100 px-2 py-0.5 rounded">{phase.duration_minutes} min</span>
               </div>
               {phase.description && (
@@ -144,24 +144,24 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
               {phase.exercise && (
                 <div className="pl-4 border-l-2 border-gray-200 space-y-3">
                   <div>
-                    <p className="font-bold text-base">⚽ {phase.exercise.name}</p>
+                    <p className="font-semibold text-base">⚽ {phase.exercise.name}</p>
                     <p className="text-sm text-gray-600 mt-0.5">{phase.exercise.description}</p>
                   </div>
 
                   {phase.exercise.setup && (
                     <div>
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 mb-1">Oppsett</p>
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400 mb-1">Oppsett</p>
                       <p className="text-sm text-gray-700 mb-2">{phase.exercise.setup}</p>
                     </div>
                   )}
 
                   {phase.exercise.instructions?.length > 0 && (
                     <div>
-                      <p className="text-[10px] font-bold uppercase text-gray-400 mb-1">Gjennomføring</p>
+                      <p className="text-[10px] font-semibold uppercase text-gray-400 mb-1">Gjennomføring</p>
                       <ol className="space-y-1">
                         {phase.exercise.instructions.map((step, j) => (
                           <li key={j} className="text-sm text-gray-700 flex gap-2">
-                            <span className="font-bold shrink-0 text-black">{j + 1}.</span>
+                            <span className="font-semibold shrink-0 text-black">{j + 1}.</span>
                             {step}
                           </li>
                         ))}
@@ -170,8 +170,8 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
                   )}
 
                   {phase.exercise.coaching_points?.length > 0 && (
-                    <div className="bg-[#22C55E]/5 border border-[#22C55E]/20 rounded-lg p-3">
-                      <p className="text-[10px] font-bold uppercase tracking-wider text-[#16A34A] mb-1.5">Trenerpunkter</p>
+                    <div className="bg-[#0A84FF]/5 border border-[#0A84FF]/20 rounded-lg p-3">
+                      <p className="text-[10px] font-semibold uppercase tracking-wider text-[#007AFF] mb-1.5">Trenerpunkter</p>
                       <ul className="space-y-0.5">
                         {phase.exercise.coaching_points.map((pt, j) => (
                           <li key={j} className="text-sm text-gray-700 flex gap-1.5">
@@ -184,7 +184,7 @@ export default async function PrintPage({ params }: { params: Promise<{ id: stri
 
                   {phase.exercise.variations?.length > 0 && (
                     <div>
-                      <p className="text-[10px] font-bold uppercase text-gray-400 mb-1">Variasjoner</p>
+                      <p className="text-[10px] font-semibold uppercase text-gray-400 mb-1">Variasjoner</p>
                       <ul className="space-y-0.5">
                         {phase.exercise.variations.map((v, j) => (
                           <li key={j} className="text-sm text-gray-500 flex gap-1.5">

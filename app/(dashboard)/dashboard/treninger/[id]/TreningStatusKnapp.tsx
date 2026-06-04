@@ -81,7 +81,7 @@ export default function TreningStatusKnapp({ id, currentStatus, dict }: Props) {
       <button
         onClick={handleClick}
         disabled={loading}
-        className="inline-flex items-center gap-1.5 text-xs text-[#94A3B8] hover:text-[#F8FAFC] transition-colors disabled:opacity-50 cursor-pointer"
+        className="inline-flex items-center gap-1.5 text-xs text-[#8E8E93] hover:text-[#FFFFFF] transition-colors disabled:opacity-50 cursor-pointer"
       >
         <RotateCcw className="h-3.5 w-3.5" />
         {loading ? t.saving : label}
@@ -100,8 +100,8 @@ export default function TreningStatusKnapp({ id, currentStatus, dict }: Props) {
       size="sm"
       className={
         isPrimary
-          ? "gap-2 bg-[#22C55E] hover:bg-[#16A34A] text-[#0B0F1A] font-semibold"
-          : "gap-2 border-[#22C55E]/40 text-[#22C55E] hover:bg-[#22C55E]/10"
+          ? "gap-2 bg-[#0A84FF] hover:bg-[#007AFF] text-white font-semibold"
+          : "gap-2 border-[#0A84FF]/40 text-[#0A84FF] hover:bg-[#0A84FF]/10"
       }
     >
       <Icon className="h-4 w-4" />

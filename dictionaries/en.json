@@ -26,13 +26,14 @@
   },
   "nav": {
     "overview": "Overview",
-    "training": "Training",
+    "training": "Planning",
     "teams": "Teams",
     "weekplan": "Week Plan",
     "calendar": "Calendar",
-    "wellbeing": "Load Management",
+    "wellbeing": "Player Status",
     "settings": "Settings",
-    "logout": "Log out"
+    "logout": "Log out",
+    "advisor": "AI Advisors"
   },
   "auth": {
     "login": {
@@ -298,7 +299,7 @@
     "title": "Calendar",
     "subtitle": "Matches and training sessions over the next 5 weeks",
     "add_match": "Add match",
-    "import_csv": "Import CSV",
+    "import_csv": "Fetch matches (NFF)",
     "today": "Today",
     "home": "Home",
     "away": "Away",
@@ -321,7 +322,7 @@
     "importing": "Importing...",
     "import_success": "Imported",
     "no_events": "No events — we're in the changing room right now.",
-    "training": "Training",
+    "training": "Planning",
     "match": "Match"
   },
   "settings": {

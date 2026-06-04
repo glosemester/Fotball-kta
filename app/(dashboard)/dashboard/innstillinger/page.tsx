@@ -20,11 +20,11 @@ export default async function InnstillingerPage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-[#F8FAFC]">{d.title}</h1>
+        <h1 className="text-2xl font-semibold text-[#F8FAFC]">{d.title}</h1>
         <p className="text-[#94A3B8] mt-1 text-sm">{d.subtitle}</p>
       </div>
 
-      <div className="bg-[#141D26] border border-[#2E4057] rounded-2xl p-4 space-y-1">
+      <div className="bg-[#141D26] border border-[#2E4057] rounded-3xl p-4 space-y-1">
         <p className="text-xs font-semibold text-[#94A3B8] uppercase tracking-widest mb-3">{d.account_title}</p>
         <p className="text-sm font-semibold text-[#F8FAFC]">{coach?.full_name}</p>
         <p className="text-xs text-[#94A3B8]">{coach?.email}</p>

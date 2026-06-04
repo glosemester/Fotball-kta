@@ -50,24 +50,24 @@ export default function OpprettLagForm({ dict }: { dict: Dict }) {
   }
 
   return (
-    <div className="bg-[#141D26] border border-[#2E4057] rounded-2xl p-5 space-y-4">
+    <div className="bg-[#1C1C1E] border border-[#38383A] rounded-3xl p-5 space-y-4">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-[#F8FAFC]">{dict.form_title}</h3>
-        <button onClick={() => setOpen(false)} className="text-[#94A3B8] hover:text-[#F8FAFC] transition-colors">
+        <h3 className="font-semibold text-[#FFFFFF]">{dict.form_title}</h3>
+        <button onClick={() => setOpen(false)} className="text-[#8E8E93] hover:text-[#FFFFFF] transition-colors">
           <X className="h-4 w-4" />
         </button>
       </div>
       <form onSubmit={handleSubmit} className="space-y-3">
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-[#94A3B8]">{dict.team_name}</label>
+          <label className="text-xs font-medium text-[#8E8E93]">{dict.team_name}</label>
           <input value={name} onChange={(e) => setName(e.target.value)} required placeholder={dict.team_name_placeholder} className="input-field" />
         </div>
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-[#94A3B8]">{dict.club_name}</label>
+          <label className="text-xs font-medium text-[#8E8E93]">{dict.club_name}</label>
           <input value={clubName} onChange={(e) => setClubName(e.target.value)} required placeholder={dict.club_name_placeholder} className="input-field" />
         </div>
         <div className="space-y-1.5">
-          <label className="text-xs font-medium text-[#94A3B8]">{dict.age_group}</label>
+          <label className="text-xs font-medium text-[#8E8E93]">{dict.age_group}</label>
           <select value={ageGroup} onChange={(e) => setAgeGroup(e.target.value)} className="input-field">
             {AGE_GROUP_KEYS.map((key) => (
               <option key={key} value={key}>{dict.age_labels[key] ?? key}</option>
@@ -75,7 +75,7 @@ export default function OpprettLagForm({ dict }: { dict: Dict }) {
           </select>
         </div>
         {error && (
-          <div className="bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-xl px-4 py-3">
+          <div className="bg-[#EF4444]/10 border border-[#EF4444]/20 rounded-2xl px-4 py-3">
             <p className="text-sm text-[#EF4444]">{error}</p>
           </div>
         )}

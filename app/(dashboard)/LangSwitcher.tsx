@@ -36,7 +36,7 @@ export default function LangSwitcher({ current }: { current: string }) {
       {open && (
         <>
           <div className="fixed inset-0 z-30" onClick={() => setOpen(false)} />
-          <div className="absolute right-0 top-10 z-40 bg-white border border-[#E4E2F5] rounded-xl shadow-lg overflow-hidden min-w-[130px]">
+          <div className="absolute right-0 top-10 z-40 bg-white border border-[#E4E2F5] rounded-2xl shadow-lg overflow-hidden min-w-[130px]">
             {LANGS.map(({ code, label }) => (
               <button
                 key={code}

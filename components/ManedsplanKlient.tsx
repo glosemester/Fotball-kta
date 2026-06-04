@@ -102,8 +102,8 @@ export default function ManedsplanKlient() {
   return (
     <div className="space-y-6 max-w-2xl mx-auto">
       <div>
-        <h1 className="text-2xl font-bold text-[#F8FAFC]">Generer Månedsplan</h1>
-        <p className="text-[#94A3B8] mt-1 text-sm">Sett opp treningstidene deres, så oppretter vi en plan for hele måneden basert på hovedtemaet du velger.</p>
+        <h1 className="text-2xl font-semibold text-[#FFFFFF]">Generer Månedsplan</h1>
+        <p className="text-[#8E8E93] mt-1 text-sm">Sett opp treningstidene deres, så oppretter vi en plan for hele måneden basert på hovedtemaet du velger.</p>
       </div>
 
       <div className="space-y-5">
@@ -136,7 +136,7 @@ export default function ManedsplanKlient() {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-[#94A3B8] mb-1">Måned</label>
+                <label className="block text-sm font-medium text-[#8E8E93] mb-1">Måned</label>
                 <select value={selectedMonth} onChange={(e) => setSelectedMonth(Number(e.target.value))} className="input-field">
                   {[1,2,3,4,5,6,7,8,9,10,11,12].map(m => (
                     <option key={m} value={m}>{new Date(2000, m - 1).toLocaleString('no-NB', { month: 'long' })}</option>
@@ -144,7 +144,7 @@ export default function ManedsplanKlient() {
                 </select>
               </div>
               <div>
-                <label className="block text-sm font-medium text-[#94A3B8] mb-1">År</label>
+                <label className="block text-sm font-medium text-[#8E8E93] mb-1">År</label>
                 <select value={selectedYear} onChange={(e) => setSelectedYear(Number(e.target.value))} className="input-field">
                   {[selectedYear - 1, selectedYear, selectedYear + 1].map(y => (
                     <option key={y} value={y}>{y}</option>
@@ -154,16 +154,16 @@ export default function ManedsplanKlient() {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-[#94A3B8] mb-2">Hvilke dager trener dere normalt?</label>
+              <label className="block text-sm font-medium text-[#8E8E93] mb-2">Hvilke dager trener dere normalt?</label>
               <div className="flex flex-wrap gap-2">
                 {WEEKDAYS.map((day) => (
                   <button
                     key={day.id}
                     onClick={() => toggleDay(day.id)}
-                    className={`rounded-xl border-2 px-3 py-2 text-sm transition-all ${
+                    className={`rounded-2xl border-2 px-3 py-2 text-sm transition-all ${
                       selectedDays.includes(day.id)
-                        ? "border-[#3B82F6] bg-[#1E2D3D] text-[#3B82F6] font-semibold"
-                        : "border-[#2E4057] hover:border-[#3B82F6]/40 text-[#F8FAFC]"
+                        ? "border-[#3B82F6] bg-[#2C2C2E] text-[#3B82F6] font-semibold"
+                        : "border-[#38383A] hover:border-[#3B82F6]/40 text-[#FFFFFF]"
                     }`}
                   >
                     {day.label}
@@ -188,10 +188,10 @@ export default function ManedsplanKlient() {
                 <button
                   key={value}
                   onClick={() => setTheme(value)}
-                  className={`rounded-xl border-2 p-3 text-sm text-left transition-all ${
+                  className={`rounded-2xl border-2 p-3 text-sm text-left transition-all ${
                     theme === value
-                      ? "border-[#3B82F6] bg-[#1E2D3D] text-[#3B82F6] font-semibold"
-                      : "border-[#2E4057] hover:border-[#3B82F6]/40 text-[#F8FAFC]"
+                      ? "border-[#3B82F6] bg-[#2C2C2E] text-[#3B82F6] font-semibold"
+                      : "border-[#38383A] hover:border-[#3B82F6]/40 text-[#FFFFFF]"
                   }`}
                 >
                   <span className="mr-2">{THEME_EMOJI[value]}</span>
@@ -203,7 +203,7 @@ export default function ManedsplanKlient() {
         </Card>
 
         {error && (
-          <div className="flex items-start gap-2 p-3 bg-[#EF4444]/10 rounded-xl border border-[#EF4444]/20">
+          <div className="flex items-start gap-2 p-3 bg-[#EF4444]/10 rounded-2xl border border-[#EF4444]/20">
             <AlertTriangle className="h-4 w-4 text-[#EF4444] shrink-0 mt-0.5" />
             <p className="text-xs text-[#EF4444]">{error}</p>
           </div>

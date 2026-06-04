@@ -21,7 +21,7 @@ type WellbeingDict = {
 interface Props { teams: Team[]; reports: Report[]; week: number; year: number; dict: WellbeingDict; }
 
 const STATUS_STYLE = {
-  GREEN:  { emoji: "🟢", bg: "#F0FDF4", border: "#16A34A", text: "#15803D" },
+  GREEN:  { emoji: "🟢", bg: "#F0FDF4", border: "#007AFF", text: "#15803D" },
   YELLOW: { emoji: "🟡", bg: "#FFFBEB", border: "#D97706", text: "#92400E" },
   RED:    { emoji: "🔴", bg: "#FEF2F2", border: "#DC2626", text: "#991B1B" },
 };
@@ -82,21 +82,21 @@ function PlayerCard({ player, report, dict, onSaved }: {
   }
 
   return (
-    <div className="bg-[#141D26] border border-[#2E4057] rounded-xl overflow-hidden">
+    <div className="bg-[#1C1C1E] border border-[#38383A] rounded-2xl overflow-hidden">
       <button
         onClick={() => { setOpen((o) => !o); setDone(false); setStatus(null); setSymptoms([]); setNote(""); }}
-        className="w-full flex items-center justify-between p-3.5 hover:bg-[#1E2D3D] transition-colors text-left"
+        className="w-full flex items-center justify-between p-3.5 hover:bg-[#2C2C2E] transition-colors text-left"
       >
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-[#1E2D3D] flex items-center justify-center shrink-0">
-            <UserRound className="h-4 w-4 text-[#22C55E]" />
+          <div className="w-9 h-9 rounded-2xl bg-[#2C2C2E] flex items-center justify-center shrink-0">
+            <UserRound className="h-4 w-4 text-[#0A84FF]" />
           </div>
           <div>
-            <p className="font-semibold text-[#F8FAFC] text-sm">{player.first_name} {player.last_name}</p>
+            <p className="font-semibold text-[#FFFFFF] text-sm">{player.first_name} {player.last_name}</p>
             {style && statusLabel ? (
               <p className="text-xs mt-0.5" style={{ color: style.text }}>{style.emoji} {statusLabel}</p>
             ) : (
-              <p className="text-xs text-[#94A3B8] mt-0.5">{dict.not_registered}</p>
+              <p className="text-xs text-[#8E8E93] mt-0.5">{dict.not_registered}</p>
             )}
           </div>
         </div>
@@ -106,32 +106,32 @@ function PlayerCard({ player, report, dict, onSaved }: {
               {style.emoji} {statusLabel}
             </span>
           )}
-          {open ? <ChevronUp className="h-4 w-4 text-[#94A3B8]" /> : <ChevronDown className="h-4 w-4 text-[#94A3B8]" />}
+          {open ? <ChevronUp className="h-4 w-4 text-[#8E8E93]" /> : <ChevronDown className="h-4 w-4 text-[#8E8E93]" />}
         </div>
       </button>
 
       {open && (
-        <div className="border-t border-[#2E4057] p-4 space-y-4 bg-[#0A0F14]">
+        <div className="border-t border-[#38383A] p-4 space-y-4 bg-[#000000]">
           {done ? (
             <div className="text-center py-4">
               <div className="text-2xl mb-1">✅</div>
-              <p className="text-sm font-semibold text-[#22C55E]">{dict.registered}</p>
+              <p className="text-sm font-semibold text-[#0A84FF]">{dict.registered}</p>
             </div>
           ) : (
             <>
-              <p className="text-xs font-semibold text-[#94A3B8]">{dict.how_is} {player.first_name} {dict.this_week}?</p>
+              <p className="text-xs font-semibold text-[#8E8E93]">{dict.how_is} {player.first_name} {dict.this_week}?</p>
               <div className="grid grid-cols-3 gap-2">
                 {(["green", "yellow", "red"] as WellbeingStatus[]).map((s) => {
                   const st = STATUS_STYLE[s.toUpperCase() as keyof typeof STATUS_STYLE];
                   const isSelected = status === s;
                   return (
                     <button key={s} onClick={() => { setStatus(s); setSymptoms([]); }}
-                      className="w-full text-left rounded-xl border p-3 transition-all"
-                      style={{ background: isSelected ? st.bg : "#141D26", borderColor: isSelected ? st.border : "#2E4057" }}
+                      className="w-full text-left rounded-2xl border p-3 transition-all"
+                      style={{ background: isSelected ? st.bg : "#1C1C1E", borderColor: isSelected ? st.border : "#38383A" }}
                     >
                       <div className="flex items-center gap-2">
                         <span>{st.emoji}</span>
-                        <p className="font-semibold text-sm" style={{ color: isSelected ? st.text : "#F8FAFC" }}>
+                        <p className="font-semibold text-sm" style={{ color: isSelected ? st.text : "#FFFFFF" }}>
                           {dict.statuses[s.toUpperCase()]}
                         </p>
                       </div>
@@ -142,12 +142,12 @@ function PlayerCard({ player, report, dict, onSaved }: {
 
               {visibleSymptoms.length > 0 && (
                 <div className="space-y-1.5">
-                  <p className="text-xs font-medium text-[#94A3B8]">{dict.symptoms_optional}</p>
+                  <p className="text-xs font-medium text-[#8E8E93]">{dict.symptoms_optional}</p>
                   {visibleSymptoms.map((key) => (
-                    <label key={key} className="flex items-center gap-2.5 rounded-lg border border-[#2E4057] bg-[#141D26] p-2.5 cursor-pointer hover:bg-[#1E2D3D]">
+                    <label key={key} className="flex items-center gap-2.5 rounded-lg border border-[#38383A] bg-[#1C1C1E] p-2.5 cursor-pointer hover:bg-[#2C2C2E]">
                       <input type="checkbox" checked={symptoms.includes(key as WellbeingSymptom)}
-                        onChange={() => toggleSymptom(key as WellbeingSymptom)} className="h-4 w-4 accent-[#22C55E]" />
-                      <span className="text-xs text-[#F8FAFC]">{dict.symptoms[key] ?? key}</span>
+                        onChange={() => toggleSymptom(key as WellbeingSymptom)} className="h-4 w-4 accent-[#0A84FF]" />
+                      <span className="text-xs text-[#FFFFFF]">{dict.symptoms[key] ?? key}</span>
                     </label>
                   ))}
                 </div>
@@ -208,36 +208,36 @@ export default function VelvareKlient({ teams, reports: initialReports, week: in
     .filter(Boolean) as (Player & { report: Report })[];
 
   const counts = [
-    { label: dict.count_green,   count: countGreen,   bg: "#F0FDF4", text: "#15803D", border: "#16A34A" },
+    { label: dict.count_green,   count: countGreen,   bg: "#F0FDF4", text: "#15803D", border: "#007AFF" },
     { label: dict.count_yellow,  count: countYellow,  bg: "#FFFBEB", text: "#92400E", border: "#D97706" },
     { label: dict.count_red,     count: countRed,     bg: "#FEF2F2", text: "#991B1B", border: "#DC2626" },
-    { label: dict.count_missing, count: countMissing, bg: "#141D26", text: "#94A3B8", border: "#2E4057" },
+    { label: dict.count_missing, count: countMissing, bg: "#1C1C1E", text: "#8E8E93", border: "#38383A" },
   ];
 
   return (
     <div className="space-y-6">
       {/* Ukesnavigasjon */}
-      <div className="flex items-center justify-between bg-[#141D26] border border-[#2E4057] rounded-2xl px-4 py-3">
+      <div className="flex items-center justify-between bg-[#1C1C1E] border border-[#38383A] rounded-3xl px-4 py-3">
         <button
           onClick={() => navigateWeek(-1)}
           disabled={loading}
-          className="flex items-center gap-1 text-sm text-[#94A3B8] hover:text-[#F8FAFC] transition-colors disabled:opacity-40"
+          className="flex items-center gap-1 text-sm text-[#8E8E93] hover:text-[#FFFFFF] transition-colors disabled:opacity-40"
         >
           <ChevronLeft className="h-4 w-4" />
           Forrige uke
         </button>
         <div className="text-center">
-          <p className="text-sm font-semibold text-[#F8FAFC]">
+          <p className="text-sm font-semibold text-[#FFFFFF]">
             Uke {currentWeek}, {currentYear}
             {isCurrentWeek && (
-              <span className="ml-2 text-xs font-medium text-[#22C55E] bg-[#1E2D3D] px-2 py-0.5 rounded-full">Denne uka</span>
+              <span className="ml-2 text-xs font-medium text-[#0A84FF] bg-[#2C2C2E] px-2 py-0.5 rounded-full">Denne uka</span>
             )}
           </p>
         </div>
         <button
           onClick={() => navigateWeek(1)}
           disabled={loading || isCurrentWeek}
-          className="flex items-center gap-1 text-sm text-[#94A3B8] hover:text-[#F8FAFC] transition-colors disabled:opacity-40"
+          className="flex items-center gap-1 text-sm text-[#8E8E93] hover:text-[#FFFFFF] transition-colors disabled:opacity-40"
         >
           Neste uke
           <ChevronRight className="h-4 w-4" />
@@ -246,7 +246,7 @@ export default function VelvareKlient({ teams, reports: initialReports, week: in
 
       {loading && (
         <div className="text-center py-8">
-          <p className="text-sm text-[#94A3B8]">Laster...</p>
+          <p className="text-sm text-[#8E8E93]">Laster...</p>
         </div>
       )}
 
@@ -254,15 +254,15 @@ export default function VelvareKlient({ teams, reports: initialReports, week: in
         <>
           <div className="grid grid-cols-4 gap-2">
             {counts.map(({ label, count, bg, text, border }) => (
-              <div key={label} className="rounded-xl border p-3 text-center" style={{ background: bg, borderColor: border }}>
-                <p className="text-xl font-bold" style={{ color: text }}>{count}</p>
+              <div key={label} className="rounded-2xl border p-3 text-center" style={{ background: bg, borderColor: border }}>
+                <p className="text-xl font-semibold" style={{ color: text }}>{count}</p>
                 <p className="text-xs font-medium mt-0.5" style={{ color: text }}>{label}</p>
               </div>
             ))}
           </div>
 
           {redYellowPlayers.length > 0 && (
-            <div className="bg-[#FFFBEB] border border-[#D97706]/30 rounded-2xl p-4">
+            <div className="bg-[#FFFBEB] border border-[#D97706]/30 rounded-3xl p-4">
               <div className="flex items-start gap-2 mb-2">
                 <AlertTriangle className="h-4 w-4 text-[#D97706] shrink-0 mt-0.5" />
                 <p className="text-sm font-semibold text-[#92400E]">
@@ -282,11 +282,11 @@ export default function VelvareKlient({ teams, reports: initialReports, week: in
 
           {teams.map((team) => (
             <div key={team.id} className="space-y-2">
-              <p className="text-xs font-semibold text-[#94A3B8] uppercase tracking-widest px-1">
+              <p className="text-xs font-semibold text-[#8E8E93] uppercase tracking-widest px-1">
                 {team.name} · {team.players.length} spillere
               </p>
               {team.players.length === 0 ? (
-                <p className="text-xs text-[#94A3B8] px-1">{dict.no_active_players}</p>
+                <p className="text-xs text-[#8E8E93] px-1">{dict.no_active_players}</p>
               ) : (
                 team.players.map((player) => (
                   <PlayerCard key={player.id} player={player} report={reportMap[player.id]}
@@ -298,8 +298,8 @@ export default function VelvareKlient({ teams, reports: initialReports, week: in
 
           {allPlayers.length === 0 && (
             <div className="text-center py-16">
-              <p className="text-[#F8FAFC] text-sm">{dict.no_players}</p>
-              <p className="text-[#94A3B8] text-xs mt-1">{dict.no_players_hint}</p>
+              <p className="text-[#FFFFFF] text-sm">{dict.no_players}</p>
+              <p className="text-[#8E8E93] text-xs mt-1">{dict.no_players_hint}</p>
             </div>
           )}
         </>

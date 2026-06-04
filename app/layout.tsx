@@ -1,14 +1,8 @@
 import type { Metadata, Viewport } from "next";
-import { Barlow_Condensed, Inter } from "next/font/google";
 import "./globals.css";
 import CapacitorInit from "./CapacitorInit";
 
-const barlowCondensed = Barlow_Condensed({
-  variable: "--font-barlow",
-  subsets: ["latin"],
-  weight: ["600", "700", "800"],
-});
-
+import { Inter } from "next/font/google";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -16,7 +10,7 @@ const inter = Inter({
 });
 
 export const viewport: Viewport = {
-  themeColor: "#0A0F14",
+  themeColor: "#000000",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -24,9 +18,9 @@ export const viewport: Viewport = {
 };
 
 export const metadata: Metadata = {
-  title: "PitchPlan — AI-drevet Treningsplanlegging",
+  title: "PitchPlan — Treningsplanlegging",
   description:
-    "Intelligent treningsplanlegging for barne- og ungdomsfotball (6–18 år). Basert på NFF, SvFF og DBU-retningslinjer.",
+    "Intelligent treningsplanlegger for barne- og ungdomsfotball (6–18 år). Basert på NFF, SvFF og DBU-retningslinjer.",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
@@ -44,8 +38,24 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="nb" className={`${barlowCondensed.variable} ${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-[#0A0F14] text-[#F8FAFC]">
+    <html lang="nb" className={`${inter.variable} h-full antialiased`}>
+      <head>
+        <style>{`
+          body {
+            font-family: var(--font-inter), sans-serif;
+          }
+          /* Hide number spinners */
+          input[type="number"]::-webkit-inner-spin-button,
+          input[type="number"]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+          }
+          input[type="number"] {
+            -moz-appearance: textfield;
+          }
+        `}</style>
+      </head>
+      <body className="min-h-full flex flex-col bg-[#000000] text-[#FFFFFF]">
         <CapacitorInit />
         {children}
         <script
