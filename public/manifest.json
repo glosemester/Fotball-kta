@@ -1,11 +1,11 @@
 {
-  "name": "PitchPlan",
-  "short_name": "PitchPlan",
-  "description": "NFF-godkjent fotballtreningsplanlegger med AI",
-  "start_url": "/dashboard",
+  "name": "75 Hard",
+  "short_name": "75 Hard",
+  "description": "Avkryssing og nedtelling for 75 Hard-utfordringen",
+  "start_url": "/",
   "display": "standalone",
-  "background_color": "#0A0F14",
-  "theme_color": "#0A0F14",
+  "background_color": "#0b0d10",
+  "theme_color": "#0b0d10",
   "icons": [
     {
       "src": "/icon-192x192.png",

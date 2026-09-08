@@ -1,4 +1,4 @@
-# PitchPlan — Teknisk dokumentasjon
+# 75 Hard — Teknisk dokumentasjon
 
 > **Regler for AI-agenter og utviklere:** Oppdater denne filen hver gang ny funksjonalitet implementeres, feil fikses eller arkitektur endres. Logg endringer under [Endringslogg](#endringslogg).
 
@@ -6,7 +6,7 @@
 
 ## Oversikt
 
-PitchPlan er en AI-drevet treningsplanlegger for barne- og ungdomsfotball, basert på retningslinjer fra NFF, SvFF, DBU, The FA, RFEF og KNVB. Filosofi: *Flest mulig · Lengst mulig · Best mulig*.
+75 Hard er en enkel webapp for å følge 75 Hard-utfordringen: avkryssing av dagens 6 oppgaver og nedtelling til midnatt. All fremgang lagres lokalt i nettleseren – ingen innlogging, ingen database, ingen backend.
 
 ---
 
@@ -16,16 +16,10 @@ PitchPlan er en AI-drevet treningsplanlegger for barne- og ungdomsfotball, baser
 |-----|-----------|---------|
 | **Rammeverk** | Next.js (App Router) | 16.2.6 |
 | **Språk** | TypeScript | ^5 |
-| **Database** | PostgreSQL (Neon serverless) | — |
-| **ORM** | Prisma | 7.8.0 |
 | **Styling** | Tailwind CSS | ^4 |
-| **UI-komponenter** | Egne komponenter + Radix UI | — |
-| **Ikoner** | Lucide React | — |
-| **Auth** | JWT (jsonwebtoken) + bcryptjs | — |
-| **DB-adapter** | @prisma/adapter-pg | 7.8.0 |
-| **Runtime** | Node.js | 22.x |
-| **Prosesstyring** | PM2 | 7.x |
-| **Webserver** | Nginx | — |
+| **Lagring** | `localStorage` i nettleseren | — |
+| **Auth** | Ingen | — |
+| **Database** | Ingen | — |
 
 ---
 
@@ -33,159 +27,52 @@ PitchPlan er en AI-drevet treningsplanlegger for barne- og ungdomsfotball, baser
 
 ```
 app/
-├── (dashboard)/          # Beskyttede ruter (krever innlogging)
-│   ├── layout.tsx         # Dashboard-layout med sidemeny og toppbar
-│   ├── LoggUtKnapp.tsx    # Client-komponent for utlogging
-│   └── dashboard/
-│       ├── page.tsx       # Oversiktside med hurtiglenker
-│       ├── lag/           # Lag & spillere
-│       │   ├── page.tsx
-│       │   ├── OpprettLagForm.tsx
-│       │   └── [lagId]/
-│       │       ├── page.tsx
-│       │       ├── LeggTilSpillerForm.tsx
-│       │       └── SlettSpillerKnapp.tsx
-│       └── treninger/
-│           └── ny/page.tsx   # Treningsøkt-wizard (3 steg)
-├── login/page.tsx
-├── registrer/page.tsx
-├── api/
-│   ├── auth/
-│   │   ├── login/route.ts
-│   │   ├── registrer/route.ts
-│   │   └── logout/route.ts
-│   └── lag/
-│       ├── route.ts                         # GET/POST lag
-│       └── [id]/
-│           ├── route.ts                     # DELETE lag
-│           └── spillere/
-│               ├── route.ts                 # GET/POST spillere
-│               └── [spillerId]/route.ts     # DELETE spiller
-├── globals.css
-└── layout.tsx
-
-lib/
-├── auth.ts               # JWT-signering, verifisering, getSession()
-├── prisma.ts             # Prisma-klientinstans (singleton)
-├── generated/prisma/     # Autogenerert Prisma-klient (gitignorert)
-├── rules-engine/         # NFF/SvFF/DBU-regler per aldersgruppe
-│   ├── index.ts
-│   └── age-groups.json
-└── constraints-engine/   # Feltforhold og utstyrslogikk
-    └── index.ts
-
-proxy.ts                  # Next.js 16 proxy (erstatter middleware.ts)
-prisma/
-├── schema.prisma
-└── migrations/
+├── layout.tsx     # Root-layout, metadata, viewport
+├── page.tsx       # Hovedside (client-komponent): dag-teller, nedtelling, avkryssingsliste
+├── tasks.ts        # Definisjon av de 6 daglige oppgavene og TOTAL_DAYS (75)
+└── globals.css     # Tailwind + fargevariabler (mørkt tema)
+public/
+├── manifest.json   # PWA-manifest
+└── icon-*.png      # App-ikoner
 ```
 
----
+### Datamodell (localStorage, nøkkel `75hard-state`)
 
-## Databasemodeller (Prisma)
-
-```prisma
-Coach       # Trener/bruker — email, passord (bcrypt), navn, klubb
-Team        # Lag — navn, klubb, aldersgruppe, sesong, coachId
-Player      # Spiller — fornavn, etternavn, fødselsår, posisjon, lagId
-TrainingSession  # Treningsøkt — tema, felt, utstyr, faser (JSON)
-WellbeingReport  # Velværerapport — symptombasert, Grønn/Gul/Rød
-WeeklyPlan       # Ukesplan — JSON-struktur per lag og uke
+```ts
+{
+  startDate: "YYYY-MM-DD",       // dato dag 1 startet
+  history: {
+    "YYYY-MM-DD": {              // per dag
+      workout1: boolean,
+      workout2: boolean,
+      water: boolean,
+      read: boolean,
+      diet: boolean,
+      photo: boolean,
+    }
+  }
+}
 ```
 
-**Database:** Neon serverless PostgreSQL (eu-west-2)
-**Kobling:** `@prisma/adapter-pg` med SSL (`sslmode=require`)
+### Kjernelogikk
+
+- **Dag-teller**: `dagens dato − startDate` (i hele dager) + 1. Når dette overstiger 75, er utfordringen fullført.
+- **Nedtelling**: tid igjen til midnatt (`setHours(24,0,0,0)`), oppdateres hvert sekund.
+- **Automatisk restart**: ved innlasting sjekkes alle dager fra `startDate` til i går. Hvis én dag mangler fullførte oppgaver, nullstilles `startDate` til i dag og `history` tømmes (tilbake til dag 1), med en synlig melding til brukeren.
+- **Manuell restart**: knapp for å starte på nytt fra dag 1 når som helst (med bekreftelse).
 
 ---
 
-## Autentisering
+## Utvikling
 
-- **Metode:** JWT lagret i HTTP-only cookie (`fotball-token`)
-- **Varighet:** 30 dager
-- **Hashing:** bcryptjs, cost factor 12
-- **Beskyttelse:** `proxy.ts` omdirigerer uautentiserte besøkende til `/login`
-- **Session:** `lib/auth.ts → getSession()` brukes i server-komponenter og API-ruter
-
-> **Viktig:** `secure: false` i cookie-oppsett fordi serveren kjører HTTP (ikke HTTPS). Settes til `true` ved Vercel-deploy med HTTPS.
-
----
-
-## Design-system
-
-Mørkt tema inspirert av moderne sports-apper:
-
-| Token | Verdi | Bruk |
-|-------|-------|------|
-| `--bg-base` | `#0B0F1A` | Sidebakgrunn |
-| `--bg-surface` | `#141929` | Kort og paneler |
-| `--bg-elevated` | `#1C2338` | Input-felter, hover |
-| `--blue` | `#4F7EFF` | Primærfarge, knapper |
-| `--text-primary` | `#FFFFFF` | Overskrifter |
-| `--text-secondary` | `#94A3B8` | Brødtekst |
-| `--text-muted` | `#4E5A72` | Metadata, labels |
-| `--green` | `#22C55E` | Suksess/velvære |
-| `--red` | `#EF4444` | Feil/advarsel |
-| `--yellow` | `#F59E0B` | Advarsler |
-
-Globale CSS-klasser: `.input-dark` for alle skjemafelt.
-
----
-
-## Serveroppsett (Hetzner)
-
-| | |
-|---|---|
-| **Provider** | Hetzner Cloud (nbg1) |
-| **OS** | Ubuntu 26.04 LTS |
-| **IP** | 178.105.131.153 |
-| **Port** | 3001 (åpnet i UFW) |
-| **App-mappe** | `/var/www/fotball-kta` |
-| **Node-versjon** | 22.x (via nvm) |
-| **Prosessstyring** | PM2 (`fotball-kta`) |
-| **Brannmur** | UFW — tillatt: OpenSSH, Nginx Full, 3001 |
-
-**Kjøre kommandoer:**
 ```bash
-# Oppdater og rebuild
-cd /var/www/fotball-kta && git pull origin claude/wonderful-mendel-uB5N4 && npm run build && pm2 restart fotball-kta
-
-# Se logger
-pm2 logs fotball-kta --lines 30 --nostream
-
-# Status
-pm2 status
+npm install
+npm run dev
 ```
-
-**Git-branch:** `claude/wonderful-mendel-uB5N4`
-
----
-
-## Byggesystem
-
-`npm run build` kjører automatisk `prisma generate && next build`.
-Prisma-klienten genereres til `lib/generated/prisma/` (gitignorert).
-
-**Årsak:** Prisma 7 med `moduleResolution: "bundler"` i tsconfig kan ikke løse `.prisma/client`-stien i typedeklarasjonene. Lokal output-path løser dette.
-
----
-
-## Implementert funksjonalitet
-
-- [x] Registrering og innlogging (e-post + passord)
-- [x] JWT-autentisering med HTTP-only cookie
-- [x] Rutebeskyttelse via `proxy.ts`
-- [x] Lag — opprett, vis, slett (soft delete)
-- [x] Spillere — legg til, vis, slett (soft delete)
-- [x] Treningsøkt-wizard (3 steg) — aldersgruppe, felt, forhåndsvisning
-- [x] Regelmotor per aldersgruppe (NFF/SvFF/DBU)
-- [x] Constraints-motor (feltforhold og utstyr)
-- [x] Mørkt design-tema over hele appen
-
----
 
 ## Mangler / Planlagt
 
-- [ ] Vercel-deploy med HTTPS
+- [ ] Ingen kjente mangler per nå
 
 ---
 
@@ -193,21 +80,4 @@ Prisma-klienten genereres til `lib/generated/prisma/` (gitignorert).
 
 | Dato | Endring |
 |------|---------|
-| 2026-05-26 | Første deploy til Hetzner-server med Neon PostgreSQL |
-| 2026-05-26 | Prisma 7-fix: lokal generator-output for TypeScript-kompatibilitet |
-| 2026-05-26 | Innlogging, registrering, JWT-auth og rutebeskyttelse implementert |
-| 2026-05-26 | Lag og spillere: CRUD-operasjoner med API-ruter og sider |
-| 2026-05-26 | Komplett mørkt design-rewrite (navy/blå tema) |
-| 2026-05-26 | Lyst pastel design-rewrite: hvit/lavendel tema, fast bunnmeny for app-følelse |
-| 2026-05-26 | Treningsøkter-modul: listeside, API og lagring fra wizard |
-| 2026-05-26 | Velvære-modul: uke-oversikt, registrering per spiller (Grønn/Gul/Rød), varselpanel |
-| 2026-05-26 | Ukesplan-modul: daglig fokusvelger, NFF-regel for antall økter, uke-navigering |
-| 2026-05-26 | Valgfrie moduler: features-felt på Coach, innstillinger-side, Velvære skjult til det slås på |
-| 2026-05-26 | AI-øvelser: Claude genererer tilpassede øvelser per fase i treningsøkt-wizarden |
-| 2026-05-27 | App omdøpt til PitchPlan; GitHub Actions auto-deploy til Hetzner via SSH |
-| 2026-05-27 | Flerspråklig støtte (nb/sv/da/en): cookie-basert i18n, JSON-ordbøker, LangSwitcher |
-| 2026-05-28 | Full branding-overhaul: Pitch Black mørkt tema, Turf Green aksent, Barlow Condensed + Inter-fonter, NavLink-komponent med aktiv-state, tone-of-voice-oppdatering i alle fire ordbøker |
-| 2026-06-02 | TreningStatusKnapp: Full livssyklus-knapp (DRAFT→ACTIVE→COMPLETED→DRAFT) med riktige ikoner, i18n-dict-prop, og design-system-farger. Nye ordbok-nøkler `training.status_button` i alle 4 språk. |
-| 2026-06-02 | Bugfix: Fjernet hardkodet norsk og la til manglende i18n-støtte på treningsøkt-detaljsiden (`[id]/page.tsx` og slette-knapp). La til hurtiglenke til treningslisten på dashboardet. Ryddejobb i dokumentasjon for implementerte funksjoner. |
-| 2026-06-03 | Fjernet AI-genererte SVG-tegninger og erstattet med bedre tekstlige instrukser. La til Månedsplan-generator med støtte for faste dager, månedstema og "Rediger"-funksjon for DRAFT-økter. |
-| 2026-06-03 | Re-designet hele plattformen til PitchPlan Dark Theme. Oppdaterte UI/UX for lag, spillere, kalender, ukesplan, velvære og innstillinger. Oppdatert print-vennlig PDF-visning med ny branding. |
+| 2026-09-08 | Hele det tidligere PitchPlan-fotballprosjektet (auth, Prisma/Neon, kalender, Capacitor osv.) fjernet. Ny, enkel 75 Hard-webapp bygget fra bunnen: dag-teller, nedtelling til midnatt, avkryssing av 6 daglige oppgaver, automatisk restart ved bommet dag. Data lagres kun lokalt i nettleseren (localStorage), ingen backend. |
