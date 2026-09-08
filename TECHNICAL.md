@@ -58,6 +58,7 @@ public/
 
 - **Dag-teller**: `dagens dato − startDate` (i hele dager) + 1. Når dette overstiger 75, er utfordringen fullført.
 - **Nedtelling**: tid igjen til midnatt (`setHours(24,0,0,0)`), oppdateres hvert sekund.
+- **Nedtelling til siste dag**: tid igjen til slutten av dag 75 (`startDate` + 75 dager, ved midnatt), vist som dager/timer/min/sek, oppdateres hvert sekund.
 - **Automatisk restart**: ved innlasting sjekkes alle dager fra `startDate` til i går. Hvis én dag mangler fullførte oppgaver, nullstilles `startDate` til i dag og `history` tømmes (tilbake til dag 1), med en synlig melding til brukeren.
 - **Manuell restart**: knapp for å starte på nytt fra dag 1 når som helst (med bekreftelse).
 
@@ -81,3 +82,4 @@ npm run dev
 | Dato | Endring |
 |------|---------|
 | 2026-09-08 | Hele det tidligere PitchPlan-fotballprosjektet (auth, Prisma/Neon, kalender, Capacitor osv.) fjernet. Ny, enkel 75 Hard-webapp bygget fra bunnen: dag-teller, nedtelling til midnatt, avkryssing av 6 daglige oppgaver, automatisk restart ved bommet dag. Data lagres kun lokalt i nettleseren (localStorage), ingen backend. |
+| 2026-09-08 | Lagt til nedtelling til siste dag (dag 75): viser dager/timer/min/sek igjen til utfordringen er fullført, i tillegg til den eksisterende nedtellingen til midnatt for dagens oppgaver. |

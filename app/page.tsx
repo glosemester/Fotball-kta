@@ -129,6 +129,19 @@ export default function Home() {
     return [h, m, s].map((n) => String(n).padStart(2, "0")).join(":");
   }, [now]);
 
+  const timeToFinish = useMemo(() => {
+    if (!now) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    const finish = startOfDay(new Date(state.startDate));
+    finish.setDate(finish.getDate() + TOTAL_DAYS);
+    const ms = Math.max(0, finish.getTime() - now.getTime());
+    return {
+      days: Math.floor(ms / 86400000),
+      hours: Math.floor((ms % 86400000) / 3600000),
+      minutes: Math.floor((ms % 3600000) / 60000),
+      seconds: Math.floor((ms % 60000) / 1000),
+    };
+  }, [state, now]);
+
   function toggleTask(id: TaskId) {
     if (!todayKey || challengeDone) return;
     const dayRecord = { ...(state.history[todayKey] ?? {}) };
@@ -201,6 +214,29 @@ export default function Home() {
                 <p className="text-2xl font-mono font-semibold tabular-nums">
                   {timeLeft}
                 </p>
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
+              <p className="text-xs uppercase tracking-wide text-[var(--muted)] text-center mb-3">
+                Nedtelling til siste dag
+              </p>
+              <div className="grid grid-cols-4 gap-2 text-center">
+                {[
+                  { value: timeToFinish.days, label: "dager" },
+                  { value: timeToFinish.hours, label: "timer" },
+                  { value: timeToFinish.minutes, label: "min" },
+                  { value: timeToFinish.seconds, label: "sek" },
+                ].map((unit) => (
+                  <div key={unit.label}>
+                    <p className="text-2xl font-mono font-semibold tabular-nums">
+                      {String(unit.value).padStart(2, "0")}
+                    </p>
+                    <p className="text-[10px] uppercase tracking-wide text-[var(--muted)]">
+                      {unit.label}
+                    </p>
+                  </div>
+                ))}
               </div>
             </section>
 
