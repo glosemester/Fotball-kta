@@ -1,4 +1,4 @@
-name: Deploy to Hetzner (PitchPlan)
+name: Deploy to Hetzner (75 Hard)
 
 on:
   push:
@@ -21,7 +21,6 @@ jobs:
             cd /var/www/fotball-kta
             git pull origin main
             npm ci
-            npx prisma db push --accept-data-loss
             npm run build
             pm2 restart fotball-kta
             pm2 save
