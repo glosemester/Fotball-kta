@@ -1,148 +1,295 @@
-import Link from "next/link";
-import PitchPlanLogo from "@/components/PitchPlanLogo";
-import { CalendarDays, Brain, Activity, Users } from "lucide-react";
-import { auth, signIn, signOut } from "@/auth";
+"use client";
 
-const FEATURES = [
-  {
-    icon: Brain,
-    title: "AI-drevet planlegging",
-    desc: "Generer tilpassede øvelser basert på aldersgruppe, antall spillere og feltforhold.",
-  },
-  {
-    icon: CalendarDays,
-    title: "Kalender & kamper",
-    desc: "Importer kamprogrammet og planlegg belastningen uke for uke.",
-  },
-  {
-    icon: Activity,
-    title: "Velvære-oversikt",
-    desc: "Hold styr på spillernes form med rask Grønn/Gul/Rød-registrering.",
-  },
-  {
-    icon: Users,
-    title: "Lag & spillere",
-    desc: "Administrer lagene dine med spillerlister, posisjoner og aldersgrupper.",
-  },
-];
+import { useEffect, useMemo, useState } from "react";
+import { TASKS, TOTAL_DAYS, type TaskId } from "./tasks";
 
-export default async function Home() {
-  const session = await auth();
+type DayRecord = Partial<Record<TaskId, boolean>>;
+type History = Record<string, DayRecord>;
 
-  return (
-    <main className="min-h-screen bg-[#000000] overflow-x-hidden">
-      {/* Hero */}
-      <div className="flex flex-col items-center justify-center px-4 pt-20 pb-12 text-center">
-        <div className="flex flex-col items-center gap-5 mb-10">
-          {/* Logo mark */}
-          <div className="w-24 h-24 rounded-[32px] bg-white/5 backdrop-blur-sm shadow-2xl shadow-black/50 flex items-center justify-center border border-white/10">
-            <PitchPlanLogo size={56} />
-          </div>
-
-          {/* Wordmark */}
-          <div>
-            <h1 className="text-5xl font-semibold tracking-tight text-[#FFFFFF]">
-              Pitch<span className="text-[#0A84FF]">Plan</span>
-            </h1>
-            <p className="text-[#8E8E93] text-base mt-2">
-              Treningsplanlegger for barne- og ungdomsfotball
-            </p>
-          </div>
-        </div>
-
-        {/* CTA buttons */}
-        <div className="flex flex-col sm:flex-row gap-3 w-full max-w-xs">
-          {session ? (
-            <>
-              <Link
-                href="/dashboard"
-                className="flex-1 inline-flex items-center justify-center rounded-full bg-[#0A84FF] px-5 py-3.5 text-white font-semibold text-sm uppercase tracking-wide hover:bg-[#007AFF] transition-colors shadow-lg shadow-[#0A84FF]/25"
-              >
-                Gå til Dashboard
-              </Link>
-              <form action={async () => {
-                "use server";
-                await signOut();
-              }} className="flex-1">
-                <button
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/12 px-5 py-3.5 text-[#FFFFFF] font-semibold text-sm hover:bg-white/12 transition-all"
-                >
-                  Logg ut
-                </button>
-              </form>
-            </>
-          ) : (
-            <>
-              <form action={async () => {
-                "use server";
-                await signIn("google");
-              }} className="flex-1">
-                <button
-                  type="submit"
-                  className="w-full inline-flex items-center justify-center gap-2.5 rounded-full bg-white/8 backdrop-blur-sm border border-white/12 px-5 py-3.5 text-[#FFFFFF] font-semibold text-sm hover:bg-white/12 transition-all"
-                >
-                  <GoogleIcon />
-                  Google
-                </button>
-              </form>
-              <Link
-                href="/login"
-                className="flex-1 inline-flex items-center justify-center rounded-full bg-[#0A84FF] px-5 py-3.5 text-white font-semibold text-sm uppercase tracking-wide hover:bg-[#007AFF] transition-colors shadow-lg shadow-[#0A84FF]/25"
-              >
-                Logg inn
-              </Link>
-            </>
-          )}
-        </div>
-
-        <p className="text-xs text-[#8E8E93] mt-4">
-          Ingen konto?{" "}
-          <Link href="/registrer" className="text-[#0A84FF] font-medium hover:underline">
-            Registrer deg gratis
-          </Link>
-        </p>
-      </div>
-
-      {/* Filosofi-banner */}
-      <div className="max-w-lg mx-auto px-4 mb-10">
-        <div className="bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-6 text-center">
-          <p className="text-[#0A84FF] text-xs font-semibold uppercase tracking-widest mb-2">Filosofi</p>
-          <p className="text-[#FFFFFF] text-xl font-semibold leading-snug">
-            "Flest mulig · Lengst mulig · Best mulig"
-          </p>
-          <p className="text-[#8E8E93] text-sm mt-2">Trygghet → Mestring → Trivsel</p>
-        </div>
-      </div>
-
-      {/* Feature strip — auto-scrolling marquee */}
-      <div className="overflow-hidden pb-20">
-        <div className="marquee-track flex gap-4" style={{ width: "max-content" }}>
-          {[...FEATURES, ...FEATURES].map(({ icon: Icon, title, desc }, i) => (
-            <div
-              key={i}
-              className="w-56 flex-shrink-0 bg-white/5 backdrop-blur-sm rounded-3xl border border-white/10 p-5"
-            >
-              <div className="w-10 h-10 rounded-3xl bg-[#0A84FF]/15 flex items-center justify-center mb-4">
-                <Icon className="text-[#0A84FF]" style={{ width: 20, height: 20 }} />
-              </div>
-              <p className="font-semibold text-[#FFFFFF] text-sm mb-1.5 leading-snug">{title}</p>
-              <p className="text-xs text-[#8E8E93] leading-relaxed">{desc}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-    </main>
-  );
+interface StoredState {
+  startDate: string;
+  history: History;
 }
 
-function GoogleIcon() {
+const STORAGE_KEY = "75hard-state";
+
+function dateKey(d: Date): string {
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
+function startOfDay(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate());
+}
+
+function daysBetween(a: Date, b: Date): number {
+  const ms = startOfDay(b).getTime() - startOfDay(a).getTime();
+  return Math.round(ms / 86400000);
+}
+
+function isDayComplete(record: DayRecord | undefined): boolean {
+  if (!record) return false;
+  return TASKS.every((t) => record[t.id]);
+}
+
+function loadState(): StoredState {
+  if (typeof window === "undefined") {
+    const today = dateKey(new Date());
+    return { startDate: today, history: {} };
+  }
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (raw) return JSON.parse(raw) as StoredState;
+  } catch {
+    // ignore corrupt state
+  }
+  const today = dateKey(new Date());
+  return { startDate: today, history: {} };
+}
+
+function saveState(state: StoredState) {
+  window.localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function initializeState(): { state: StoredState; resetMessage: string | null } {
+  const loaded = loadState();
+  const today = new Date();
+  const start = new Date(loaded.startDate);
+
+  let failedOnDay: number | null = null;
+  const checkedUntil = daysBetween(start, today);
+  for (let offset = 0; offset < checkedUntil; offset++) {
+    const d = new Date(start);
+    d.setDate(d.getDate() + offset);
+    const key = dateKey(d);
+    if (!isDayComplete(loaded.history[key])) {
+      failedOnDay = offset + 1;
+      break;
+    }
+  }
+
+  if (failedOnDay !== null) {
+    const fresh: StoredState = { startDate: dateKey(today), history: {} };
+    saveState(fresh);
+    return {
+      state: fresh,
+      resetMessage: `Du fullførte ikke alle oppgavene på dag ${failedOnDay}. Utfordringen er startet på nytt fra dag 1.`,
+    };
+  }
+  return { state: loaded, resetMessage: null };
+}
+
+export default function Home() {
+  const [mounted, setMounted] = useState(false);
+  const [{ state, resetMessage }, setInit] = useState<{
+    state: StoredState;
+    resetMessage: string | null;
+  }>(() => ({
+    state: { startDate: dateKey(new Date()), history: {} },
+    resetMessage: null,
+  }));
+  const [now, setNow] = useState<Date | null>(null);
+
+  useEffect(() => {
+    // Reads localStorage, unavailable during SSR, so this must run after mount.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setInit(initializeState());
+    setMounted(true);
+    setNow(new Date());
+    const interval = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const todayKey = now ? dateKey(now) : null;
+
+  const currentDay = useMemo(() => {
+    if (!state || !now) return 1;
+    return daysBetween(new Date(state.startDate), now) + 1;
+  }, [state, now]);
+
+  const todayRecord: DayRecord = useMemo(() => {
+    if (!state || !todayKey) return {};
+    return state.history[todayKey] ?? {};
+  }, [state, todayKey]);
+
+  const completedCount = TASKS.filter((t) => todayRecord[t.id]).length;
+  const allDoneToday = completedCount === TASKS.length;
+  const challengeDone = currentDay > TOTAL_DAYS;
+
+  const timeLeft = useMemo(() => {
+    if (!now) return "00:00:00";
+    const midnight = new Date(now);
+    midnight.setHours(24, 0, 0, 0);
+    const ms = midnight.getTime() - now.getTime();
+    const h = Math.floor(ms / 3600000);
+    const m = Math.floor((ms % 3600000) / 60000);
+    const s = Math.floor((ms % 60000) / 1000);
+    return [h, m, s].map((n) => String(n).padStart(2, "0")).join(":");
+  }, [now]);
+
+  const timeToFinish = useMemo(() => {
+    if (!now) return { days: 0, hours: 0, minutes: 0, seconds: 0 };
+    const finish = startOfDay(new Date(state.startDate));
+    finish.setDate(finish.getDate() + TOTAL_DAYS);
+    const ms = Math.max(0, finish.getTime() - now.getTime());
+    return {
+      days: Math.floor(ms / 86400000),
+      hours: Math.floor((ms % 86400000) / 3600000),
+      minutes: Math.floor((ms % 3600000) / 60000),
+      seconds: Math.floor((ms % 60000) / 1000),
+    };
+  }, [state, now]);
+
+  function toggleTask(id: TaskId) {
+    if (!todayKey || challengeDone) return;
+    const dayRecord = { ...(state.history[todayKey] ?? {}) };
+    dayRecord[id] = !dayRecord[id];
+    const nextState: StoredState = {
+      ...state,
+      history: { ...state.history, [todayKey]: dayRecord },
+    };
+    setInit({ state: nextState, resetMessage });
+    saveState(nextState);
+  }
+
+  function restartChallenge() {
+    if (!confirm("Er du sikker på at du vil starte 75 Hard på nytt fra dag 1?")) return;
+    const fresh: StoredState = { startDate: dateKey(new Date()), history: {} };
+    saveState(fresh);
+    setInit({ state: fresh, resetMessage: null });
+  }
+
+  if (!mounted || !now) {
+    return (
+      <main className="min-h-screen flex items-center justify-center">
+        <p className="text-[var(--muted)]">Laster …</p>
+      </main>
+    );
+  }
+
   return (
-    <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg">
-      <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4"/>
-      <path d="M9 18c2.43 0 4.467-.806 5.956-2.184l-2.908-2.259c-.806.54-1.837.86-3.048.86-2.344 0-4.328-1.584-5.036-3.711H.957v2.332A8.997 8.997 0 0 0 9 18z" fill="#34A853"/>
-      <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.996 8.996 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332z" fill="#FBBC05"/>
-      <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.163 6.656 3.58 9 3.58z" fill="#EA4335"/>
-    </svg>
+    <main className="min-h-screen px-4 py-8 flex flex-col items-center">
+      <div className="w-full max-w-md flex flex-col gap-6">
+        <header className="text-center">
+          <h1 className="text-2xl font-bold tracking-tight">75 Hard</h1>
+          <p className="text-sm text-[var(--muted)] mt-1">
+            Ingen unnskyldninger. Hver dag teller.
+          </p>
+        </header>
+
+        {resetMessage && (
+          <div className="rounded-xl border border-[var(--accent)]/40 bg-[var(--accent)]/10 px-4 py-3 text-sm">
+            {resetMessage}
+          </div>
+        )}
+
+        {challengeDone ? (
+          <div className="rounded-2xl border border-[var(--accent-2)]/50 bg-[var(--accent-2)]/10 px-4 py-6 text-center">
+            <p className="text-lg font-semibold">🎉 Gratulerer!</p>
+            <p className="text-sm text-[var(--muted)] mt-1">
+              Du har fullført alle {TOTAL_DAYS} dager med 75 Hard.
+            </p>
+          </div>
+        ) : (
+          <>
+            <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5 flex items-center justify-between">
+              <div>
+                <p className="text-xs uppercase tracking-wide text-[var(--muted)]">
+                  Dag
+                </p>
+                <p className="text-3xl font-bold">
+                  {currentDay}
+                  <span className="text-[var(--muted)] text-lg font-normal">
+                    {" "}
+                    / {TOTAL_DAYS}
+                  </span>
+                </p>
+              </div>
+              <div className="text-right">
+                <p className="text-xs uppercase tracking-wide text-[var(--muted)]">
+                  Tid igjen i dag
+                </p>
+                <p className="text-2xl font-mono font-semibold tabular-nums">
+                  {timeLeft}
+                </p>
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-5">
+              <p className="text-xs uppercase tracking-wide text-[var(--muted)] text-center mb-3">
+                Nedtelling til siste dag
+              </p>
+              <div className="grid grid-cols-4 gap-2 text-center">
+                {[
+                  { value: timeToFinish.days, label: "dager" },
+                  { value: timeToFinish.hours, label: "timer" },
+                  { value: timeToFinish.minutes, label: "min" },
+                  { value: timeToFinish.seconds, label: "sek" },
+                ].map((unit) => (
+                  <div key={unit.label}>
+                    <p className="text-2xl font-mono font-semibold tabular-nums">
+                      {String(unit.value).padStart(2, "0")}
+                    </p>
+                    <p className="text-[10px] uppercase tracking-wide text-[var(--muted)]">
+                      {unit.label}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            <section className="rounded-2xl border border-[var(--border)] bg-[var(--card)] p-2 divide-y divide-[var(--border)]">
+              {TASKS.map((task) => {
+                const checked = Boolean(todayRecord[task.id]);
+                return (
+                  <label
+                    key={task.id}
+                    className="flex items-start gap-3 px-3 py-3 cursor-pointer select-none"
+                  >
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={() => toggleTask(task.id)}
+                      className="mt-1 h-5 w-5 shrink-0 accent-[var(--accent-2)]"
+                    />
+                    <span>
+                      <span
+                        className={
+                          "block font-medium " +
+                          (checked ? "line-through text-[var(--muted)]" : "")
+                        }
+                      >
+                        {task.label}
+                      </span>
+                      <span className="block text-xs text-[var(--muted)]">
+                        {task.detail}
+                      </span>
+                    </span>
+                  </label>
+                );
+              })}
+            </section>
+
+            <section className="text-center text-sm text-[var(--muted)]">
+              {completedCount} / {TASKS.length} oppgaver fullført i dag
+              {allDoneToday && (
+                <p className="text-[var(--accent-2)] font-medium mt-1">
+                  Bra jobbet – dagen er i boks! ✅
+                </p>
+              )}
+            </section>
+          </>
+        )}
+
+        <button
+          onClick={restartChallenge}
+          className="text-xs text-[var(--muted)] underline underline-offset-2 self-center mt-2"
+        >
+          Start på nytt fra dag 1
+        </button>
+      </div>
+    </main>
   );
 }
